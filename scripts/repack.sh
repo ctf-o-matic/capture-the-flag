@@ -7,7 +7,7 @@
 cd $(dirname "$0"); . ./common.sh; cd ..
 
 tmp=squashfs.gz
-{ cd $extract; sudo find | cmd sudo cpio -o -H newc; } | gzip -2 > $tmp
+{ cd $extract; sudo find | sudo cpio -o -H newc; } | gzip -2 > $tmp
 cmd advdef -z4 $tmp
 cmd sudo mv $tmp $squashfs
 cmd sudo mkisofs -l -J -R -V TC-custom -no-emul-boot -boot-load-size 4 \
