@@ -48,14 +48,10 @@ How to use
 
 Todo
 ----
-* For some reason, the `setuid` exploit of `level01` (and certainly
-  on all other levels too) is not working. See this discussion:
-  http://unix.stackexchange.com/questions/65501/setuid-programs-dont-seem-to-run-setuid-in-tinycore-linux
-
 * Use `sudo` *inside* the scripts, only when necessary, and eliminate
   all the `sudo` calls from the above steps (eliminating the TODOs above)
 
-* Verify that levels 1, 3, 5, 6 work.
+* Verify that levels 3, 5, 6 work.
 
 * Setup levels 2 and 4 (require web server)
 
