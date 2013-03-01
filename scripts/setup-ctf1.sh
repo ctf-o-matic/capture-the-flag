@@ -6,15 +6,6 @@
 
 cd $(dirname "$0"); . ./common.sh; cd ..
 
-cat<<EOF >/dev/null
-if ! ls $squashfs >/dev/null 2>/dev/null; then
-    mount | grep $livecd0 >/dev/null || cmd sudo mount $livecd0 $mnt
-    cmd mkdir -p $newiso
-    cmd rsync -av $mnt/* $newiso/
-    cmd sudo umount $livecd0
-fi
-EOF
-
 for i in $ctf1/code/level*; do
     test -f $i/Makefile && (cd $i; make)
     chmod -v u+s $i/level??
