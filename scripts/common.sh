@@ -11,6 +11,7 @@ extract=./extract
 newiso=./newiso
 squashfs=$newiso/boot/core.gz
 ctf1=./ctf1
+ctf1_extra=./ctf1-extra
 
 msg() {
     echo '[*]' $*
