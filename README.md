@@ -48,10 +48,12 @@ How to use
 
 Todo
 ----
+* Verified levels: 1, 3
+
 * Use `sudo` *inside* the scripts, only when necessary, and eliminate
   all the `sudo` calls from the above steps (eliminating the TODOs above)
 
-* Verify that levels 3, 5, 6 work.
+* Verify that levels 5, 6 work.
 
 * Setup levels 2 and 4 (require web server)
 

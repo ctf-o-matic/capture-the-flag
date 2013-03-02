@@ -30,7 +30,7 @@ sudo chroot $extract $create_users0
 sudo rm $create_users
 
 sudo rsync -av $ctf1/code/level0? $extract/home/
-sudo rsync -av $ctf1_extra/home/level0? $extract/home/ --exclude level01.c
+sudo rsync -av $ctf1_extra/home/level0? $extract/home/ --exclude level01.c --exclude level03.c
 
 sudo chmod 0755 $extract/home/level0?
 sudo chmod 0400 $extract/home/level0?/.password
@@ -39,7 +39,7 @@ for i in 1 2 3 4 5 6; do
     sudo chown -R 110$i.110$i $extract/home/level0$i
     j=$((i+1))
     sudo chown 110$j.110$j $extract/home/level0$i/level0$i
-    sudo chmod u+s $extract/home/level0$i/level0$i
+    sudo chmod 4755 $extract/home/level0$i/level0$i
 done
 
 # eof
