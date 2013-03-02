@@ -36,12 +36,10 @@ How to use
 4. Unpack the live cd image:
 
         sudo ./scripts/unpack-iso.sh
-        # TODO: we should not need root here
 
 5. Unpack the squashfs image inside the live cd
 
         sudo ./scripts/unpack-squashfs.sh
-        # TODO: do we really need root here?
 
 6. Install software:
 
@@ -54,7 +52,6 @@ How to use
 8. Rebuild the iso:
 
         sudo ./scripts/repack.sh
-        # TODO: do we really need root here?
 
 
 Progress
@@ -65,9 +62,6 @@ Progress
 
 Todo
 ----
-* Use `sudo` *inside* the scripts, only when necessary, and eliminate
-  all the `sudo` calls from the above steps if possible
-
 * Verify that levels 4, 6 work.
 
 * Setup levels 2 and 5 (require web server, php, python)

@@ -6,13 +6,15 @@
 
 cd $(dirname "$0"); . ./common.sh; cd ..
 
+exit_if_nonroot
+
 mkdir -pv $mnt
 
 if ! ls $squashfs >/dev/null 2>/dev/null; then
-    mount | grep $livecd0 >/dev/null || cmd sudo mount $livecd0 $mnt
+    mount | grep $livecd0 >/dev/null || cmd mount $livecd0 $mnt
     cmd mkdir -p $newiso
     cmd rsync -av $mnt/* $newiso/
-    cmd sudo umount $livecd0
+    cmd umount $livecd0
 fi
 
 rmdir -v $mnt 2>/dev/null

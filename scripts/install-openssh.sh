@@ -6,6 +6,8 @@
 
 cd $(dirname "$0"); . ./common.sh; cd ..
 
+exit_if_nonroot
+
 tcz_url=http://distro.ibiblio.org:/tinycorelinux/4.x/x86/tcz
 packages='gcc_libs openssh openssl-1.0.0'
 tcz_dir=./tcz
