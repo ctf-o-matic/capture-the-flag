@@ -79,3 +79,18 @@ Todo
 * maybe: Implement the second Capture The Flag contest of Stripe
 
 
+Disclaimer
+----------
+The challenges are based on the original online contest
+organized by Stripe:
+https://stripe.com/blog/capture-the-flag
+
+
+Links
+-----
+* https://stripe.com/blog/capture-the-flag
+* https://stripe.com/blog/capture-the-flag-20
+* http://io.smashthestack.org:84/
+* http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=CTF
+
+
