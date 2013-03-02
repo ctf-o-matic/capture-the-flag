@@ -54,6 +54,10 @@ sudo chmod g-s $extract/home/level0?
 sudo chmod 0400 $extract/home/level0?/.password
 sudo chmod 0750 $extract/levels/level0?
 
+# fix ownerships
+sudo chown -R 0.50 $extract/root
+sudo chown 0.50 $extract/levels
+
 # create message files
 for i in 0 1 2 3 4 5 6; do
     cat $ctf1_motd/banner.txt $ctf1_motd/level0$i.txt | sudo tee $extract/home/level0$i/motd.txt >/dev/null
