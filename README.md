@@ -45,13 +45,18 @@ How to use
 
         sudo ./scripts/install-openssh.sh
 
-7. Setup the capture the flag challenges:
+7. [Optional] Install keymaps for non US keyboards:
+
+        sudo ./scripts/install-kmaps.sh
+
+8. Setup the capture the flag challenges:
 
         sudo ./scripts/setup-ctf1.sh
 
-8. Rebuild the iso:
+9. Rebuild the iso:
 
         sudo ./scripts/repack.sh
+
 
 
 Progress
@@ -79,6 +84,9 @@ Todo
 
 * maybe: Implement the second Capture The Flag contest of Stripe
 
+* Explain how to switch the keymap when booting the livecd (i.e : mc kmap=azerty/fr rom french) 
+
+* find a way to have the levels executables built with the same gcc/arch version as the one used in the livecd
 
 Disclaimer
 ----------
