@@ -15,10 +15,10 @@ the scripts in this project:
 * `git`
 * `make`
 * `gcc`
-* `pwgen`
-* `genisoimage`
-* `advancecomp`
-* `squashfs-tools`
+* `pwgen` -- for generating random passwords
+* `genisoimage` -- for `mkisofs`
+* `advancecomp` -- for `advdef`
+* `squashfs-tools` -- for `unsquashfs`
 * `curl`
 
 
