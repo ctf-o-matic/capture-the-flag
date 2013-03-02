@@ -8,10 +8,10 @@ use hacking contests with pre-installed vulnerabilities to exploit.
 
 Requirements
 ------------
-You need the following to build the Live CD using the scripts
-in this project.
+You will need the following in order to build the Live CD using
+the scripts in this project:
 
-* Linux, with root access
+* Linux, with root access using `sudo`
 * `git`
 * `make`
 * `gcc`
@@ -66,17 +66,16 @@ Progress
 Todo
 ----
 * Use `sudo` *inside* the scripts, only when necessary, and eliminate
-  all the `sudo` calls from the above steps (eliminating the TODOs above)
+  all the `sudo` calls from the above steps if possible
 
 * Verify that levels 4, 6 work.
 
 * Setup levels 2 and 5 (require web server, php, python)
 
 * Add software inside the live cd:
-    - ssh server
     - lighttpd
     - php
-    - curl
+    - curl or wget or both
     - gdb
     - objdump
     - perl
