@@ -8,10 +8,14 @@ use hacking contests with pre-installed vulnerabilities to exploit.
 
 Requirements
 ------------
+You need the following to build the Live CD using the scripts
+in this project.
+
+* Linux, with root access
 * `git`
 * `make`
 * `gcc`
-* Linux, with root access
+* `pwgen`
 
 
 How to use
@@ -46,10 +50,13 @@ How to use
         # TODO: do we really need root here?
 
 
-Todo
-----
+Progress
+--------
 * Verified levels: 1, 3
 
+
+Todo
+----
 * Use `sudo` *inside* the scripts, only when necessary, and eliminate
   all the `sudo` calls from the above steps (eliminating the TODOs above)
 
@@ -57,9 +64,14 @@ Todo
 
 * Setup levels 2 and 4 (require web server)
 
-* Add ssh server inside the live cd
-
-* Use random passwords for the accounts
+* Add software inside the live cd:
+    - ssh server
+    - lighttpd
+    - php
+    - gdb
+    - objdump
+    - perl
+    - python
 
 * maybe: Generalize the scripts to use with other than TinyCore
 
