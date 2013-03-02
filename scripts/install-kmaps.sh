@@ -6,6 +6,6 @@
 
 cd $(dirname "$0"); . ./common.sh; cd ..
 
-install_packages 'kmaps'
+install_tcz kmaps
 
 # eof
