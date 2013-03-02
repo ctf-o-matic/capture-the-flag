@@ -1,7 +1,6 @@
 #!/bin/sh
 INIT=/tmp/INIT
 if ! test -f $INIT; then
-    touch $INIT
-    /usr/local/etc/init.d/openssh start
+    /usr/local/etc/init.d/openssh start > $INIT
 fi
 exec /bin/login -f level00
