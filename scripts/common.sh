@@ -49,7 +49,6 @@ get_tcz() {
         target=$tcz_dir/$package.tcz
         test -f $target || curl -o $target $tcz_url/$package.tcz
     done
-    rmdir -pv $tcz_dir 2>/dev/null
 }
 
 install_tcz() {
