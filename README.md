@@ -41,22 +41,17 @@ How to use
 
         sudo ./scripts/unpack-squashfs.sh
 
-6. Install software:
+6. [Optional] Install keymaps for non US keyboards:
 
-        sudo ./scripts/install-openssh.sh
+        sudo ./scripts/install-tcz.sh kmaps
 
-7. [Optional] Install keymaps for non US keyboards:
-
-        sudo ./scripts/install-kmaps.sh
-
-8. Setup the capture the flag challenges:
+7. Setup the capture the flag challenges:
 
         sudo ./scripts/setup-ctf1.sh
 
-9. Rebuild the iso:
+8. Rebuild the iso:
 
         sudo ./scripts/repack.sh
-
 
 
 Progress
