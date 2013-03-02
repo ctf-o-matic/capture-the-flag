@@ -8,14 +8,16 @@ cd $(dirname "$0"); . ./common.sh; cd ..
 
 exit_if_nonroot
 
+test "$SUDO_USER" && runas="sudo -u $SUDO_USER" || runas=
+
 # build programs
 for i in $ctf1_orig/code/level*; do
-    test -f $i/Makefile && (cd $i; make)
+    test -f $i/Makefile && (cd $i; $runas make)
 done
 
 # build extra programs
 for i in $ctf1_append/levels/level*; do
-    test -f $i/Makefile && (cd $i; make)
+    test -f $i/Makefile && (cd $i; $runas make)
 done
 
 # create users
