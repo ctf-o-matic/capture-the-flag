@@ -8,8 +8,6 @@ cd $(dirname "$0"); . ./common.sh; cd ..
 
 exit_if_nonroot
 
-test "$SUDO_USER" && runas="sudo -u $SUDO_USER" || runas=
-
 # install software
 ./scripts/install-openssh.sh
 install_tcz php5 curl binutils perl5 python

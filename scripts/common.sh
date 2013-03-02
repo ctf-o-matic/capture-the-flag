@@ -24,6 +24,8 @@ ctf1_orig=$ctf1/orig
 ctf1_append=$ctf1/append
 ctf1_motd=$ctf1/motd
 
+test "$SUDO_USER" && runas="sudo -u $SUDO_USER" || runas=
+
 
 msg() {
     echo '[*]' $*
@@ -47,12 +49,13 @@ get_tcz() {
     mkdir -pv $tcz_dir
     for package; do
         target=$tcz_dir/$package.tcz
-        test -f $target || curl -o $target $tcz_url/$package.tcz
+        test -f $target || $runas curl -o $target $tcz_url/$package.tcz
     done
 }
 
 install_tcz() {
     get_tcz $@
+    exit_if_nonroot
     for package; do
         target=$tcz_dir/$package.tcz
         tce_marker=$extract/usr/local/tce.installed/$package
