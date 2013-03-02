@@ -13,13 +13,12 @@ the scripts in this project:
 
 * Linux, with root access using `sudo`
 * `git`
-* `make`
-* `gcc`
+* `make`, `gcc` -- for building vulnerable programs
 * `pwgen` -- for generating random passwords
 * `genisoimage` -- for `mkisofs`
 * `advancecomp` -- for `advdef`
 * `squashfs-tools` -- for `unsquashfs`
-* `curl`
+* `curl` -- for downloading packages and other files
 
 
 Basic build (for the impatient)
@@ -63,24 +62,17 @@ Progress
 
 Todo
 ----
-* Verify that levels 4, 6 work.
+* Setup level 2 (requires web server, maybe lighttpd?)
 
-* Setup levels 2 and 5 (require web server, php, python)
+* Confirm that level 4 can be hacked
 
-* Add software inside the live cd:
-    - lighttpd
-    - php
-    - curl or wget or both
-    - gdb
-    - objdump
-    - perl
-    - python
+* Setup level 5 and confirm it can be hacked
+
+* Confirm that level 6 can be hacked
 
 * maybe: Generalize the scripts to use with other than TinyCore
 
 * maybe: Implement the second Capture The Flag contest of Stripe
-
-* Explain how to switch the keymap when booting the livecd (i.e : mc kmap=azerty/fr rom french) 
 
 
 Disclaimer

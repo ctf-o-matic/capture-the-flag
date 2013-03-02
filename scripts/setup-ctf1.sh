@@ -10,7 +10,12 @@ exit_if_nonroot
 
 # install software
 ./scripts/install-openssh.sh
-install_tcz php5 curl binutils perl5 python
+install_tcz curl binutils perl5
+install_tcz python sqlite3 bzip2-lib
+install_tcz php5 mysql libmcrypt gmp bsddb gdbm libltdl libiconv
+install_tcz libxslt libxml2 liblzma
+install_tcz unixODBC libltdl readline pcre
+install_tcz gdb ncurses ncurses-common expat2 eglibc_add_lib
 
 # build programs for i686
 for i in $ctf1_orig/code/level*; do
@@ -77,5 +82,8 @@ for i in 0 1 2 3 4 5 6; do
     chown -R 110$i.110$i $extract/levels/level0$i
     test $i = 0 || chmod 4755 $extract/levels/level0$i/level0$i
 done
+
+# customize boot screen
+rsync -av $ctf1/boot/ $newiso/boot
 
 # eof
