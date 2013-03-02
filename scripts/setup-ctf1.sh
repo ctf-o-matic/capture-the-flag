@@ -7,12 +7,12 @@
 cd $(dirname "$0"); . ./common.sh; cd ..
 
 # build programs
-for i in $ctf1/code/level*; do
+for i in $ctf1_orig/code/level*; do
     test -f $i/Makefile && (cd $i; make)
 done
 
 # build extra programs
-for i in $ctf1_extra/levels/level*; do
+for i in $ctf1_append/levels/level*; do
     test -f $i/Makefile && (cd $i; make)
 done
 
@@ -45,8 +45,8 @@ sudo rm $create_users
 
 # copy ctf1 files
 sudo mkdir -p $extract/levels/level00
-sudo rsync -av $ctf1/code/level0? $extract/levels/
-sudo rsync -av $ctf1_extra/* $extract/ --exclude '*.c'
+sudo rsync -av $ctf1_orig/code/level0? $extract/levels/
+sudo rsync -av $ctf1_append/* $extract/ --exclude '*.c'
 
 # fix permissions
 sudo chmod 0750 $extract/home/level0?
@@ -56,7 +56,7 @@ sudo chmod 0750 $extract/levels/level0?
 
 # create message files
 for i in 0 1 2 3 4 5 6; do
-    cat $ctf1_extra/motd/banner.txt $ctf1_extra/motd/level0$i.txt | sudo tee $extract/home/level0$i/motd.txt >/dev/null
+    cat $ctf1_motd/banner.txt $ctf1_motd/level0$i.txt | sudo tee $extract/home/level0$i/motd.txt >/dev/null
     printf 'clear\ncat ~/motd.txt\n' | sudo tee -a $extract/home/level0$i/.profile >/dev/null
 done
 
