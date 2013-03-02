@@ -49,7 +49,10 @@ get_tcz() {
     mkdir -pv $tcz_dir
     for package; do
         target=$tcz_dir/$package.tcz
-        test -f $target || $runas curl -o $target $tcz_url/$package.tcz
+        if test ! -f $target; then
+            msg fetching package $package ...
+            $runas curl -o $target $tcz_url/$package.tcz
+        fi
     done
 }
 
@@ -60,6 +63,7 @@ install_tcz() {
         target=$tcz_dir/$package.tcz
         tce_marker=$extract/usr/local/tce.installed/$package
         if ! test -f $tce_marker; then
+            msg installing package $package ...
             unsquashfs -f -d $extract $target
             touch $tce_marker
         fi
