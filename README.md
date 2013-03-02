@@ -16,6 +16,9 @@ in this project.
 * `make`
 * `gcc`
 * `pwgen`
+* `genisoimage`
+* `advancecomp`
+* `squashfs-tools`
 
 
 How to use
