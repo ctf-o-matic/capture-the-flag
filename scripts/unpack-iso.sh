@@ -14,7 +14,7 @@ if ! ls $squashfs >/dev/null 2>/dev/null; then
     mount | grep $livecd0 >/dev/null || cmd mount $livecd0 $mnt
     cmd mkdir -p $newiso
     cmd rsync -av $mnt/* $newiso/
-    cmd umount $livecd0
+    cmd umount $mnt
 fi
 
 rmdir -v $mnt 2>/dev/null
