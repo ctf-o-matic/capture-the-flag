@@ -19,6 +19,7 @@ in this project.
 * `genisoimage`
 * `advancecomp`
 * `squashfs-tools`
+* `curl`
 
 
 How to use
@@ -42,11 +43,15 @@ How to use
         sudo ./scripts/unpack-squashfs.sh
         # TODO: do we really need root here?
 
-6. Setup the capture the flag challenges:
+6. Install software:
+
+        sudo ./scripts/install-openssh.sh
+
+7. Setup the capture the flag challenges:
 
         sudo ./scripts/setup-ctf1.sh
 
-7. Rebuild the iso:
+8. Rebuild the iso:
 
         sudo ./scripts/repack.sh
         # TODO: do we really need root here?
