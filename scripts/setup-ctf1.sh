@@ -39,7 +39,7 @@ sudo chroot $extract $create_users0
 sudo rm $create_users
 
 # copy ctf1 files
-sudo mkdir $extract/levels
+sudo mkdir -p $extract/levels/level00
 sudo rsync -av $ctf1/code/level0? $extract/levels/
 sudo rsync -av $ctf1_extra/* $extract/ --exclude level01.c --exclude level03.c
 
@@ -52,13 +52,14 @@ sudo chmod 0750 $extract/levels/level0?
 # create message files
 for i in 0 1 2 3 4 5 6; do
     cat $ctf1_extra/motd/banner.txt $ctf1_extra/motd/level0$i.txt | sudo tee $extract/home/level0$i/motd.txt >/dev/null
+    printf 'clear\ncat ~/motd.txt\n' | sudo tee -a $extract/home/level0$i/.profile >/dev/null
 done
 
 # fix ownerships
-for i in 1 2 3 4 5 6; do
+for i in 0 1 2 3 4 5 6; do
     sudo chown -R 110$i.110$i $extract/home/level0$i
     sudo chown -R 110$i.110$i $extract/levels/level0$i
-    sudo chmod 4755 $extract/levels/level0$i/level0$i
+    sudo chmod 4755 $extract/levels/level0$i/level0$i || :
 done
 
 # eof
