@@ -1,0 +1,14 @@
+Congratulations on making it to level 1!
+ 
+The password for the next level is in /home/level02/.password. This
+one is a web-based vulnerability, so go ahead and point your browser
+to http://localhost:8002/level02.php. You'll need to provide the password
+for level02 using HTTP digest authentication.
+ 
+You can find the source code for level02.php in /levels/level02/.
+Who knows, you may find it useful.
+ 
+There are a total of 6 levels in this CTF; if you're stuck, feel free
+to email us for guidance.
+ 
+Best of luck!

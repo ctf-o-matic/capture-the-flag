@@ -19,7 +19,7 @@ done
 # create users
 create_users0=/tmp/create-users.sh
 create_users=$extract$create_users0
-for i in 1 2 3 4 5 6; do
+for i in 0 1 2 3 4 5 6; do
     pass=$(pwgen 8 1)
     echo "# level0$i"
     echo "adduser -s /bin/sh -u 110$i -D level0$i"
@@ -29,9 +29,8 @@ for i in 1 2 3 4 5 6; do
 done | tee $create_users
 
 # add users to groups
-for i in 1 2 3 4 5 6; do
-    test $i = 1 && user=tc || user=level0$((i-1))
-    echo "addgroup $user level0$i"
+for i in 0 1 2 3 4 5; do
+    echo "addgroup level0$i level0$((i+1))"
 done | tee -a $create_users
 
 # run create user script in chroot
@@ -50,6 +49,12 @@ sudo chmod g-s $extract/home/level0?
 sudo chmod 0400 $extract/home/level0?/.password
 sudo chmod 0750 $extract/levels/level0?
 
+# create message files
+for i in 0 1 2 3 4 5 6; do
+    cat $ctf1_extra/motd/banner.txt $ctf1_extra/motd/level0$i.txt | sudo tee $extract/home/level0$i/motd.txt >/dev/null
+done
+
+# fix ownerships
 for i in 1 2 3 4 5 6; do
     sudo chown -R 110$i.110$i $extract/home/level0$i
     sudo chown -R 110$i.110$i $extract/levels/level0$i

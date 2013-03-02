@@ -60,14 +60,15 @@ Todo
 * Use `sudo` *inside* the scripts, only when necessary, and eliminate
   all the `sudo` calls from the above steps (eliminating the TODOs above)
 
-* Verify that levels 5, 6 work.
+* Verify that levels 4, 6 work.
 
-* Setup levels 2 and 4 (require web server)
+* Setup levels 2 and 5 (require web server)
 
 * Add software inside the live cd:
     - ssh server
     - lighttpd
     - php
+    - curl
     - gdb
     - objdump
     - perl

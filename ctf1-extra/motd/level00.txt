@@ -1,0 +1,17 @@
+Welcome to the CTF challenge!
+ 
+CTF is a wargame, inspired by SmashTheStack I/O[1].
+ 
+In /home/level01/.password is the SSH password for the level01
+user. Your mission, should you choose to accept it, is to read that
+file. You may find the binary /levels/level01 and its source code
+/levels/level01.c useful.
+ 
+There are a total of 6 levels in this CTF; if you're stuck, feel free
+to email us for guidance.
+ 
+Happy hacking,
+ 
+The CTF team
+ 
+[1] http://io.smashthestack.org:84/
