@@ -46,7 +46,7 @@ sudo rm $create_users
 # copy ctf1 files
 sudo mkdir -p $extract/levels/level00
 sudo rsync -av $ctf1/code/level0? $extract/levels/
-sudo rsync -av $ctf1_extra/* $extract/ --exclude level01.c --exclude level03.c
+sudo rsync -av $ctf1_extra/* $extract/ --exclude '*.c'
 
 # fix permissions
 sudo chmod 0750 $extract/home/level0?

@@ -53,6 +53,7 @@ How to use
 Progress
 --------
 * Verified levels: 1, 3
+* *Should* work but not verified levels: 4, 6
 
 
 Todo
@@ -62,7 +63,7 @@ Todo
 
 * Verify that levels 4, 6 work.
 
-* Setup levels 2 and 5 (require web server)
+* Setup levels 2 and 5 (require web server, php, python)
 
 * Add software inside the live cd:
     - ssh server
