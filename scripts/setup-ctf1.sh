@@ -16,7 +16,7 @@ for i in $ctf1_extra/levels/level*; do
     test -f $i/Makefile && (cd $i; make)
 done
 
-# create user files
+# create users
 create_users0=/tmp/create-users.sh
 create_users=$extract$create_users0
 for i in 1 2 3 4 5 6; do
@@ -27,6 +27,12 @@ for i in 1 2 3 4 5 6; do
     echo "echo $pass > /home/level0$i/.password"
     echo
 done | tee $create_users
+
+# add users to groups
+for i in 1 2 3 4 5 6; do
+    test $i = 1 && user=tc || user=level0$((i-1))
+    echo "addgroup $user level0$i"
+done | tee -a $create_users
 
 # run create user script in chroot
 chmod 755 $create_users
@@ -47,8 +53,6 @@ sudo chmod 0750 $extract/levels/level0?
 for i in 1 2 3 4 5 6; do
     sudo chown -R 110$i.110$i $extract/home/level0$i
     sudo chown -R 110$i.110$i $extract/levels/level0$i
-    j=$((i+1))
-    sudo chown 110$j.110$j $extract/levels/level0$i/level0$i
     sudo chmod 4755 $extract/levels/level0$i/level0$i
 done
 
