@@ -42,7 +42,6 @@ How to use
 6. Setup the capture the flag challenges:
 
         sudo ./scripts/setup-ctf1.sh
-        # TODO: do we really need root here?
 
 7. Rebuild the iso:
 

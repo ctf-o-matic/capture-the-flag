@@ -29,6 +29,10 @@ error() {
     exit 1
 }
 
+exit_if_nonroot() {
+    test $(id -u) = 0 || error this script needs to run as root
+}
+
 for i in "$@"; do
     case "$i" in
         -h|--help) usage ; exit 1 ;;
