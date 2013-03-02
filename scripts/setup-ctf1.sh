@@ -10,6 +10,10 @@ exit_if_nonroot
 
 test "$SUDO_USER" && runas="sudo -u $SUDO_USER" || runas=
 
+# install software
+./scripts/install-openssh.sh
+install_tcz php5 curl binutils perl5 python
+
 # build programs
 for i in $ctf1_orig/code/level*; do
     test -f $i/Makefile && (cd $i; $runas make)
