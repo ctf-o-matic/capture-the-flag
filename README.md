@@ -22,36 +22,37 @@ the scripts in this project:
 * `curl`
 
 
-How to use
-----------
-1. Download the smallest TinyCore Linux live cd image from: 
-   http://distro.ibiblio.org/tinycorelinux/downloads.html
+Basic build (for the impatient)
+-------------------------------
+To fetch all the necessary files including the 8MB TinyCore base
+base image, the hacking contest data and all the required TinyCore
+packages and remaster the CD:
 
-2. Copy or symlink the live cd image file to `livecd.iso`
+    ./scripts/rebuild.sh
 
-3. Get the files of the first Capture The Flag contest from GitHub:
+Note: some of the steps need to run `sudo`, so you will be prompted
+for your password one or more times.
 
-        ./scripts/get-ctf1.sh
 
-4. Unpack the live cd image:
+3-step build
+------------
+Create the basic CD data but stop before rebuilding the image to
+give you a chance to customize.
 
-        sudo ./scripts/unpack-iso.sh
+1. Build the basic CD data:
 
-5. Unpack the squashfs image inside the live cd
+        ./scripts/build.sh
 
-        sudo ./scripts/unpack-squashfs.sh
+   Note: some of the steps need to run `sudo`, so you will be
+   prompted for your password one or more times.
 
-6. [Optional] Install keymaps for non US keyboards:
+2. Install custom packages, for example keymaps for non US keyboards:
 
         sudo ./scripts/install-tcz.sh kmaps
 
-7. Setup the capture the flag challenges:
+3. Create the final ISO:
 
-        sudo ./scripts/setup-ctf1.sh
-
-8. Rebuild the iso:
-
-        sudo ./scripts/repack.sh
+        sudo ./scripts/pack-iso.sh
 
 
 Progress
@@ -81,7 +82,6 @@ Todo
 
 * Explain how to switch the keymap when booting the livecd (i.e : mc kmap=azerty/fr rom french) 
 
-* find a way to have the levels executables built with the same gcc/arch version as the one used in the livecd
 
 Disclaimer
 ----------
