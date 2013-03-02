@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-const int UID = 1102;
-
 int main(int argc, char **argv)
 {
-  setreuid(UID, UID);
+  // circumvent busybox ash dropping privileges
+  uid_t uid = geteuid();
+  setreuid(uid, uid);
+
   printf("Current time: ");
   fflush(stdout);
   system("date");
