@@ -46,7 +46,7 @@ exit_if_nonroot() {
 }
 
 get_tcz() {
-    mkdir -pv $tcz_dir
+    $runas mkdir -pv $tcz_dir
     for package; do
         target=$tcz_dir/$package.tcz
         if test ! -f $target; then
