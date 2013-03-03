@@ -3,8 +3,6 @@ ctf-o-matic
 Remaster Linux Live CD images for the purpose of creating ready to
 use hacking contests with pre-installed vulnerabilities to exploit.
 
-**IMPORTANT: this is a work in progress**
-
 
 Requirements
 ------------
@@ -21,6 +19,17 @@ the scripts in this project:
 * `curl` -- for downloading packages and other files
 
 
+Building the Live CD
+--------------------
+You have different options to build the CD.
+
+* Basic build: using a single script to build everything
+* 3-step build: 3 steps to give you a chance to customize
+* Expert build: if you want to understand everything
+
+Choose whichever method is most suitable for you.
+
+
 Basic build (for the impatient)
 -------------------------------
 To fetch all the necessary files including the 8MB TinyCore base
@@ -35,8 +44,8 @@ for your password one or more times.
 
 3-step build
 ------------
-Create the basic CD data but stop before rebuilding the image to
-give you a chance to customize.
+The idea of this build method is to create the basic CD data but stop
+before rebuilding the image so that you can customize it first.
 
 1. Build the basic CD data:
 
@@ -45,7 +54,10 @@ give you a chance to customize.
    Note: some of the steps need to run `sudo`, so you will be
    prompted for your password one or more times.
 
-2. Install custom packages, for example keymaps for non US keyboards:
+2. Customize the contents in the `extract` directory. This step is
+   completely up to you, depending on what you want to customize.
+   You might want to install some custom packages, for example
+   keymaps for non US keyboards:
 
         sudo ./scripts/install-tcz.sh kmaps
 
@@ -62,11 +74,20 @@ Progress
 
 Todo
 ----
-* Setup level 2 (requires web server, maybe lighttpd?)
+* Setup level 2
+    * Use a standalone web server, for example `php -S`
+      http://docs.php.net/manual/en/features.commandline.webserver.php
+    * Confirm the exploit works
+    * Setup the web server to start on boot
+    * Confirm the exploit works on the live cd
+    * Eliminate unnecessary php dependencies (mysql, ...) if possible
 
 * Confirm that level 4 can be hacked
 
 * Setup level 5 and confirm it can be hacked
+    * Confirm the exploit works
+    * Setup the web server to start on boot
+    * Confirm the exploit works on the live cd
 
 * Confirm that level 6 can be hacked
 
