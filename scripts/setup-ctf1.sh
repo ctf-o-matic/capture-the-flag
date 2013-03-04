@@ -55,6 +55,11 @@ rm $create_users
 # copy ctf1 files
 mkdir -p $extract/levels/level00
 rsync -av $ctf1_orig/code/level0? $extract/levels/
+
+# custom handling for level5
+mv $extract/levels/level05/level05 $extract/levels/level05/level05.py
+
+# add extra ctf1 files
 rsync -av $ctf1_append/* $extract/ --exclude '*.c'
 
 # fix permissions
