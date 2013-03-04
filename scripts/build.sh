@@ -8,8 +8,6 @@ cd $(dirname "$0"); . ./common.sh; cd ..
 
 ./scripts/get-livecd.sh
 
-./scripts/get-ctf1.sh
-
 sudo ./scripts/unpack-iso.sh
 
 sudo ./scripts/unpack-squashfs.sh
