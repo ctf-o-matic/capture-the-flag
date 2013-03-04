@@ -78,7 +78,8 @@ done
 for i in 0 1 2 3 4 5 6; do
     chown -R 110$i.110$i $extract/home/level0$i
     chown -R 110$i.110$i $extract/levels/level0$i
-    test $i = 0 || chmod 4755 $extract/levels/level0$i/level0$i
+    to_setuid=$extract/levels/level0$i/level0$i
+    test -f $to_setuid && chmod 4755 $to_setuid
 done
 
 # customize boot screen
