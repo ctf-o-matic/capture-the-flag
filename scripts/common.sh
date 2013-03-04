@@ -53,6 +53,15 @@ get_tcz() {
             msg fetching package $package ...
             $runas curl -o $target $tcz_url/$package.tcz
         fi
+        dep=$target.dep
+        if test ! -f $dep; then
+            msg fetching dep list of $package ...
+            $runas curl -o $dep $tcz_url/$package.tcz.dep || touch $dep
+            grep -q 404 $dep && >$dep
+            if test -s $dep; then
+                get_tcz $(sed -e s/.tcz$// $dep)
+            fi
+        fi
     done
 }
 
@@ -66,6 +75,10 @@ install_tcz() {
             msg installing package $package ...
             unsquashfs -f -d $extract $target
             touch $tce_marker
+        fi
+        dep=$target.dep
+        if test -s $dep; then
+            install_tcz $(sed -e s/.tcz$// $dep)
         fi
     done
 }

@@ -6,7 +6,7 @@
 
 cd $(dirname "$0"); . ./common.sh; cd ..
 
-install_tcz gcc_libs openssh openssl-1.0.0
+install_tcz openssh
 
 exit_if_nonroot
 
