@@ -67,9 +67,8 @@ mv $extract/levels/level05/level05 $extract/levels/level05/level05.py
 rsync -av $ctf1_append/* $extract/ --exclude '*.c'
 
 # fix permissions
-chmod 0750 $extract/home/level0?
+chmod -R go-rwx $extract/home/level0?
 chmod g-s $extract/home/level0?
-chmod 0400 $extract/home/level0?/.password
 chmod 0750 $extract/levels/level0?
 
 # fix ownerships
