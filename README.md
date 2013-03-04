@@ -75,12 +75,14 @@ Progress
 Todo
 ----
 * Setup level 2
-    * Use a standalone web server, for example `php -S`
+    * Build php from source, disable everything possible
+    * Try if it works in chroot: `php < extract/home/level02/level02.php`
+        * If yes great, copy the binary to /usr/local/bin/php
+        * If not then see the wiki of TC
+    * Create a start script for level02 to run php -S 0.0.0.0:8002
       http://docs.php.net/manual/en/features.commandline.webserver.php
-    * Confirm the exploit works
-    * Setup the web server to start on boot
-    * Confirm the exploit works on the live cd
-    * Eliminate unnecessary php dependencies (mysql, ...) if possible
+    * Call the start script on boot
+    * Confirm the web server is listening on 8002 and works
 
 * Confirm that level 4 can be hacked
 
