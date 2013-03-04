@@ -74,7 +74,11 @@ install_tcz() {
         if ! test -f $tce_marker; then
             msg installing package $package ...
             unsquashfs -f -d $extract $target
-            touch $tce_marker
+            if test -s $tce_marker; then
+                chroot $extract /usr/local/tce.installed/$package
+            else
+                touch $tce_marker
+            fi
         fi
         dep=$target.dep
         if test -s $dep; then
