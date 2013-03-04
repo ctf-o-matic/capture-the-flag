@@ -9,13 +9,11 @@ cd $(dirname "$0"); . ./common.sh; cd ..
 exit_if_nonroot
 
 # install software
-./scripts/install-openssh.sh
-install_tcz curl binutils perl5
-install_tcz python sqlite3 bzip2-lib
-install_tcz php5 mysql libmcrypt gmp bsddb gdbm libltdl libiconv
-install_tcz libxslt libxml2 liblzma
-install_tcz unixODBC libltdl readline pcre
-install_tcz gdb ncurses ncurses-common expat2 eglibc_add_lib
+install_tcz python    # required by contest
+install_tcz curl      # hacking tool
+install_tcz binutils  # hacking tool
+install_tcz gdb       # hacking tool
+./scripts/install-openssh.sh  # just for convenience
 
 # build programs for i686
 for i in $ctf1_orig/code/level*; do
