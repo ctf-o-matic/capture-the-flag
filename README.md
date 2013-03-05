@@ -68,18 +68,13 @@ before rebuilding the image so that you can customize it first.
 
 Progress
 --------
-* Verified levels: 1, 2, 3
+* Verified levels: 1, 2, 3, 5
 * *Should* work but not verified levels: 4, 6
 
 
 Todo
 ----
 * Confirm that level 4 can be hacked
-
-* Setup level 5 and confirm it can be hacked
-    * Confirm the exploit works
-    * Setup the web server to start on boot
-    * Confirm the exploit works on the live cd
 
 * Confirm that level 6 can be hacked
 

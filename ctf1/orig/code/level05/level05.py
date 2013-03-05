@@ -18,12 +18,16 @@ LOGGER_NAME = 'queue'
 logger = logging.getLogger(LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
-TMPDIR = '/tmp/level05'
+wwwdata_dir = os.path.join(os.path.dirname(__file__), 'wwwdata')
+if not os.path.isdir(wwwdata_dir):
+    os.makedirs(wwwdata_dir)
+
+PORT = 8005
 
 
 class Job(object):
-    QUEUE_JOBS = os.path.join(TMPDIR, 'jobs')
-    QUEUE_RESULTS = os.path.join(TMPDIR, 'results')
+    QUEUE_JOBS = os.path.join(wwwdata_dir, 'jobs')
+    QUEUE_RESULTS = os.path.join(wwwdata_dir, 'results')
 
     def __init__(self):
         self.id = self.generate_id()
@@ -183,7 +187,7 @@ class QueueHttpServer(BaseHTTPRequestHandler):
 
 def run_server():
     try:
-        server = HTTPServer(('127.0.0.1', 9020), QueueHttpServer)
+        server = HTTPServer(('0.0.0.0', PORT), QueueHttpServer)
         logger.info('Starting QueueServer')
         server.serve_forever()
     except KeyboardInterrupt:
