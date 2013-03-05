@@ -6,6 +6,8 @@ import os
 import random
 import string
 
+PORT = 8002
+
 app = flask.Flask(__name__)
 
 wwwdata_dir = os.path.join(os.path.dirname(__file__), 'wwwdata')
@@ -41,4 +43,4 @@ def index():
     return resp
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8002)
+    app.run(host='0.0.0.0', port=PORT)
