@@ -4,9 +4,9 @@ flag is almost in your grasp.
 The password for the flag is in /home/level06/.password.
 
 As it turns out, level06 is a pretty arrogant user. He created a
-taunting utility and left it in /levels/level06 (source code in
-/levels/level06.c). This utility will read the first line of a
-specified file, compare it with your supplied guess, and taunt you
+taunting utility and left it in /levels/level06
+This utility will read the first line of a specified file, compare
+it with your supplied guess, and taunt you
 unless you guessed correctly.
 
 You could try using the taunt utility to brute-force the password, but
