@@ -66,19 +66,13 @@ before rebuilding the image so that you can customize it first.
         sudo ./scripts/pack-iso.sh
 
 
-Progress
---------
-* Verified levels: 1, 2, 3, 4, 5
-* *Should* work but not verified levels: 6
-
-
 Todo
 ----
-* Confirm that level 6 can be hacked
+* Re-implement /levels/level02/level02.py without flask
+
+* Implement the second Capture The Flag contest of Stripe
 
 * maybe: Generalize the scripts to use with other than TinyCore
-
-* maybe: Implement the second Capture The Flag contest of Stripe
 
 
 Disclaimer
