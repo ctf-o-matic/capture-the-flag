@@ -68,22 +68,12 @@ before rebuilding the image so that you can customize it first.
 
 Progress
 --------
-* Verified levels: 1, 3
+* Verified levels: 1, 2, 3
 * *Should* work but not verified levels: 4, 6
 
 
 Todo
 ----
-* Setup level 2
-    * Build php from source, disable everything possible
-    * Try if it works in chroot: `php < extract/home/level02/level02.php`
-        * If yes great, copy the binary to /usr/local/bin/php
-        * If not then see the wiki of TC
-    * Create a start script for level02 to run php -S 0.0.0.0:8002
-      http://docs.php.net/manual/en/features.commandline.webserver.php
-    * Call the start script on boot
-    * Confirm the web server is listening on 8002 and works
-
 * Confirm that level 4 can be hacked
 
 * Setup level 5 and confirm it can be hacked
