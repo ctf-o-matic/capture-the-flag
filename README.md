@@ -68,14 +68,12 @@ before rebuilding the image so that you can customize it first.
 
 Progress
 --------
-* Verified levels: 1, 2, 3, 5
-* *Should* work but not verified levels: 4, 6
+* Verified levels: 1, 2, 3, 4, 5
+* *Should* work but not verified levels: 6
 
 
 Todo
 ----
-* Confirm that level 4 can be hacked
-
 * Confirm that level 6 can be hacked
 
 * maybe: Generalize the scripts to use with other than TinyCore
