@@ -16,7 +16,7 @@ install_tcz gdb       # hacking tool
 ./scripts/install-openssh.sh  # just for convenience
 
 # build programs for i686
-for i in $ctf1_orig/code/level*; do
+for i in $ctf1_code/levels/level*; do
     test -f $i/Makefile && (cd $i; $runas make CFLAGS="-m32")
 done
 
@@ -54,7 +54,7 @@ rm $create_users
 
 # copy ctf1 files
 mkdir -p $extract/levels/level00
-rsync -av $ctf1_orig/code/level0? $extract/levels/
+rsync -av $ctf1_code/levels/ $extract/levels
 
 # add extra ctf1 files
 rsync -av $ctf1_append/* $extract/ --exclude '*.c'

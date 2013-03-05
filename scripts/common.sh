@@ -20,7 +20,7 @@ squashfs=$newiso/boot/core.gz
 
 # ctf1 related
 ctf1=./ctf1
-ctf1_orig=$ctf1/orig
+ctf1_code=$ctf1/code
 ctf1_append=$ctf1/append
 ctf1_motd=$ctf1/motd
 
