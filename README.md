@@ -74,20 +74,25 @@ before rebuilding the image so that you can customize it first.
         sudo ./scripts/pack-iso.sh
 
 
-Todo
-----
-* Re-implement /levels/level02/level02.py without flask (save 3MB)
-
-* Implement the second Capture The Flag contest of Stripe
-
-* maybe: Generalize the scripts to use with other than TinyCore
-
-
 Disclaimer
 ----------
 The challenges are based on the original online contest
 organized by Stripe:
 https://stripe.com/blog/capture-the-flag
+
+
+Solutions
+---------
+The solutions are intentionally omitted from this project.
+You may find the solutions to the original Stripe challenges,
+but don't be surprised if they don't work on this Live CD.
+That is intentional too ;-)
+
+However, the solutions already reveal too much information,
+so for maximum enjoyment of this contest-on-a-CD it is best
+to not look for the solutions at all.
+
+Please keep your own solutions private.
 
 
 Links
@@ -96,5 +101,14 @@ Links
 * https://stripe.com/blog/capture-the-flag-20
 * http://io.smashthestack.org:84/
 * http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=CTF
+
+
+Todo
+----
+* Re-implement /levels/level02/level02.py without flask (save 3MB)
+
+* Implement the second Capture The Flag contest of Stripe
+
+* maybe: Generalize the scripts to use with other than TinyCore
 
 
