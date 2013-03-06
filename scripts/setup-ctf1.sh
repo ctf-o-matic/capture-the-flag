@@ -9,7 +9,7 @@ cd $(dirname "$0"); . ./common.sh; cd ..
 exit_if_nonroot
 
 # install software
-install_tcz python    # required by contest
+./scripts/install-python.sh   # required by contest
 install_tcz curl      # hacking tool
 install_tcz binutils  # hacking tool
 install_tcz gdb       # hacking tool
