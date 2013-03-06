@@ -19,6 +19,14 @@ the scripts in this project:
 * `curl` -- for downloading packages and other files
 
 
+Requirements when building in 64-bit systems
+--------------------------------------------
+The base Live CD is 32-bit, and therefore the C programs
+must be built 32-bit too. In order to do that you need
+to install 32-bit development libraries. In Debian for
+example the package is called `libc6-dev-i386`.
+
+
 Building the Live CD
 --------------------
 You have different options to build the CD.
