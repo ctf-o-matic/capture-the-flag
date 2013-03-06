@@ -68,7 +68,9 @@ before rebuilding the image so that you can customize it first.
 
 Todo
 ----
-* Re-implement /levels/level02/level02.py without flask
+* Add build number or revision indicator on boot screen
+
+* Re-implement /levels/level02/level02.py without flask (save 3MB)
 
 * Implement the second Capture The Flag contest of Stripe
 
