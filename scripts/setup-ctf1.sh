@@ -27,12 +27,12 @@ rsync -av $ctf1_special/levels/level* $work_special/
 
 # build programs for i686
 for i in $work_code/level*; do
-    test -f $i/Makefile && (cd $i; $runas make CFLAGS="-m32")
+    test -f $i/Makefile && (cd $i; $as_user make CFLAGS="-m32")
 done
 
 # build extra programs
 for i in $work_special/level*; do
-    test -f $i/Makefile && (cd $i; $runas make CFLAGS="-m32")
+    test -f $i/Makefile && (cd $i; $as_user make CFLAGS="-m32")
 done
 
 # create users
