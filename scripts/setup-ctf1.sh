@@ -13,6 +13,7 @@ exit_if_nonroot
 install_tcz curl      # hacking tool
 install_tcz binutils  # hacking tool
 install_tcz gdb       # hacking tool
+install_tcz ruby      # hacking tool
 ./scripts/install-openssh.sh  # just for convenience
 
 # build programs for i686
