@@ -26,6 +26,7 @@ ctf1_code=$ctf1/code
 ctf1_special=$ctf1/special
 ctf1_append=$ctf1/append
 ctf1_motd=$ctf1/motd
+work_ctf1=$work/ctf1
 
 test "$SUDO_USER" && runas="sudo -u $SUDO_USER" || runas=
 

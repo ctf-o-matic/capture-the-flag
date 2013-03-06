@@ -17,11 +17,11 @@ install_tcz ruby      # hacking tool
 ./scripts/install-openssh.sh  # just for convenience
 
 # copy original source codes to work
-work_code=$work/ctf1/code/levels
+work_code=$work_ctf1/code/levels
 mkdir -p $work_code
 rsync -av $ctf1_code/levels/level* $work_code/
 
-work_special=$work/ctf1/special/levels
+work_special=$work_ctf1/special/levels
 mkdir -p $work_special
 rsync -av $ctf1_special/levels/level* $work_special/
 
