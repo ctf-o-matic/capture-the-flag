@@ -17,6 +17,7 @@ mnt=./mnt
 extract=./extract
 newiso=./newiso
 squashfs=$newiso/boot/core.gz
+build_info=$extract/tmp/build.info
 
 # ctf1 related
 ctf1=./ctf1

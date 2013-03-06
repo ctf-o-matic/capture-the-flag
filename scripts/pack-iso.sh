@@ -8,6 +8,12 @@ cd $(dirname "$0"); . ./common.sh; cd ..
 
 exit_if_nonroot
 
+# add build info
+printf '\n%60s\n' "$(date)" > $build_info
+printf '%60s\n\n' "$(git rev-list HEAD -n1)" >> $build_info
+boot_msg0=boot/isolinux/boot.msg
+cat $ctf1/$boot_msg0 $build_info > $newiso/$boot_msg0
+
 tmp=squashfs.gz
 { cd $extract; find | cpio -o -H newc; } | gzip -2 > $tmp
 cmd advdef -z4 $tmp
