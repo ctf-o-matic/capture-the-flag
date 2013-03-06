@@ -14,6 +14,7 @@ install_tcz curl      # hacking tool
 install_tcz binutils  # hacking tool
 install_tcz gdb       # hacking tool
 install_tcz ruby      # hacking tool
+install_tcz kmaps     # for international use
 ./scripts/install-openssh.sh  # just for convenience
 
 # copy original source codes to work
