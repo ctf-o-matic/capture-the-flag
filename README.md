@@ -1,7 +1,7 @@
 ctf-o-matic
 ===========
 Remaster Linux Live CD images for the purpose of creating ready to
-use hacking contests with pre-installed vulnerabilities to exploit.
+use security wargames with pre-installed vulnerabilities to exploit.
 
 
 Requirements
