@@ -16,13 +16,22 @@ install_tcz gdb       # hacking tool
 install_tcz ruby      # hacking tool
 ./scripts/install-openssh.sh  # just for convenience
 
+# copy original source codes to work
+work_code=$work/ctf1/code/levels
+mkdir -p $work_code
+rsync -av $ctf1_code/levels/level* $work_code/
+
+work_special=$work/ctf1/special/levels
+mkdir -p $work_special
+rsync -av $ctf1_special/levels/level* $work_special/
+
 # build programs for i686
-for i in $ctf1_code/levels/level*; do
+for i in $work_code/level*; do
     test -f $i/Makefile && (cd $i; $runas make CFLAGS="-m32")
 done
 
 # build extra programs
-for i in $ctf1_append/levels/level*; do
+for i in $work_special/level*; do
     test -f $i/Makefile && (cd $i; $runas make CFLAGS="-m32")
 done
 
@@ -55,10 +64,11 @@ rm $create_users
 
 # copy ctf1 files
 mkdir -p $extract/levels/level00
-rsync -av $ctf1_code/levels/ $extract/levels
+rsync -av $ctf1_append/* $extract/
 
-# add extra ctf1 files
-rsync -av $ctf1_append/* $extract/ --exclude '*.c'
+# copy ctf1 code
+rsync -av $work_code/ $extract/levels
+rsync -av $work_special/ $extract/levels --exclude '*.c'
 
 # fix permissions
 chmod -R go-rwx $extract/home/level0?

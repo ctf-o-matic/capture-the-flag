@@ -23,6 +23,7 @@ build_info=$extract/tmp/build.info
 # ctf1 related
 ctf1=./ctf1
 ctf1_code=$ctf1/code
+ctf1_special=$ctf1/special
 ctf1_append=$ctf1/append
 ctf1_motd=$ctf1/motd
 
