@@ -5,4 +5,5 @@
  v_/_          http://www.tinycorelinux.com
 
 Press <Enter> to begin or F2, F3, or F4 to view boot options.
-For example to use French keymap enter: mc kmap=azerty/fr
+Shortcuts for alternative keymaps: fr jp hu
+Or you can specify a keymap explicitly: mc kmap=THE_KEYMAP
