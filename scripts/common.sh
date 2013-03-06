@@ -8,14 +8,15 @@
 # http://distro.ibiblio.org/tinycorelinux/downloads.html
 livecd_url=http://distro.ibiblio.org/tinycorelinux/4.x/x86/release/Core-current.iso
 tcz_url=http://distro.ibiblio.org/tinycorelinux/4.x/x86/tcz
-tcz_dir=./tcz
 
 # internally used dirs and paths
-livecd0=./livecd.iso
-livecd1=./remastered.iso
-mnt=./mnt
-extract=./extract
-newiso=./newiso
+work=./work
+tcz_dir=$work/tcz
+livecd0=$work/livecd.iso
+livecd1=$work/remastered.iso
+mnt=$work/mnt
+extract=$work/extract
+newiso=$work/newiso
 squashfs=$newiso/boot/core.gz
 build_info=$extract/tmp/build.info
 

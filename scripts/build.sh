@@ -6,7 +6,7 @@
 
 cd $(dirname "$0"); . ./common.sh; cd ..
 
-./scripts/get-livecd.sh
+$runas ./scripts/get-livecd.sh
 
 sudo ./scripts/unpack-iso.sh
 

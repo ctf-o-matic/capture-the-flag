@@ -14,7 +14,7 @@ printf '%60s\n\n' "$(git rev-list HEAD -n1)" >> $build_info
 boot_msg0=boot/isolinux/boot.msg
 cat $ctf1/$boot_msg0 $build_info > $newiso/$boot_msg0
 
-tmp=squashfs.gz
+tmp=$work/squashfs.gz
 { cd $extract; find | cpio -o -H newc; } | gzip -2 > $tmp
 cmd advdef -z4 $tmp
 cmd mv $tmp $squashfs
