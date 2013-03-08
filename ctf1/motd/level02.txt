@@ -1,7 +1,7 @@
 Congratulations on making it to level 2!
 
 The password for the next level is in /home/level03/.password. As
-before, you may find /levels/level03 and /levels/level03.c useful.
+before, you may find the files in /levels/level03 useful.
 While the supplied binary mostly just does mundane tasks, we trust
 you'll find a way of making it do something much more interesting.
 

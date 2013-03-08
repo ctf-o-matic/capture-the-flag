@@ -1,6 +1,6 @@
 Congratulations on making it to level 4! You're almost done!
 
-The password for the next (and final) level is in /home/level05/.password.
+The password for the next (and final) level is in: /home/level05/.password
 
 As it turns out, level05 is running a public uppercasing service. You
  can POST data to it, and it'll uppercase the data for you:

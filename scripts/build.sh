@@ -6,9 +6,7 @@
 
 cd $(dirname "$0"); . ./common.sh; cd ..
 
-./scripts/get-livecd.sh
-
-./scripts/get-ctf1.sh
+$as_user ./scripts/get-livecd.sh
 
 sudo ./scripts/unpack-iso.sh
 

@@ -1,7 +1,7 @@
 Congratulations on making it to level 3!
 
 The password for the next level is in /home/level04/.password. As
-before, you may find /levels/level04 and /levels/level04.c useful.
+before, you may find the files in /levels/level04 useful.
 The vulnerabilities overfloweth!
 
 There are a total of 6 levels in this CTF; if you're stuck, feel free

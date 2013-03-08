@@ -9,22 +9,31 @@ cd $(dirname "$0"); . ./common.sh; cd ..
 exit_if_nonroot
 
 # install software
-./scripts/install-openssh.sh
-install_tcz curl binutils perl5
-install_tcz python sqlite3 bzip2-lib
-install_tcz php5 mysql libmcrypt gmp bsddb gdbm libltdl libiconv
-install_tcz libxslt libxml2 liblzma
-install_tcz unixODBC libltdl readline pcre
-install_tcz gdb ncurses ncurses-common expat2 eglibc_add_lib
+./scripts/install-python.sh   # required by contest
+install_tcz curl      # hacking tool
+install_tcz binutils  # hacking tool
+install_tcz gdb       # hacking tool
+install_tcz ruby      # hacking tool
+install_tcz kmaps     # for international use
+./scripts/install-openssh.sh  # just for convenience
+
+# copy original source codes to work
+work_code=$work_ctf1/code/levels
+mkdir -p $work_code
+rsync -av $ctf1_code/levels/level* $work_code/
+
+work_special=$work_ctf1/special/levels
+mkdir -p $work_special
+rsync -av $ctf1_special/levels/level* $work_special/
 
 # build programs for i686
-for i in $ctf1_orig/code/level*; do
-    test -f $i/Makefile && (cd $i; $runas make CFLAGS="-m32")
+for i in $work_code/level*; do
+    test -f $i/Makefile && (cd $i; $as_user make CFLAGS="-m32")
 done
 
 # build extra programs
-for i in $ctf1_append/levels/level*; do
-    test -f $i/Makefile && (cd $i; $runas make CFLAGS="-m32")
+for i in $work_special/level*; do
+    test -f $i/Makefile && (cd $i; $as_user make CFLAGS="-m32")
 done
 
 # create users
@@ -56,13 +65,15 @@ rm $create_users
 
 # copy ctf1 files
 mkdir -p $extract/levels/level00
-rsync -av $ctf1_orig/code/level0? $extract/levels/
-rsync -av $ctf1_append/* $extract/ --exclude '*.c'
+rsync -av $ctf1_append/* $extract/
+
+# copy ctf1 code
+rsync -av $work_code/ $extract/levels
+rsync -av $work_special/ $extract/levels --exclude '*.c'
 
 # fix permissions
-chmod 0750 $extract/home/level0?
+chmod -R go-rwx $extract/home/level0?
 chmod g-s $extract/home/level0?
-chmod 0400 $extract/home/level0?/.password
 chmod 0750 $extract/levels/level0?
 
 # fix ownerships
@@ -80,8 +91,12 @@ done
 for i in 0 1 2 3 4 5 6; do
     chown -R 110$i.110$i $extract/home/level0$i
     chown -R 110$i.110$i $extract/levels/level0$i
-    test $i = 0 || chmod 4755 $extract/levels/level0$i/level0$i
+    to_setuid=$extract/levels/level0$i/level0$i
+    test -f $to_setuid && chmod 4755 $to_setuid
 done
+
+# customize /etc
+rsync -av $ctf1_append/etc/ $extract/etc
 
 # customize boot screen
 rsync -av $ctf1/boot/ $newiso/boot

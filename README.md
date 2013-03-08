@@ -1,7 +1,7 @@
 ctf-o-matic
 ===========
 Remaster Linux Live CD images for the purpose of creating ready to
-use hacking contests with pre-installed vulnerabilities to exploit.
+use security wargames with pre-installed vulnerabilities to exploit.
 
 
 Requirements
@@ -18,6 +18,14 @@ the scripts in this project:
 * `advancecomp` -- for `advdef`
 * `squashfs-tools` -- for `unsquashfs`
 * `curl` -- for downloading packages and other files
+
+
+Requirements when building in 64-bit systems
+--------------------------------------------
+The base Live CD is 32-bit, and therefore the C programs
+must be built 32-bit too. In order to do that you need
+to install 32-bit development libraries. In Debian for
+example the package is called `libc6-dev-i386`.
 
 
 Building the Live CD
@@ -67,41 +75,25 @@ before rebuilding the image so that you can customize it first.
         sudo ./scripts/pack-iso.sh
 
 
-Progress
---------
-* Verified levels: 1, 3
-* *Should* work but not verified levels: 4, 6
-
-
-Todo
-----
-* Setup level 2
-    * Use a standalone web server, for example `php -S`
-      http://docs.php.net/manual/en/features.commandline.webserver.php
-    * Confirm the exploit works
-    * Setup the web server to start on boot
-    * Confirm the exploit works on the live cd
-    * Eliminate unnecessary php dependencies (mysql, ...) if possible
-
-* Confirm that level 4 can be hacked
-
-* Setup level 5 and confirm it can be hacked
-    * Confirm the exploit works
-    * Setup the web server to start on boot
-    * Confirm the exploit works on the live cd
-
-* Confirm that level 6 can be hacked
-
-* maybe: Generalize the scripts to use with other than TinyCore
-
-* maybe: Implement the second Capture The Flag contest of Stripe
-
-
 Disclaimer
 ----------
 The challenges are based on the original online contest
 organized by Stripe:
 https://stripe.com/blog/capture-the-flag
+
+
+Solutions
+---------
+The solutions are intentionally omitted from this project.
+You may find the solutions to the original Stripe challenges,
+but don't be surprised if they don't work on this Live CD.
+That is intentional too ;-)
+
+However, the solutions already reveal too much information,
+so for maximum enjoyment of this contest-on-a-CD it is best
+to not look for the solutions at all.
+
+Please keep your own solutions private.
 
 
 Links
@@ -110,5 +102,14 @@ Links
 * https://stripe.com/blog/capture-the-flag-20
 * http://io.smashthestack.org:84/
 * http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=CTF
+
+
+Todo
+----
+* Re-implement /levels/level02/level02.py without flask (save 3MB)
+
+* Implement the second Capture The Flag contest of Stripe
+
+* maybe: Generalize the scripts to use with other than TinyCore
 
 

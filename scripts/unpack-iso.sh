@@ -17,6 +17,4 @@ if ! ls $squashfs >/dev/null 2>/dev/null; then
     cmd umount $mnt
 fi
 
-rmdir -v $mnt 2>/dev/null
-
 # eof
