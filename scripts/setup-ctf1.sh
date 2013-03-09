@@ -14,7 +14,7 @@ install_tcz curl      # hacking tool
 install_tcz binutils  # hacking tool
 install_tcz gdb       # hacking tool
 install_tcz ruby      # hacking tool
-install_tcz nano      # easier editor than vi...
+install_tcz nano || : # easier editor than vi...
 install_tcz kmaps     # for international use
 ./scripts/install-openssh.sh  # just for convenience
 
