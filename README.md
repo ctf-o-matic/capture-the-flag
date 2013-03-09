@@ -96,6 +96,40 @@ to not look for the solutions at all.
 Please keep your own solutions private.
 
 
+How to use the CD
+-----------------
+The easiest way to use is with a software like VirtualBox,
+for example by following these steps:
+
+1. Create a new virtual machine: Linux, 2.6 kernel
+2. Memory: 256MB
+3. Hard disk: no need for a disk
+4. CD: configure the virtual machine to use the ISO image
+   of the Live CD as a CD drive
+5. Start the Virtual Machine
+
+At the boot prompt, you may want to enter `fr`, `jp` or `hu`
+to use French, Japanese or Hungarian keymap, respectively.
+
+All the regular boot options of TinyCore should work as well.
+
+
+Abusing the CD
+--------------
+The same way that you cannot really protect a system from an
+attacker who has physical access to it, it is impossible to
+protect the Live CD, so we did not even try to do that.
+
+If you want to get root access in the live system, you can
+either do `su - tc` to become the admin user, or boot the
+system with the `mc superuser` standard TinyCore boot option.
+
+Actually there is nothing wrong with this. The CD is more
+user-friendly this way, as it gives you the opportunity to
+install additional software you may prefer to use to pass
+the challenges.
+
+
 Links
 -----
 * https://stripe.com/blog/capture-the-flag
