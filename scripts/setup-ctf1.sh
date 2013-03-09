@@ -20,11 +20,11 @@ install_tcz kmaps     # for international use
 # copy original source codes to work
 work_code=$work_ctf1/code/levels
 mkdir -p $work_code
-rsync -av $ctf1_code/levels/level* $work_code/
+rsync -rv $ctf1_code/levels/level* $work_code/
 
 work_special=$work_ctf1/special/levels
 mkdir -p $work_special
-rsync -av $ctf1_special/levels/level* $work_special/
+rsync -rv $ctf1_special/levels/level* $work_special/
 
 # build programs for i686
 for i in $work_code/level*; do
@@ -65,15 +65,15 @@ rm $create_users
 
 # copy ctf1 files
 mkdir -p $extract/levels/level00
-rsync -av $ctf1_append/* $extract/
+rsync -rv $ctf1_append/* $extract/
 
 # copy ctf1 code
-rsync -av $work_code/ $extract/levels
-rsync -av $work_special/ $extract/levels --exclude '*.c'
+rsync -rv $work_code/ $extract/levels
+rsync -rv $work_special/ $extract/levels --exclude '*.c'
 
 # fix permissions
 chmod -R go-rwx $extract/home/level0?
-chmod g-s $extract/home/level0?
+chmod -R g-s $extract/home/level0?
 chmod 0750 $extract/levels/level0?
 
 # fix ownerships
@@ -96,9 +96,9 @@ for i in 0 1 2 3 4 5 6; do
 done
 
 # customize /etc
-rsync -av $ctf1_append/etc/ $extract/etc
+rsync -rv $ctf1_append/etc/ $extract/etc
 
 # customize boot screen
-rsync -av $ctf1/boot/ $newiso/boot
+rsync -rv $ctf1/boot/ $newiso/boot
 
 # eof
