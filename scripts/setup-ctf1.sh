@@ -54,10 +54,6 @@ for i in 0 1 2 3 4 5; do
     echo "addgroup level0$i level0$((i+1))"
 done | tee -a $create_users
 
-# set a password for tc user
-tcpass=$(pwgen 8 1)
-echo "echo tc:$tcpass | chpasswd --md5" | tee -a $create_users
-
 # run create user script in chroot
 chmod 755 $create_users
 chroot $extract $create_users0
