@@ -7,7 +7,4 @@ to http://localhost:8002/
 You can find the source code for this level in /levels/level02/.
 Who knows, you may find it useful.
  
-There are a total of 6 levels in this CTF; if you're stuck, feel free
-to email us for guidance.
- 
 Best of luck!

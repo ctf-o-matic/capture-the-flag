@@ -1,16 +1,18 @@
-Welcome to the CTF challenge!
+Welcome to the Capture The Flag security challenge!
  
-CTF is a wargame, inspired by SmashTheStack I/O[1].
+This is a security wargame inspired by Stripe.com[1]
  
-In /home/level01/.password is the SSH password for the level01
-user. Your mission, should you choose to accept it, is to read that
-file. You may find the files in /levels/level01 useful.
+In /home/level01/.password is the password of the level01 user.
+Your mission, should you choose to accept it, is to read that
+file and login as level01 to advance to the next level.
+You may find the files in /levels/level01 useful.
  
-There are a total of 6 levels in this CTF; if you're stuck, feel free
-to email us for guidance.
+There are a total of 6 levels in this challenge; your goal is
+to advance level by level by discovering and exploiting the
+vulnerability at each level until you reach level06, the
+final level with the flag and glory!
  
-Happy hacking,
+Happy hacking!
+The ctf-o-matic team
  
-The CTF team
- 
-[1] http://io.smashthestack.org:84/
+[1] http://stripe.com/blog/capture-the-flag
