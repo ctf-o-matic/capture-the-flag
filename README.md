@@ -114,6 +114,12 @@ to use French, Japanese or Hungarian keymap, respectively.
 All the regular boot options of TinyCore should work as well.
 
 
+Screenshots
+-----------
+![Start](https://github.com/janosgyerik/ctf-o-matic/raw/master/images/start.png)
+![End](https://github.com/janosgyerik/ctf-o-matic/raw/master/images/end.png)
+
+
 Abusing the CD
 --------------
 The same way that you cannot really protect a system from an
