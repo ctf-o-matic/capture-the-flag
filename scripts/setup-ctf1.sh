@@ -96,9 +96,6 @@ for i in 0 1 2 3 4 5 6; do
     test -f $to_setuid && chmod 4755 $to_setuid
 done
 
-# customize /etc
-rsync -rv $ctf1_append/etc/ $extract/etc
-
 # customize boot screen
 rsync -rv $ctf1/boot/ $newiso/boot
 

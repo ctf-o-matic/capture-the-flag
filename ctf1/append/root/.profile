@@ -1,9 +1,15 @@
 #!/bin/sh
-INIT=/tmp/INIT
-if ! test -f $INIT; then
-    /usr/local/etc/init.d/openssh start >> $INIT.log
-    (exec sudo -u level02 /home/level02/start.sh >> $INIT.log 2>&1)&
-    (exec sudo -u level05 /home/level05/start.sh >> $INIT.log 2>&1)&
-    touch $INIT
+NOAUTOLOGIN=/etc/sysconfig/noautologin
+if [ -f "$NOAUTOLOGIN" ]; then
+	if [ -s "$NOAUTOLOGIN" ]; then
+		> "$NOAUTOLOGIN"
+		exit
+	fi
+else
+	if [ ! -f /etc/sysconfig/superuser ]; then 
+		clear
+		#TCUSER="$(cat /etc/sysconfig/tcuser)"
+		#exec /bin/login -f "$TCUSER"
+        exec /bin/login -f level00
+	fi
 fi
-exec /bin/login -f level00
