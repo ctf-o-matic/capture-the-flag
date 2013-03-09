@@ -73,6 +73,7 @@ rsync -rv $work_special/ $extract/levels --exclude '*.c'
 
 # fix permissions
 chmod -R go-rwx $extract/home/level0?
+chmod -R go+rx $extract/home/level00
 chmod -R g-s $extract/home/level0?
 chmod 0750 $extract/levels/level0?
 
