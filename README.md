@@ -13,6 +13,7 @@ the scripts in this project:
 * `git`
 * `make`, `gcc` -- for building vulnerable programs
 * `pwgen` -- for generating random passwords
+* `rsync`
 * `genisoimage` -- for `mkisofs`
 * `advancecomp` -- for `advdef`
 * `squashfs-tools` -- for `unsquashfs`

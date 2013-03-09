@@ -24,7 +24,7 @@ def index():
     params = {}
     if request.method == 'POST':
         params['name'] = request.form.get('name')
-        params['age'] = request.form.get('name')
+        params['age'] = request.form.get('age')
 
     user_details = request.cookies.get('user_details')
     if not user_details:
