@@ -57,7 +57,6 @@ done | tee -a $create_users
 # set a password for tc user
 tcpass=$(pwgen 8 1)
 echo "echo tc:$tcpass | chpasswd --md5" | tee -a $create_users
-echo $tcpass > $extract/home/tc/.password
 
 # run create user script in chroot
 chmod 755 $create_users
