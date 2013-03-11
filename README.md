@@ -82,20 +82,6 @@ organized by Stripe:
 https://stripe.com/blog/capture-the-flag
 
 
-Solutions
----------
-The solutions are intentionally omitted from this project.
-You may find the solutions to the original Stripe challenges,
-but don't be surprised if they don't work on this Live CD.
-That is intentional too ;-)
-
-However, the solutions already reveal too much information,
-so for maximum enjoyment of this contest-on-a-CD it is best
-to not look for the solutions at all.
-
-Please keep your own solutions private.
-
-
 How to use the CD
 -----------------
 The easiest way to use is with a software like VirtualBox,
@@ -113,11 +99,33 @@ to use French, Japanese or Hungarian keymap, respectively.
 
 All the regular boot options of TinyCore should work as well.
 
+After the system has started, you will be presented the
+instructions to pass the first challenge.
+
+To install additional software in the running system,
+switch to the `tc` user using the `su - tc` command, and
+use the `tce` program which is the TinyCore package manager.
+It is not complicated to use, just follow the instructions.
+
 
 Screenshots
 -----------
 ![Start](https://github.com/janosgyerik/ctf-o-matic/raw/master/images/start.png)
 ![End](https://github.com/janosgyerik/ctf-o-matic/raw/master/images/end.png)
+
+
+Solutions
+---------
+The solutions are intentionally omitted from this project.
+You may find the solutions to the original Stripe challenges,
+but don't be surprised if they don't work on this Live CD.
+That is intentional too ;-)
+
+However, the solutions already reveal too much information,
+so for maximum enjoyment of this contest-on-a-CD it is best
+to not look for the solutions at all.
+
+Please keep your own solutions private.
 
 
 Abusing the CD
@@ -129,11 +137,6 @@ protect the Live CD, so we did not even try to do that.
 If you want to get root access in the live system, you can
 either do `su - tc` to become the admin user, or boot the
 system with the `mc superuser` standard TinyCore boot option.
-
-Actually there is nothing wrong with this. The CD is more
-user-friendly this way, as it gives you the opportunity to
-install additional software you may prefer to use to pass
-the challenges.
 
 
 Links
