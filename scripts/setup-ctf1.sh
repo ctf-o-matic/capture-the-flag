@@ -65,7 +65,8 @@ rsync -rv $ctf1_append/* $extract/
 
 # copy ctf1 code
 rsync -rv $work_code/ $extract/levels
-rsync -rv $work_special/ $extract/levels --exclude '*.c'
+#rsync -rv $work_special/ $extract/levels --exclude '*.c'
+rsync -rv $work_special/ $extract/levels
 
 # fix permissions
 chmod -R go-rwx $extract/home/level0?
