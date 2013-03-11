@@ -69,8 +69,8 @@ rsync -rv $work_code/ $extract/levels
 rsync -rv $work_special/ $extract/levels
 
 # fix permissions
-chmod -R go-rwx $extract/home/level0?
-chmod -R go+rx $extract/home/level00
+chmod -R go-w $extract/home/level0?
+chmod -R go-rx $extract/home/level0[1-9]
 chmod -R g-s $extract/home/level0?
 chmod 0750 $extract/levels/level0?
 
