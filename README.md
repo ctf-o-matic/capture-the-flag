@@ -30,7 +30,7 @@ example the package is called `libc6-dev-i386`.
 
 Building the Live CD
 --------------------
-You have different options to build the CD.
+You have different options to build the CD:
 
 * Basic build: using a single script to build everything
 * 3-step build: 3 steps to give you a chance to customize
@@ -103,9 +103,9 @@ After the system has started, you will be presented the
 instructions to pass the first challenge.
 
 To install additional software in the running system,
-switch to the `tc` user using the `su - tc` command, and
-use the `tce` program which is the TinyCore package manager.
-It is not complicated to use, just follow the instructions.
+switch to the `tc` user with the `su - tc` command, and
+use the `tce` program -- TinyCore's package manager.
+It is not complicated, just follow the instructions.
 
 
 Screenshots
@@ -118,22 +118,14 @@ Solutions
 ---------
 The solutions are intentionally omitted from this project.
 You may find the solutions to the original Stripe challenges,
-but don't be surprised if they don't work on this Live CD.
-That is intentional too ;-)
-
-However, the solutions already reveal too much information,
-so for maximum enjoyment of this contest-on-a-CD it is best
-to not look for the solutions at all.
+but don't be surprised if they don't work on this Live CD
+out of the box. That is intentional too ;-)
 
 Please keep your own solutions private.
 
 
 Abusing the CD
 --------------
-The same way that you cannot really protect a system from an
-attacker who has physical access to it, it is impossible to
-protect the Live CD, so we did not even try to do that.
-
 If you want to get root access in the live system, you can
 either do `su - tc` to become the admin user, or boot the
 system with the `mc superuser` standard TinyCore boot option.
