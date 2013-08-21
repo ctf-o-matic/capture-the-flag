@@ -1,5 +1,5 @@
-ctf-o-matic
-===========
+Capture the flag!
+=================
 Remaster Linux Live CD images for the purpose of creating ready to
 use security wargames with pre-installed vulnerabilities to exploit.
 
@@ -110,8 +110,8 @@ It is not complicated, just follow the instructions.
 
 Screenshots
 -----------
-![Start](https://github.com/janosgyerik/ctf-o-matic/raw/master/images/start.png)
-![End](https://github.com/janosgyerik/ctf-o-matic/raw/master/images/end.png)
+![Start](https://github.com/janosgyerik/capture-the-flag/raw/master/images/start.png)
+![End](https://github.com/janosgyerik/capture-the-flag/raw/master/images/end.png)
 
 
 Solutions
