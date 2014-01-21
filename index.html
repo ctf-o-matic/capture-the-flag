@@ -19,8 +19,10 @@
         <h2>A security wargame with 6 challenges, embedded on an ultra-light Linux Live CD</h2>
 
         <section id="downloads">
+        <!--
           <a href="https://github.com/janosgyerik/capture-the-flag/zipball/master" class="btn">Download as .zip</a>
           <a href="https://github.com/janosgyerik/capture-the-flag/tarball/master" class="btn">Download as .tar.gz</a>
+          -->
           <a href="https://github.com/janosgyerik/capture-the-flag" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
         </section>
       </div>
@@ -53,35 +55,40 @@ to use French, Japanese or Hungarian keymap, respectively.</p>
 
 <p>All the regular boot options of TinyCore should work as well.</p>
 
-<p>After the system has started, you will be presented the
-instructions to pass the first challenge.</p>
+<p>After the system has started,
+you will see the instructions to pass the first challenge:</p>
 
-<p>To install additional software in the running system,
-switch to the <code>tc</code> user with the <code>su - tc</code> command, and
+<p><img src="https://github.com/janosgyerik/capture-the-flag/raw/master/images/start.png" alt="Start"></p>
+
+<p>If you need, you can install additional software in the running system, it's totally ok and not cheating.
+Switch to the <code>tc</code> user with the <code>su - tc</code> command, and
 use the <code>tce</code> program -- TinyCore's package manager.
-It is not complicated, just follow the instructions.</p>
+It's easy, just follow the instructions.</p>
 
-<h2>
-<a name="screenshots" class="anchor" href="#screenshots"><span class="octicon octicon-link"></span></a>Screenshots</h2>
+<p>The goal is to advance through the levels one by one,
+discovering the password to the next level at each step,
+until you reach "The Flag" (and celebrate):</p>
 
-<p><img src="https://github.com/janosgyerik/capture-the-flag/raw/master/images/start.png" alt="Start"><img src="https://github.com/janosgyerik/capture-the-flag/raw/master/images/end.png" alt="End"></p>
+<p><img src="https://github.com/janosgyerik/capture-the-flag/raw/master/images/end.png" alt="End"></p>
 
 <h2>
 <a name="solutions" class="anchor" href="#solutions"><span class="octicon octicon-link"></span></a>Solutions</h2>
 
 <p>The solutions are intentionally omitted from this project.
-You may find the solutions to the original Stripe challenges,
-but don't be surprised if they don't work on this Live CD
-out of the box. That is intentional too ;-)</p>
+You can find the solutions to the original Stripe challenges on the internet,
+but don't be surprised if they won't work on this Live CD
+out of the box. That's intentional too ;-)</p>
 
-<p>Please keep your own solutions private.</p>
+<p>Please keep your own solutions private. Thank you.</p>
 
 <h2>
 <a name="abusing-the-cd" class="anchor" href="#abusing-the-cd"><span class="octicon octicon-link"></span></a>Abusing the CD</h2>
 
 <p>If you want to get root access in the live system, you can
 either do <code>su - tc</code> to become the admin user, or boot the
-system with the <code>mc superuser</code> standard TinyCore boot option.</p>
+system with the <code>mc superuser</code> boot option.
+This is no secret, and you won't learn anything this way.
+</p>
 
 <h2>
 <a name="disclaimer" class="anchor" href="#disclaimer"><span class="octicon octicon-link"></span></a>Disclaimer</h2>
@@ -94,6 +101,7 @@ organized by Stripe:
 <a name="links" class="anchor" href="#links"><span class="octicon octicon-link"></span></a>Links</h2>
 
 <ul>
+<li><a href="http://sourceforge.net/projects/ctfomatic/files/">ISO images</a></li>
 <li><a href="https://stripe.com/blog/capture-the-flag">https://stripe.com/blog/capture-the-flag</a></li>
 <li><a href="https://stripe.com/blog/capture-the-flag-20">https://stripe.com/blog/capture-the-flag-20</a></li>
 <li><a href="http://io.smashthestack.org:84/">http://io.smashthestack.org:84/</a></li>
