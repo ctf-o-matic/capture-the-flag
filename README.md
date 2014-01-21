@@ -1,4 +1,4 @@
-Capture the flag!
+Capture The Flag!
 =================
 Remaster Linux Live CD images for the purpose of creating ready to
 use security wargames with pre-installed vulnerabilities to exploit.
@@ -82,30 +82,9 @@ organized by Stripe:
 https://stripe.com/blog/capture-the-flag
 
 
-How to use the CD
+Using the Live CD
 -----------------
-The easiest way to use is with a software like VirtualBox,
-for example by following these steps:
-
-1. Create a new virtual machine: Linux, 2.6 kernel
-2. Memory: 256MB
-3. Hard disk: no need for a disk
-4. CD: configure the virtual machine to use the ISO image
-   of the Live CD as a CD drive
-5. Start the Virtual Machine
-
-At the boot prompt, you may want to enter `fr`, `jp` or `hu`
-to use French, Japanese or Hungarian keymap, respectively.
-
-All the regular boot options of TinyCore should work as well.
-
-After the system has started, you will be presented the
-instructions to pass the first challenge.
-
-To install additional software in the running system,
-switch to the `tc` user with the `su - tc` command, and
-use the `tce` program -- TinyCore's package manager.
-It is not complicated, just follow the instructions.
+See http://janosgyerik.github.com/capture-the-flag/
 
 
 Screenshots
@@ -117,31 +96,34 @@ Screenshots
 Solutions
 ---------
 The solutions are intentionally omitted from this project.
-You may find the solutions to the original Stripe challenges,
-but don't be surprised if they don't work on this Live CD
-out of the box. That is intentional too ;-)
+You can find the solutions to the original Stripe challenges on the internet,
+but don't be surprised if they won't work on this Live CD out of the box.
+That's intentional too ;-)
 
 Please keep your own solutions private.
 
 
 Abusing the CD
 --------------
-If you want to get root access in the live system, you can
-either do `su - tc` to become the admin user, or boot the
-system with the `mc superuser` standard TinyCore boot option.
+If you want to get root access in the live system,
+you can either do `su - tc` to become the admin user,
+or boot the system with the `mc superuser` boot option.
+This is no secret, and you won't learn anything this way.
 
 
 Links
 -----
-* https://stripe.com/blog/capture-the-flag
-* https://stripe.com/blog/capture-the-flag-20
+* [ISO images](http://sourceforge.net/projects/ctfomatic/files/)
+* [Blog announcement of Capture The Flag, by Stripe](https://stripe.com/blog/capture-the-flag)
+* [Blog announcement of Capture The Flag 2.0, by Stripe](https://stripe.com/blog/capture-the-flag-20)
 * http://io.smashthestack.org:84/
-* http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=CTF
+* [Tiny Core Linux](http://distro.ibiblio.org/tinycorelinux/)
+* [The CTF ASCII art generator](http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=CTF)
 
 
 Todo
 ----
-* Re-implement /levels/level02/level02.py without flask (save 3MB)
+* Re-implement /levels/level02/level02.py without Flask (save 3MB)
 
 * Implement the second Capture The Flag contest of Stripe
 
