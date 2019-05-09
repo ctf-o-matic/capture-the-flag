@@ -116,7 +116,7 @@ Links
 * [ISO images](http://sourceforge.net/projects/ctfomatic/files/)
 * [Blog announcement of Capture The Flag, by Stripe](https://stripe.com/blog/capture-the-flag)
 * [Blog announcement of Capture The Flag 2.0, by Stripe](https://stripe.com/blog/capture-the-flag-20)
-* http://io.smashthestack.org:84/
+* https://insecure.org/stf/smashstack.html
 * [Tiny Core Linux](http://distro.ibiblio.org/tinycorelinux/)
 * [The CTF ASCII art generator](http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=CTF)
 
