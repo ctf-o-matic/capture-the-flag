@@ -38,22 +38,20 @@
 <h2>
 <a name="using-the-live-cd" class="anchor" href="#using-the-live-cd"><span class="octicon octicon-link"></span></a>Using the Live CD</h2>
 
-<p>You <em>could</em> burn the <a href="http://sourceforge.net/projects/ctfomatic/files/">latest ISO image</a> on a CD and boot your computer from it.
-But it's probably a lot easier to use a virtualization software like VirtualBox, VMWare, qemu or similar.
-(Btw the ISO image is ultra-light, less than 30 MB!)</p>
+<p>Using a virtualization software like VirtualBox, VMWare, qemu or similar,
+configure a virtual machine to use the ISO image as a Live CD.</p>
 
 <ol>
-<li>Get the latest ISO image: <a href="https://sourceforge.net/projects/ctfomatic/files/">https://sourceforge.net/projects/ctfomatic/files/</a>
-</li>
-<li>Create a new virtual machine: Linux, 2.6 kernel</li>
-<li>Memory: 256MB (no need for more, at all)</li>
+<li>Get the latest ISO image (~26MB): <a href="https://github.com/janosgyerik/capture-the-flag/releases/download/v1.0/ctf1-r14.iso">https://github.com/janosgyerik/capture-the-flag/releases/download/v1.0/ctf1-r14.iso</a></li>
+<li>Create a new virtual machine: Linux, 2.6/3.x/4.x kernel, 32-bit</li>
+<li>Memory: 256MB</li>
 <li>Hard disk: no need for a disk</li>
 <li>CD: configure the CD drive of the virtual machine to use the ISO image</li>
 <li>Start the Virtual Machine</li>
 </ol>
 
-<p>At the boot prompt, simply press Enter if you have US keyboard,
-or type <code>fr</code>, <code>jp</code> or <code>hu</code> and Enter
+<p>In the boot menu, if you have a US keyboard, then simply press enter.
+Otherwise, you can type <code>fr</code>, <code>jp</code> or <code>hu</code> and Enter
 to use French, Japanese or Hungarian keymap, respectively.</p>
 
 <p>The Live CD is based on <a href="http://distro.ibiblio.org/tinycorelinux/">TinyCore Linux</a>,
@@ -64,19 +62,13 @@ you will see the instructions to pass the first challenge:</p>
 
 <p><img src="https://github.com/janosgyerik/capture-the-flag/raw/master/images/start.png" alt="Start"></p>
 
-<p>If you need, you can install additional software in the running system, it's totally ok and not cheating.
-Switch to the <code>tc</code> user with the <code>su - tc</code> command, and
-use the <code>tce</code> program -- TinyCore's package manager.
-It's easy, just follow the instructions.</p>
-
 <p>The goal is to advance through the levels one by one,
 discovering the password to the next level at each step,
 until you reach "The Flag" (and celebrate):</p>
 
 <p><img src="https://github.com/janosgyerik/capture-the-flag/raw/master/images/end.png" alt="End"></p>
 
-<h2>
-<a name="solutions" class="anchor" href="#solutions"><span class="octicon octicon-link"></span></a>Solutions</h2>
+<h2><a name="solutions" class="anchor" href="#solutions"><span class="octicon octicon-link"></span></a>Solutions</h2>
 
 <p>The solutions are intentionally omitted from this project.
 You can find the solutions to the original Stripe challenges on the internet,
@@ -84,6 +76,13 @@ but don't be surprised if they won't work on this Live CD
 out of the box. That's intentional too ;-)</p>
 
 <p>Please keep your own solutions private. Thank you.</p>
+
+<h2><a name="installing-additional-software" class="anchor" href="#installing-additional-software"><span class="octicon octicon-link"></span></a>Installing additional software</h2>
+
+<p>You can install additional software in the running system, if you really want.
+Switch to the <code>tc</code> user with the <code>su - tc</code> command, and
+use the <code>tce</code> program -- TinyCore's package manager.
+Simply run the command and follow the instructions.</p>
 
 <h2>
 <a name="abusing-the-cd" class="anchor" href="#abusing-the-cd"><span class="octicon octicon-link"></span></a>Abusing the CD</h2>
