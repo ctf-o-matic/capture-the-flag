@@ -1,0 +1,14 @@
+_______________________________
+\_   ___ \__    ___/\_   _____/
+/    \  \/ |    |    |    __)  
+\     \____|    |    |     \   
+ \______  /|____|    \___  /   
+        \/               \/    
+
+Congratulations on making it to level 3!
+
+The password for the next level is in /home/level04/.password. As
+before, you may find the files in /levels/level04 useful.
+The vulnerabilities overfloweth!
+
+Best of luck!

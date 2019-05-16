@@ -1,0 +1,28 @@
+Hi there!
+
+If you know what to do but have a bit of struggle with the
+syntax, you may find these examples helpful.
+
+Example 1: send an HTTP GET to a local web server and output the result
+
+    curl localhost:1234
+
+Example 2: passing binary data as command line arguments
+
+    /path/to/program arg1 $(printf "\x41\x00\x20\x41") arg2
+
+Example 3: view binary data in hexadecimal format
+
+    printf "\x41\x00\x20\x41" | hexdump
+
+Example 4: send an HTTP POST with the POST data in a file, and at
+the same time set a cookie
+
+    curl localhost:1234 --data-urlencode @postdata.txt --cookie name=value
+
+Example 5: repeat something a 100 times
+
+    for i in $(seq 1 100); do echo hello $i; done
+
+Good luck, and have fun!
+The ctf-o-matic team

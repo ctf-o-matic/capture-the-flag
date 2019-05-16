@@ -43,18 +43,6 @@ Lastly, unrelated to the content of the contest,
 to maximize the usability of the package,
 its size should be as small as possible.
 
-*What is the challenge in supporting setuid feature?*
-
-The shell on Tiny Core uses *busybox ash*,
-which has a security feature to ignore the setuid flag
-TODO: find related question you asked on Stack Overflow,
-possibly migrated to other Stack Exchange.
-
-To bypass these safety features,
-we had to modify the C programs.
-We were concerned that these modifications may confuse the participants,
-so we made additional efforts to keep them hidden.
-
 *What is the challenge in including C programs?*
 
 The vulnerable C programs must be compiled on the same architecture as the base image. A simple and easy approach is to include C compilers in the image, with the drawback of increased size, as compilers can be large.
@@ -64,6 +52,20 @@ We could have used a separate build machine to compile the vulnerable programs a
 *What vulnerable architecture is needed for C programs?*
 
 We are not security experts. To us, some of the vulnerabilities *seem* harder to exploit on modern architectures such as x64, compared to for example i386. We used an architecture where we could confirm that the levels are possible to pass.
+
+*What is the challenge in supporting setuid feature?*
+
+The shell on Tiny Core uses *busybox ash*,
+which has a security feature to drop setuid privileges in some cases,
+making some of the vulnerabilities difficult to recreate.
+We were able to enforce setuid privileges by modifying the vulnerable programs to also include this:
+
+    // circumvent busybox ash dropping privileges
+    uid_t uid = geteuid();
+    setreuid(uid, uid);
+
+We were concerned that these modifications may confuse the participants,
+so we made additional efforts to keep them hidden.
 
 *What is the challenge in including PHP?*
 

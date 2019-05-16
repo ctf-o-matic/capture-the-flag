@@ -1,0 +1,20 @@
+Congratulations on making it to level 4! You're almost done!
+
+The password for the next (and final) level is in: /home/level05/.password
+
+As it turns out, level05 is running a public uppercasing service. You
+ can POST data to it, and it'll uppercase the data for you:
+
+  curl localhost:8005 -d 'hello friend'
+  {
+      "processing_time": 5.0067901611328125e-06,
+      "queue_time": 0.41274619102478027,
+      "result": "HELLO FRIEND"
+  }
+
+You can view the source for this service in /levels/level05. As you
+can see, the service is structured as a queue server and a queue
+worker.
+
+Could it be that this seemingly innocuous service will be level05's
+downfall?

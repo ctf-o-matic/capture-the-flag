@@ -1,0 +1,13 @@
+Congratulations on making it to level 5! This is the final level. The
+flag is almost in your grasp.
+
+The password for the flag is in /home/level06/.password.
+
+As it turns out, level06 is a pretty arrogant user. He created a
+taunting utility and left it in the directory /levels/level06
+This utility will read the first line of a specified file, compare
+it with your supplied guess, and taunt you unless you guessed correctly.
+
+You could try using the taunt utility to brute-force the password, but
+that would take... well, I don't want to say forever, but
+approximately that. I guess you'll have to find another way.

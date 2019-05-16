@@ -1,0 +1,23 @@
+Hi there!
+
+For your convenience, we included some tools that you migth
+find helpful:
+
+* objdump   # display information from object files
+* gdb       # the GNU debugger
+* curl      # transfer a URL (run http GET/POST requests, etc)
+* ruby      # interpreted object oriented scripting language
+* python    # interpreted object oriented scripting language
+* vi        # a programmer's text editor
+* nano      # text editor, an enhanced free Pico clone
+
+However, epecially at higher levels it is probably easier to
+copy the source code files of the levels to your host system,
+compile them as 32-bit Linux binaries, and develop the exploit
+code in your comfortable environment using your favorite
+tools. When an exploit code is ready, copy it here using scp
+or sftp, and login to try and execute against the vulnerable
+programs.
+
+Good luck, and have fun!
+The ctf-o-matic team
