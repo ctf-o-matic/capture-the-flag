@@ -1,7 +1,20 @@
 Congratulations on making it to level 3!
 
-The password for the next level is in /home/level04/.password. As
-before, you may find the files in /levels/level04 useful.
-The vulnerabilities overfloweth!
+The password for the next (and final) level is in: /home/level04/.password
 
-Best of luck!
+As it turns out, level04 is running a public uppercasing service. You
+ can POST data to it, and it'll uppercase the data for you:
+
+  curl localhost:8004 -d 'hello friend'
+  {
+      "processing_time": 5.0067901611328125e-06,
+      "queue_time": 0.41274619102478027,
+      "result": "HELLO FRIEND"
+  }
+
+You can view the source for this service in /levels/level04. As you
+can see, the service is structured as a queue server and a queue
+worker.
+
+Could it be that this seemingly innocuous service will be level04's
+downfall?

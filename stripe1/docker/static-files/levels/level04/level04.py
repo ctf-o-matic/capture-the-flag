@@ -25,7 +25,7 @@ except OSError:
     if not os.path.isdir(wwwdata_dir):
         raise
 
-PORT = 8005
+PORT = 8004
 
 
 class Job(object):

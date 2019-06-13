@@ -16,7 +16,7 @@ RUN apk add sudo
 
 EXPOSE 22
 EXPOSE 8002
-EXPOSE 8005
+EXPOSE 8004
 
 COPY static-files /
 COPY generated-files /

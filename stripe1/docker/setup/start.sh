@@ -24,7 +24,7 @@ waitForPort() {
 
 waitForPort 22
 waitForPort 8002
-waitForPort 8005
+waitForPort 8004
 
 netstat -ntl
 
