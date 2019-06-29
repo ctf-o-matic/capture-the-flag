@@ -24,4 +24,4 @@ COPY generated-files /
 WORKDIR /setup
 COPY setup .
 RUN ./install.sh
-CMD ./start.sh
+ENTRYPOINT ["./entrypoint.sh"]
