@@ -48,3 +48,6 @@ if grep -q '^root:!:' /etc/shadow; then
     password=$(cat /root/.password)
     chpasswd --md5 <<< "root:$password"
 fi
+
+echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
+passwd -d level00
