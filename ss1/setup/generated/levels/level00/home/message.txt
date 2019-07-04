@@ -1,0 +1,12 @@
+Welcome to the Capture The Flag security challenge!
+ 
+The password for the next level is in: /home/level01/.password
+You may find the files in /levels/level01 useful.
+While the supplied binary mostly just does mundane tasks, we trust
+you'll find a way of making it do something much more interesting.
+ 
+Your goal is to advance level by level by discovering and exploiting the
+vulnerability at each level until you reach the final level with the flag!
+ 
+Happy hacking!
+The Capture The Flag Team
