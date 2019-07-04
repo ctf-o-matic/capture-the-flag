@@ -36,19 +36,21 @@ create_welcome_message() {
 
     msg "creating message file: $output ..."
 
-    local commands=()
-    if [[ "$next" ]]; then
-        hintfile=levels/$next/hint.tpl
-        commands+=(sed)
-        commands+=(-e "/__HINT__/r $hintfile")
-        commands+=(-e "/__HINT__/d")
+    if [[ "$current" = "level00" ]]; then
+        cat messages/banner.txt messages/first.txt > "$output"
+    elif ! [[ "$next" ]]; then
+        cat messages/banner.txt messages/last.txt > "$output"
     else
-        commands+=(cat)
+        local current_level_num=${current#level0}
+        local hintfile=levels/$next/hint.txt
+        cat messages/banner.txt messages/middle.tpl | \
+        sed \
+            -e "s/__CURRENT_LEVEL_NUM__/$current_level_num/" \
+            -e "s/__NEXT_LEVEL__/$next/" \
+            -e "/__HINT__/r $hintfile" \
+            -e "/__HINT__/d" \
+            > "$output"
     fi
-
-    "${commands[@]}" "$src/message.tpl" \
-        | sed -e "s/__LEVEL__/$next/g" \
-        > "$output"
 }
 
 create_level() {
