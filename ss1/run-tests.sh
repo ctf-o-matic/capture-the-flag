@@ -7,7 +7,7 @@ name=$(basename "$PWD")
 
 . setup/common.sh
 
-cid=$(docker run -d -p 8022:22 "$name")
+cid=$(docker run -d -p 8022:22 --hostname "$name" "$name")
 
 cleanup() {
     msg "cleaning up ..."
