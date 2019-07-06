@@ -13,7 +13,7 @@ level=$1; shift
 
 case $level in
     level0[1-9])
-        num=${level#level0}
+        num=$(num "$level")
         prev=level0$((num - 1))
         ;;
     *) fatal "got $level; expected first arg to match pattern level0[1-9]" ;;

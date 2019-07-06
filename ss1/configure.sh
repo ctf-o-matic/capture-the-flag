@@ -8,6 +8,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")"
+. setup/common.sh
 
 generated=setup/generated
 rm -fr "$generated"
@@ -18,10 +19,6 @@ levels=(levels/level*/)
 levels=(${levels[@]%/})
 # strip beginning, leaving only the directory name
 levels=(${levels[@]##*/})
-
-msg() {
-    echo "* $@"
-}
 
 create_password() {
     pwgen 16 1
@@ -36,12 +33,12 @@ create_welcome_message() {
 
     msg "creating message file: $output ..."
 
-    if [[ "$current" = "level00" ]]; then
+    local current_level_num=$(num "$current")
+    if [[ "$current_level_num" == "0" ]]; then
         cat messages/banner.txt messages/first.txt > "$output"
     elif ! [[ "$next" ]]; then
         cat messages/banner.txt messages/last.txt > "$output"
     else
-        local current_level_num=${current#level0}
         local hintfile=levels/$next/hint.txt
         cat messages/banner.txt messages/middle.tpl | \
         sed \
