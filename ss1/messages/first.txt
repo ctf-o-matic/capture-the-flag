@@ -1,9 +1,9 @@
 Welcome to the Capture The Flag security challenge!
 
-In /home/level01/.password is the password of the level01 user.
+In /home/level1/.password is the password of the level1 user.
 Your mission, should you choose to accept it, is to read that
-file and login as level01 to advance to the next level.
-You may find the files in /levels/level01 useful.
+file and login as level1 to advance to the next level.
+You may find the files in /levels/level1 useful.
 
 Your goal is to advance from level to level by discovering and exploiting the
 vulnerability at each level until you reach the final level with the flag!

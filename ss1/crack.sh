@@ -7,16 +7,16 @@ cd "$(dirname "$0")"
 . common.sh
 . setup/common.sh
 
-[[ $# = 1 ]] || usage "$0 level0[1-9]"
+[[ $# = 1 ]] || usage "$0 level[1-9]"
 
 level=$1; shift
 
 case $level in
-    level0[1-9])
+    level[1-9])
         num=$(num "$level")
-        prev=level0$((num - 1))
+        prev=level$((num - 1))
         ;;
-    *) fatal "got $level; expected first arg to match pattern level0[1-9]" ;;
+    *) fatal "got $level; expected first arg to match pattern level[1-9]" ;;
 esac
 
 local_crack=levels/$level/crack.sh

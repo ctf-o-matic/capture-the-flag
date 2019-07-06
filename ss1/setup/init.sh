@@ -34,11 +34,11 @@ create_level() {
     echo "$username:$password" | chpasswd --md5
 
     if [ $count != 0 ]; then
-        addgroup "level0$((count-1))" "$username" || :
+        addgroup "level$((count-1))" "$username" || :
     fi
 }
 
-for level in "$content"/levels/level*/; do
+for level in "$content"/levels/level?/; do
     level=$(basename "$level")
     create_level "$level"
 done
@@ -50,4 +50,4 @@ if grep -q '^root:!:' /etc/shadow; then
 fi
 
 echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
-passwd -d level00
+passwd -d level0

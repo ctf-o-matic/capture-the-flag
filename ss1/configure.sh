@@ -13,8 +13,8 @@ cd "$(dirname "$0")"
 generated=setup/generated
 rm -fr "$generated"
 
-# directories matching "level*"
-levels=(levels/level*/)
+# directories matching "level?"
+levels=(levels/level?/)
 # strip trailing "/"
 levels=(${levels[@]%/})
 # strip beginning, leaving only the directory name

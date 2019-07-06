@@ -19,7 +19,7 @@ trap 'cleanup' EXIT
 msg "sleep for 3 to wait for container ..."
 sleep 3
 
-for script in levels/level*/crack.sh; do
+for script in levels/level?/crack.sh; do
     msg "running script: $script ..."
     level=$(basename "$(dirname "$script")")
     cmd ./crack.sh "$level"

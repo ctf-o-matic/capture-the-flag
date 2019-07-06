@@ -9,4 +9,4 @@ set -euo pipefail
 ./build.sh
 ./run.sh bash
 
-# tip: test a new level with: ./crack.sh level0X
+# tip: test a new level with: ./crack.sh levelX
