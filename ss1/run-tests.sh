@@ -16,8 +16,8 @@ cleanup() {
 
 trap 'cleanup' EXIT
 
-msg "sleep for 5 to wait for container ..."
-sleep 5
+msg "sleep for 3 to wait for container ..."
+sleep 3
 
 for script in levels/level*/crack.sh; do
     msg "running script: $script ..."

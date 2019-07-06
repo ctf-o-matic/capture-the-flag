@@ -34,7 +34,7 @@ create_level() {
     echo "$username:$password" | chpasswd --md5
 
     if [ $count != 0 ]; then
-        addgroup "level0$((count-1))" "$username"
+        addgroup "level0$((count-1))" "$username" || :
     fi
 }
 

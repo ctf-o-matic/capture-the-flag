@@ -4,6 +4,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")"
 
+. common.sh
 . setup/common.sh
 
 [[ $# = 1 ]] || usage "$0 level0[1-9]"
@@ -18,24 +19,19 @@ case $level in
     *) fatal "got $level; expected first arg to match pattern level0[1-9]" ;;
 esac
 
-crack=levels/$level/crack.sh
-[[ -f "$crack" ]] || fatal "no such file: $crack"
-
-_ssh() {
-    ssh -p 8022 \
-        -oStrictHostKeyChecking=no \
-        -oUserKnownHostsFile=/dev/null \
-        -oLogLevel=QUIET \
-        "$@"
-}
+local_crack=levels/$level/crack.sh
+[[ -f "$local_crack" ]] || fatal "no such file: $local_crack"
 
 pw_found=$(mktemp)
 pw_expected=$(mktemp)
 trap 'rm "$pw_found" "$pw_expected"' EXIT
 
-_ssh root@localhost /setup/authorize-for-users.sh "$prev"
+crack=/tmp/crack.sh
 
-_ssh "$prev@localhost" 's=/tmp/crack.sh; cat > $s; chmod +x $s; $s '"$level" < "$crack" | tee "$pw_found"
+_ssh root@localhost /setup/authorize-for-users.sh "$prev"
+_ssh root@localhost rm -f "$crack"
+
+_ssh "$prev@localhost" "cat > $crack; chmod +x $crack; $crack $level" < "$local_crack" | tee "$pw_found"
 
 _ssh root@localhost cat "/home/$level/.password" | tee "$pw_expected"
 
