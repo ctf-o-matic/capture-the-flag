@@ -6,5 +6,5 @@ cd "$(dirname "$0")"
 . common.sh
 
 for script in generated/levels/level?/reset.sh; do
-    cmd "$script"
+    cmd "$script" "$@"
 done

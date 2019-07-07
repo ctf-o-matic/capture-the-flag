@@ -8,10 +8,19 @@ level=$(basename "$PWD")
 
 ../common/reset.sh "$level"
 
-cd special
-make
+rundir=/var/run/levels/$level
 
-progpath=/levels/$level/prog
-cp prog "$progpath"
-chown -v "$level:$level" "$progpath"
-chmod -v 4555 "$progpath"
+rm -fr "$rundir"
+mkdir "$rundir"
+
+cp -vr runtime "$rundir/runtime"
+cp -vr code "$rundir/code"
+cp -v start.sh "$rundir"
+
+mkdir -p "$rundir/wwwdata"
+chmod 700 "$rundir/wwwdata"
+chown "$level" "$rundir/wwwdata"
+
+if [[ $# == 0 ]]; then
+    /setup/service.sh "$level" restart
+fi

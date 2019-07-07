@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>Capture the Flag, level X</title>
+  </head>
+  <body>
+    <h1>Welcome to the challenge!</h1>
+    <div class="main">
+        <p>{{ out }}</p>
+        {% if name and age %}
+        <p>You're {{ name }}, and your age is {{ age }}.</p>
+        {% else %}
+      <form action="#" method="post">
+        Name: <input name="name" type="text" length="40" /><br />
+        Age: <input name="age" type="text" length="2" /><br /><br />
+        <input type="submit" value="Submit!" />
+      </form>
+      {% endif %}
+    </div>
+  </body>
+</html>

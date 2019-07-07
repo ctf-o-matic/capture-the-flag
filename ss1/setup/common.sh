@@ -43,3 +43,34 @@ is_valid_level() {
     local level=$1
     [[ $level == level[0-9] ]]
 }
+
+findPidByPort() {
+    [[ $# == 1 ]] || usage "findPidByPort port"
+    local port=$1; shift
+
+    local line=($(netstat -ntlp | grep ":$port "))
+    [[ ${#line[@]} != 0 ]] || return 1
+
+    local pid=${line[-1]%%/*}
+    echo "$pid"
+}
+
+verifyPort() {
+    [[ $# == 1 ]] || usage "verifyPort port"
+    local port=$1; shift
+
+    netstat -ntl | grep -q ":$port "
+}
+
+waitForPort() {
+    [[ $# == 1 ]] || usage "waitForPort port"
+    local port=$1; shift
+
+    for _ in 1 2 3; do
+        if verifyPort "$port"; then
+            return
+        fi
+        msg "waiting a bit more for port $port to come up ..."
+        sleep 1
+    done
+}

@@ -6,4 +6,4 @@ cd "$(dirname "$0")"
 chmod 700 .
 
 ./init.sh
-./reset.sh
+./reset.sh --skip-service

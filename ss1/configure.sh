@@ -34,18 +34,21 @@ create_welcome_message() {
     msg "creating message file: $output ..."
 
     local current_level_num=$(num "$current")
+    local next_level_port=$(levelport "$current")
+    ((next_level_port++))
+
     if [[ "$current_level_num" == "0" ]]; then
         cat messages/banner.txt messages/first.txt > "$output"
     elif ! [[ "$next" ]]; then
         cat messages/banner.txt messages/last.txt > "$output"
     else
-        local hintfile=levels/$next/hint.txt
+        local hintfile=levels/$next/hint.tpl
         cat messages/banner.txt messages/middle.tpl | \
+        sed -e "/__HINT__/r $hintfile" -e "/__HINT__/d" | \
         sed \
-            -e "s/__CURRENT_LEVEL_NUM__/$current_level_num/" \
-            -e "s/__NEXT_LEVEL__/$next/" \
-            -e "/__HINT__/r $hintfile" \
-            -e "/__HINT__/d" \
+            -e "s/__CURRENT_LEVEL_NUM__/$current_level_num/g" \
+            -e "s/__NEXT_LEVEL_PORT__/$next_level_port/g" \
+            -e "s/__NEXT_LEVEL__/$next/g" \
             > "$output"
     fi
 }
@@ -58,6 +61,7 @@ create_level() {
 
     msg "creating level: $current ..."
 
+    # TODO copy common home files, instead of doing that in reset.sh
     mkdir -p "$dst/home"
     cp -rv "$src"/ "$dst"/
 

@@ -32,3 +32,7 @@ if [[ -d "$code_src" ]]; then
     chown -Rv "$level:$level" "$code_dst"
     chmod -Rv g-w,o-rwx "$code_dst"
 fi
+
+rundir=/var/run/levels
+mkdir -p "$rundir"
+chmod 701 "$rundir"

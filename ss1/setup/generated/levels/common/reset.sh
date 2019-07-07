@@ -28,7 +28,11 @@ code_dst=/levels/$level
 
 if [[ -d "$code_src" ]]; then
     mkdir -p "$code_dst"
-    cp -v "$code_src"/* "$code_dst"
+    cp -Rv "$code_src"/* "$code_dst"
     chown -Rv "$level:$level" "$code_dst"
     chmod -Rv g-w,o-rwx "$code_dst"
 fi
+
+rundir=/var/run/levels
+mkdir -p "$rundir"
+chmod 701 "$rundir"
