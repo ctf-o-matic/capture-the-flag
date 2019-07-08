@@ -39,6 +39,7 @@ create_welcome_message() {
 
     if [[ "$current_level_num" == "0" ]]; then
         cat messages/banner.txt messages/first.txt > "$output"
+        cp -v messages/*-help.txt "$dst/home/"
     elif ! [[ "$next" ]]; then
         cat messages/banner.txt messages/last.txt > "$output"
     else

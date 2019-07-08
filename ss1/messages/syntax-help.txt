@@ -1,0 +1,26 @@
+Hi there!
+
+Some examples that may be helpful.
+
+Example: send an HTTP GET to a local web server and output the result
+
+    curl localhost:1234
+
+Example: pass binary data as command line arguments
+
+    /path/to/program arg1 $(printf "\x41\x00\x20\x41") arg2
+
+Example: view binary data in hexadecimal format
+
+    printf "\x41\x00\x20\x41" | hexdump
+
+Example: send an HTTP POST with the POST data in a file, and set a cookie:
+
+    curl localhost:1234 --data-urlencode @postdata.txt --cookie name=value
+
+Example: repeat something a 100 times
+
+    for ((i = 0; i < 100; i++)); do echo "hello $i"; done
+
+Good luck, and have fun!
+The Capture The Flag Team

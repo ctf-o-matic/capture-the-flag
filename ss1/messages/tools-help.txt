@@ -1,0 +1,15 @@
+Hi there!
+
+For your convenience, we included some tools that you migth
+find helpful:
+
+* objdump   # display information from object files
+* gdb       # the GNU debugger
+* curl      # transfer a URL (run http GET/POST requests, etc)
+* ruby      # interpreted object oriented scripting language
+* python    # interpreted object oriented scripting language
+* vi        # a programmer's text editor
+* nano      # text editor, an enhanced free Pico clone
+
+Good luck, and have fun!
+The Capture The Flag Team
