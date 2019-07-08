@@ -10,10 +10,13 @@ import sys
 port = int(sys.argv[1])
 wwwdata_dir = sys.argv[2]
 
-app = flask.Flask(__name__)
-
-if not os.path.isdir(wwwdata_dir):
+try:
     os.makedirs(wwwdata_dir)
+except OSError:
+    if not os.path.isdir(wwwdata_dir):
+        raise
+
+app = flask.Flask(__name__)
 
 
 def random_string(length):

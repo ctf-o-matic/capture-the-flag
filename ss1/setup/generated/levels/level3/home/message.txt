@@ -5,15 +5,13 @@ _______________________________
  \______  /|____|    \___  /   
         \/               \/    
 
-   __
-  (__)
-   ||_______________________
-   ||                       |
-   || Congratulations !!!   |
-   ||                       |
-   ||~~~~~~~~~~~~~~~~~~~~~~~
-   ||
-   ||
-   ||
-   ||
+Congratulations on making it to level 3!
 
+The password for the next level is in: /home/level4/.password
+
+You may find the files in /levels/level4 useful.
+
+While the supplied binary mostly just does mundane tasks, we trust
+you'll find a way to make it do something much more interesting!
+
+Best of luck!

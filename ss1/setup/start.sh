@@ -11,7 +11,7 @@ services=(/var/run/levels/level?)
 if [[ -d "${services[0]}" ]]; then
     for service in "${services[@]}"; do
         level=$(basename "$service")
-        /setup/service.sh "$level" start
+        /setup/service.sh "$level" start || :
     done
 fi
 

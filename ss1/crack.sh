@@ -19,6 +19,8 @@ case $level in
     *) fatal "got $level; expected first arg to match pattern level[1-9]" ;;
 esac
 
+port=$(levelport "$level")
+
 local_crack=levels/$level/crack.sh
 [[ -f "$local_crack" ]] || fatal "no such file: $local_crack"
 
@@ -31,7 +33,7 @@ crack=/tmp/crack.sh
 _ssh root@localhost /setup/authorize-for-users.sh "$prev"
 _ssh root@localhost rm -f "$crack"
 
-_ssh "$prev@localhost" "cat > $crack; chmod +x $crack; $crack $level" < "$local_crack" | tee "$pw_found"
+_ssh "$prev@localhost" "cat > $crack; chmod +x $crack; $crack $level $port" < "$local_crack" | tee "$pw_found"
 
 _ssh root@localhost cat "/home/$level/.password" | tee "$pw_expected"
 
