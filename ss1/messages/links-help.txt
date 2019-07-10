@@ -1,0 +1,7 @@
+Related reading:
+
+- [Open Web Application Security Project (OWASP)](https://www.owasp.org/index.php/Main_Page)
+
+- [Browser Security Handbook](https://code.google.com/archive/p/browsersec/wikis/Main.wiki)
+
+- [Smashing The Stack For Fun And Profit](https://insecure.org/stf/smashstack.html)
