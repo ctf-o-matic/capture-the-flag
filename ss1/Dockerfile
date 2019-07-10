@@ -26,6 +26,7 @@ EXPOSE 8007
 EXPOSE 8008
 
 COPY setup/generated/root /root
+COPY setup/root /root
 
 WORKDIR /setup
 COPY setup .
