@@ -6,8 +6,7 @@ cd "$(dirname "$0")"
 
 level=$(basename "$PWD")
 
-../common/reset.sh "$level"
-
+# TODO move all this to init and common reset and delete this file
 rundir=/var/run/levels/$level
 
 rm -fr "$rundir"

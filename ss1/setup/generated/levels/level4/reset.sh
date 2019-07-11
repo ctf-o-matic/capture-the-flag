@@ -6,8 +6,6 @@ cd "$(dirname "$0")"
 
 level=$(basename "$PWD")
 
-../common/reset.sh "$level"
-
 cd special
 make
 

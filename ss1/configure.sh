@@ -85,7 +85,7 @@ done
 create_level "${levels[i]}" ""
 
 msg "copy common files ..."
-cp -rv levels/common "$generated"/levels/
+cp -vr levels/common "$generated"/levels/
 
 msg "setup root user and authorized ssh keys ..."
 mkdir -p "$generated"/root/.ssh
