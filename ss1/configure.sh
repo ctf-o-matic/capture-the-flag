@@ -64,7 +64,12 @@ create_level() {
 
     # TODO copy common home files, instead of doing that in reset.sh
     mkdir -p "$dst/home"
-    cp -rv "$src"/ "$dst"/
+    for dirname in home code special runtime; do
+        [[ -d "$src/$dirname" ]] && cp -vr "$src/$dirname/" "$dst/$dirname"
+    done
+    for filename in reset.sh start.sh; do
+        [[ -f "$src/$filename" ]] && cp -v "$src/$filename" "$dst/"
+    done
 
     create_password > "$dst/home/.password"
     create_welcome_message "$current" "$next" "$src" "$dst"
