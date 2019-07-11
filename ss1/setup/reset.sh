@@ -18,10 +18,9 @@ reset() {
     cp -v generated/levels/common/home/.??* "$home_dst"
     cp -v generated/levels/common/home/* "$home_dst" || :
 
-    # TODO probably this can be written simpler
     cp -v "$home_src"/.??* "$home_dst"
     cp -v "$home_src"/* "$home_dst"
-    chown -Rv "$level:$level" "$home_dst"
+    chown -vR "$level:$level" "$home_dst"
     chmod -v 0700 "$home_dst"
 
     local code_src=$leveldir/code
@@ -29,9 +28,9 @@ reset() {
 
     if [[ -d "$code_src" ]]; then
         mkdir -p "$code_dst"
-        cp -Rv "$code_src"/* "$code_dst"
-        chown -Rv "$level:$level" "$code_dst"
-        chmod -Rv g-w,o-rwx "$code_dst"
+        cp -vR "$code_src"/* "$code_dst"
+        chown -vR "$level:$level" "$code_dst"
+        chmod -vR g-w,o-rwx "$code_dst"
     fi
 
     # TODO move this to init, or Dockerfile
