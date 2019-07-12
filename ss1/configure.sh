@@ -62,8 +62,10 @@ create_level() {
 
     msg "creating level: $current ..."
 
-    # TODO copy common home files, instead of doing that in reset.sh
     mkdir -p "$dst/home"
+    cp -v levels/common/home/.??* "$dst/home" || :
+    cp -v levels/common/home/* "$dst/home" || :
+
     for dirname in home code special runtime; do
         [[ -d "$src/$dirname" ]] && cp -vr "$src/$dirname/" "$dst/$dirname"
     done

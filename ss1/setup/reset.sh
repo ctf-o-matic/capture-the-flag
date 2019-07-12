@@ -14,10 +14,6 @@ reset() {
 
     [[ -d "$home_dst" ]]
 
-    # TODO move these files to level/home in configure
-    cp -v generated/levels/common/home/.??* "$home_dst"
-    cp -v generated/levels/common/home/* "$home_dst" || :
-
     cp -v "$home_src"/.??* "$home_dst"
     cp -v "$home_src"/* "$home_dst"
     chown -vR "$level:$level" "$home_dst"
