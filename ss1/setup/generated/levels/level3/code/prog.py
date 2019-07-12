@@ -1,4 +1,5 @@
 #!/usr/bin/env python2
+
 import logging
 import json
 import optparse
@@ -18,14 +19,10 @@ LOGGER_NAME = 'queue'
 logger = logging.getLogger(LOGGER_NAME)
 logger.addHandler(logging.StreamHandler(sys.stderr))
 
-port = 1234
-wwwdata_dir = '/tmp/wwwdata'
-
 
 class Job(object):
-    global wwwdata_dir
-    QUEUE_JOBS = os.path.join(wwwdata_dir, 'jobs')
-    QUEUE_RESULTS = os.path.join(wwwdata_dir, 'results')
+    QUEUE_JOBS = None
+    QUEUE_RESULTS = None
 
     def __init__(self):
         self.id = self.generate_id()
@@ -114,9 +111,9 @@ class QueueServer(object):
 class QueueWorker(object):
     def __init__(self):
         # ensure tmp directories exist
-        if not os.path.exists(Job.QUEUE_JOBS):
+        if not os.path.isdir(Job.QUEUE_JOBS):
             os.mkdir(Job.QUEUE_JOBS)
-        if not os.path.exists(Job.QUEUE_RESULTS):
+        if not os.path.isdir(Job.QUEUE_RESULTS):
             os.mkdir(Job.QUEUE_RESULTS)
 
     def poll(self):
@@ -183,8 +180,8 @@ class QueueHttpServer(BaseHTTPRequestHandler):
         self.wfile.write('\n')
         self.wfile.close()
 
-def run_server():
-    global port
+
+def run_server(port):
     try:
         server = HTTPServer(('0.0.0.0', port), QueueHttpServer)
         logger.info('Starting QueueServer')
@@ -193,9 +190,11 @@ def run_server():
         logger.info('^C received, shutting down server')
         server.socket.close()
 
+
 def run_worker():
     worker = QueueWorker()
     worker.poll()
+
 
 def main():
     parser = optparse.OptionParser("""%prog [options] port wwwdata_dir type""")
@@ -212,22 +211,19 @@ def main():
         parser.print_help()
         return 1
 
-    global port
-    global wwwdata_dir
-
     port = int(args[0])
     wwwdata_dir = args[1]
 
-    try:
+    Job.QUEUE_JOBS = os.path.join(wwwdata_dir, 'jobs')
+    Job.QUEUE_RESULTS = os.path.join(wwwdata_dir, 'results')
+
+    if not os.path.isdir(wwwdata_dir):
         os.makedirs(wwwdata_dir)
-    except OSError:
-        if not os.path.isdir(wwwdata_dir):
-            raise
 
     if args[2] == 'worker':
         run_worker()
     elif args[2] == 'server':
-        run_server()
+        run_server(port)
     else:
         raise ValueError('Invalid type %s' % args[2])
 
