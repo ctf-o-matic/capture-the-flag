@@ -34,7 +34,9 @@ reset() {
         "$custom_reset" "$@"
     fi
 
-    # TODO if a service, call restart now
+    if [[ $# == 0 ]]; then
+        /setup/service.sh "$level" restart || :
+    fi
 }
 
 for leveldir in generated/levels/level?; do

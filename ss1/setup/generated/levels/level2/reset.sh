@@ -19,7 +19,3 @@ cp -v start.sh "$rundir"
 mkdir -p "$rundir/wwwdata"
 chmod 700 "$rundir/wwwdata"
 chown "$level" "$rundir/wwwdata"
-
-if [[ $# == 0 ]]; then
-    /setup/service.sh "$level" restart
-fi
