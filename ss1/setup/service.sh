@@ -50,10 +50,14 @@ start() {
         return
     fi
 
-    local pid=$(findPidByPort "$port")
-    if [[ "$pid" ]]; then
-        msg "port appears to be up by process $pid -> killing it ..."
-        kill -9 "$pid"
+    local pids=($(findPidByPort "$port"))
+    if [[ ${#pids[@]} != 0 ]]; then
+        local pid
+        for pid in "${pids[@]}"; do
+            msg "port appears to be up by process $pid -> killing it ..."
+            kill -9 "$pid"
+        done
+        sleep 1
     fi
 
     msg "starting process for $level ..."
@@ -65,12 +69,20 @@ start() {
 }
 
 stop() {
-    if status; then
-        local pid=$(findPidByPort "$port")
-        msg "stopping process $pid running service listening on port $port ..."
-        kill -9 "$pid"
-        status
+    if ! status; then
+        return
     fi
+
+    local pids=($(findPidByPort "$port"))
+    if [[ ${#pids[@]} != 0 ]]; then
+        local pid
+        for pid in "${pids[@]}"; do
+            msg "stopping process $pid running service listening on port $port ..."
+            kill -9 "$pid"
+        done
+        sleep 1
+    fi
+    status
 }
 
 restart() {

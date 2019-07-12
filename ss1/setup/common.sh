@@ -52,7 +52,17 @@ findPidByPort() {
     [[ ${#line[@]} != 0 ]] || return 1
 
     local pid=${line[-1]%%/*}
-    echo "$pid"
+    case $pid in
+        *[^0-9]*) findPidByPortApproximately "$port" ;;
+        *) echo "$pid" ;;
+    esac
+}
+
+findPidByPortApproximately() {
+    [[ $# == 1 ]] || usage "findPidByPortApproximately port"
+    local port=$1; shift
+
+    ps | grep "[ ]$port\>" | awk '{ print $1 }'
 }
 
 verifyPort() {
