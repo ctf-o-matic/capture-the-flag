@@ -11,8 +11,7 @@ for ((i = 1; i <= 8; i++)); do
     port_args+=(-p "$port:$port")
 done
 
-docker run -it --cap-add=SYS_PTRACE \
-    --security-opt seccomp=unconfined \
+docker run -it \
     --hostname "$name" \
     "${port_args[@]}" \
     "$name" "$@"
