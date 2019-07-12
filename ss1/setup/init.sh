@@ -36,7 +36,29 @@ create_level() {
     if [ $count != 0 ]; then
         addgroup "level$((count-1))" "$username" || :
     fi
+
+    local rundir=$rundir/$level
+    mkdir "$rundir"
+
+    local dirname filename src dst
+    for dirname in runtime code; do
+        src=$content/levels/$username/$dirname
+        [[ -d "$src" ]] && cp -vr "$src" "$rundir/$dirname"
+    done
+    for filename in start.sh; do
+        src=$content/levels/$username/$filename
+        [[ -f "$src" ]] && cp -v "$src" "$rundir/"
+    done
+
+    mkdir -p "$rundir/wwwdata"
+    chmod 700 "$rundir/wwwdata"
+    chown "$username" "$rundir/wwwdata"
 }
+
+rundir=/var/run/levels
+msg "setting up '$rundir' for services ..."
+mkdir -p "$rundir"
+chmod 701 "$rundir"
 
 for level in "$content"/levels/level?/; do
     level=$(basename "$level")
@@ -52,8 +74,3 @@ fi
 msg "setting empty password for level0 ..."
 echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
 passwd -d level0
-
-rundir=/var/run/levels
-msg "setting up '$rundir' for services ..."
-mkdir -p "$rundir"
-chmod 701 "$rundir"
