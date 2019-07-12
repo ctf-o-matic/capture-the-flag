@@ -29,11 +29,6 @@ reset() {
         chmod -vR g-w,o-rwx "$code_dst"
     fi
 
-    # TODO move this to init, or Dockerfile
-    local rundir=/var/run/levels
-    mkdir -p "$rundir"
-    chmod 701 "$rundir"
-
     custom_reset=$leveldir/reset.sh
     if [[ -f "$custom_reset" ]]; then
         "$custom_reset" "$@"

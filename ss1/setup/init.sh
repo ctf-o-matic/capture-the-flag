@@ -49,5 +49,11 @@ if grep -q '^root:!:' /etc/shadow; then
     chpasswd --md5 <<< "root:$password"
 fi
 
+msg "setting empty password for level0 ..."
 echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
 passwd -d level0
+
+rundir=/var/run/levels
+msg "setting up '$rundir' for services ..."
+mkdir -p "$rundir"
+chmod 701 "$rundir"
