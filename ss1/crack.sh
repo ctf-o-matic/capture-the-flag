@@ -28,14 +28,27 @@ pw_found=$(mktemp)
 pw_expected=$(mktemp)
 trap 'rm "$pw_found" "$pw_expected"' EXIT
 
-crack=/tmp/crack.sh
-
 _ssh root@localhost /setup/authorize-for-users.sh "$prev"
-_ssh root@localhost rm -f "$crack"
 
-_ssh "$prev@localhost" "cat > $crack; chmod +x $crack; $crack $level $port" < "$local_crack" | tee "$pw_found"
+tmpdir=$(_ssh root@localhost mktemp -d)
+crack=$tmpdir/crack.sh
 
-_ssh root@localhost cat "/home/$level/.password" | tee "$pw_expected"
+_ssh "root@localhost" "cat > $crack" < "$local_crack"
+_ssh "root@localhost" << EOF
+chmod o+x "$crack"
+chmod o+xw "$tmpdir"
+EOF
+
+_ssh "$prev@localhost" "$crack $level $port" | tee "$pw_found"
+
+_ssh root@localhost << EOF
+rm -vfr "$tmpdir"
+grep -vxf /root/.ssh/authorized_keys "/home/$prev/.ssh/authorized_keys" > authorized_keys
+chown -v "$prev" authorized_keys
+mv -v authorized_keys "/home/$prev/.ssh"
+EOF
+
+_ssh root@localhost "cat /home/$level/.password" | tee "$pw_expected"
 
 if cmp "$pw_found" "$pw_expected"; then
     echo OK
