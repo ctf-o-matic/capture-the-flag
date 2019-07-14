@@ -7,9 +7,15 @@ cd "$(dirname "$0")"
 . common.sh
 . setup/common.sh
 
-[[ $# = 1 ]] || usage "$0 level[1-9]"
+[[ $# == [12] ]] || usage "$0 level[1-9] [host]"
 
 level=$1; shift
+
+if [[ $# = 1 ]]; then
+    host=$1; shift
+else
+    host=localhost
+fi
 
 case $level in
     level[1-9])
@@ -28,27 +34,35 @@ pw_found=$(mktemp)
 pw_expected=$(mktemp)
 trap 'rm "$pw_found" "$pw_expected"' EXIT
 
-_ssh root@localhost /setup/authorize-for-users.sh "$prev"
+as_root() {
+    _ssh "root@$host" "$@"
+}
 
-tmpdir=$(_ssh root@localhost mktemp -d)
+as_user() {
+    _ssh "$prev@$host" "$@"
+}
+
+as_root /setup/authorize-for-users.sh "$prev"
+
+tmpdir=$(as_root mktemp -d)
 crack=$tmpdir/crack.sh
 
-_ssh "root@localhost" "cat > $crack" < "$local_crack"
-_ssh "root@localhost" << EOF
+as_root "cat > $crack" < "$local_crack"
+as_root << EOF
 chmod o+x "$crack"
 chmod o+xw "$tmpdir"
 EOF
 
-_ssh "$prev@localhost" "$crack $level $port" | tee "$pw_found"
+as_user "$crack $level $port" | tee "$pw_found"
 
-_ssh root@localhost << EOF
+as_root << EOF
 rm -vfr "$tmpdir"
 grep -vxf /root/.ssh/authorized_keys "/home/$prev/.ssh/authorized_keys" > authorized_keys
 chown -v "$prev" authorized_keys
 mv -v authorized_keys "/home/$prev/.ssh"
 EOF
 
-_ssh root@localhost "cat /home/$level/.password" | tee "$pw_expected"
+as_root "cat /home/$level/.password" | tee "$pw_expected"
 
 if cmp "$pw_found" "$pw_expected"; then
     echo OK

@@ -20,8 +20,4 @@ seconds=3
 msg "sleep for $seconds seconds to wait for container ..."
 sleep "$seconds"
 
-for script in levels/level?/crack.sh; do
-    msg "running script: $script ..."
-    level=$(basename "$(dirname "$script")")
-    cmd ./crack.sh "$level"
-done
+./crack-all.sh
