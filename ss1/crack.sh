@@ -27,7 +27,7 @@ esac
 
 port=$(levelport "$level")
 
-local_crack=levels/$level/crack.sh
+local_crack=solutions/levels/$(cat "levels/$level/solution-key.txt").sh
 [[ -f "$local_crack" ]] || fatal "no such file: $local_crack"
 
 pw_found=$(mktemp)

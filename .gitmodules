@@ -1,0 +1,3 @@
+[submodule "ss1/solutions"]
+	path = ss1/solutions
+	url = me:capture-the-flag-solutions

@@ -12,8 +12,8 @@ else
     host=localhost
 fi
 
-for script in levels/level?/crack.sh; do
-    msg "running script: $script ..."
-    level=$(basename "$(dirname "$script")")
+for leveldir in levels/level[1-9]/; do
+    msg "running script for dir $leveldir ..."
+    level=$(basename "$leveldir")
     cmd ./crack.sh "$level" "$host"
 done
