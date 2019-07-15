@@ -65,12 +65,13 @@ for level in "$content"/levels/level?/; do
     create_level "$level"
 done
 
+msg "setting empty password for level0 ..."
+echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
+passwd -d level0
+
+# Note: this is needed to enable root login; the actual password doesn't matter
 if grep -q '^root:!:' /etc/shadow; then
     msg "setting password for root user ..."
     password=$(cat /root/.password)
     chpasswd --md5 <<< "root:$password"
 fi
-
-msg "setting empty password for level0 ..."
-echo "PermitEmptyPasswords yes" >> /etc/ssh/sshd_config
-passwd -d level0
