@@ -20,4 +20,6 @@ seconds=3
 msg "sleep for $seconds seconds to wait for container ..."
 sleep "$seconds"
 
+./test-reset.sh
+
 ./crack-all.sh

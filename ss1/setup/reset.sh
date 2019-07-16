@@ -6,8 +6,9 @@ cd "$(dirname "$0")"
 . common.sh
 
 reset() {
-    local leveldir=$1; shift
-    local level=$(basename "$leveldir")
+    local level=$1; shift
+
+    local leveldir=generated/levels/$level
 
     local home_src=$leveldir/home
     local home_dst=/home/$level
@@ -26,8 +27,11 @@ reset() {
         mkdir -p "$code_dst"
         cp -vR "$code_src"/* "$code_dst"
         chown -vR "$level:$level" "$code_dst"
+        chmod -v 0750 "$code_dst"
         chmod -vR g-w,o-rwx "$code_dst"
     fi
+
+    chmod 0700 "/var/run/levels/$level/wwwdata"
 
     custom_reset=$leveldir/reset.sh
     if [[ -f "$custom_reset" ]]; then
@@ -39,6 +43,4 @@ reset() {
     fi
 }
 
-for leveldir in generated/levels/level?; do
-    reset "$leveldir" "$@"
-done
+reset "$@"
