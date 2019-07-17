@@ -72,3 +72,4 @@ tmp/
 
 # Django
 db.sqlite3
+*_settings.py
