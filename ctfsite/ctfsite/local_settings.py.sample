@@ -16,6 +16,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'TODO.apps.googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'TODO'
 
 ALLOWED_HOSTS = [
-        '127.0.0.1',
-        'localhost',
+    '127.0.0.1',
+    'localhost',
 ]

@@ -19,8 +19,9 @@ from django.urls import include, path
 from leaderboard.views import index
 
 urlpatterns = [
-    # path(r'^oauth/', include('social_django.urls', namespace='social')),
+    path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('oauth/', include('social_django.urls', namespace='social')),
     path('', index, name='index'),
     path('leaderboard/', include('leaderboard.urls')),
-    path('admin/', admin.site.urls),
 ]

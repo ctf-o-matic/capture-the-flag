@@ -30,8 +30,12 @@
             <li class="nav-item disabled"><a href="#" class="nav-link text-light">Rules</a></li>
             <li class="nav-item disabled"><a href="#" class="nav-link text-light">Leaderboard</a></li>
             <li class="nav-item disabled"><a href="#" class="nav-link text-light">Teams</a></li>
-            <li class="nav-item active"><a href="#" class="nav-link text-light">Login</a></li>
           </ul>
+          {% if user.is_authenticated %}
+          <a href="{% url 'logout' %}" class="btn btn-outline-info">Logout</a>
+          {% else %}
+          <a href="/oauth/login/google-oauth2/" class="btn btn-outline-success">Login</a>
+          {% endif %}
         </div>
       </nav>
     </div>
@@ -67,7 +71,7 @@
             In <code>/levels/level1</code>, you'll find a binary owned by <code>level1</code> (as well as its source code)
             — you will probably find it useful.
             Once you have the password, you can <code>ssh</code> in as <code>level1</code>,
-            where new instructions will await you.
+            where new instructions await you.
           </p>
 
           <p>Happy hacking!<br/>
