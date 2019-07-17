@@ -1,0 +1,5 @@
+# Install required python packages using pip:
+# pip install -r requirements.txt
+Django==2.2.3
+pytz==2019.1
+sqlparse==0.3.0
