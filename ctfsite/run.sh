@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-./manage.sh runserver "$@" --settings ctfsite.local_settings
+./manage.sh runserver 0.0.0.0:8000 "$@" --settings ctfsite.local_settings
