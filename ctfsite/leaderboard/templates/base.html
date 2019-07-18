@@ -1,0 +1,36 @@
+{% extends "html5.html" %}
+
+{% block title %}{% block pagetitle %}{% endblock %} | Capture The Flag{% endblock %}
+
+{% block navbar %}
+
+  <div class="navbar-dark text-white">
+    <div class="container">
+      <nav class="navbar px-0 navbar-expand-lg navbar-dark">
+        <a href="/" class="navbar-brand pl-md-0 p-3 text-decoration-none text-light">Capture The Flag</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a href="/leaderboard/rules" class="nav-link text-light">Rules</a></li>
+            <!--<li class="nav-item"><a href="/leaderboard/" class="nav-link text-light">Leaderboard</a></li>-->
+            <!--<li class="nav-item"><a href="/leaderboard/teams" class="nav-link text-light">Teams</a></li>-->
+          </ul>
+          {% if user.is_authenticated %}
+          <a href="{% url 'logout' %}" class="btn btn-outline-info">Logout</a>
+          {% else %}
+          <a href="/oauth/login/google-oauth2/" class="btn btn-outline-success">Login</a>
+          {% endif %}
+        </div>
+      </nav>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block main %}
+
+    {% block content %}{% endblock %}
+
+{% endblock main %}
