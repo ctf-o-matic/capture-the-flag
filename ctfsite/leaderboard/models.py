@@ -1,8 +1,14 @@
+import hashlib
+
 from django.db import models, transaction
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
 MAX_MEMBERS_PER_TEAM = 4
+
+
+def encoded(answer_attempt):
+    return hashlib.sha1(answer_attempt.encode()).hexdigest()
 
 
 class Team(models.Model):
@@ -32,6 +38,23 @@ class Team(models.Model):
         if self.is_empty():
             self.delete()
 
+    def can_submit(self):
+        return not self.is_empty() and not self.has_flag()
+
+    def has_flag(self):
+        return self.completed_levels() == Level.objects.count()
+
+    def completed_levels(self):
+        return Submission.objects.filter(team=self).count()
+
+    def submit_attempt(self, answer_attempt):
+        level = Level.objects.all()[self.completed_levels()]
+        if not level.is_correct(answer_attempt):
+            return False
+
+        Submission.objects.create(team=self, level=level)
+        return True
+
 
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
@@ -44,4 +67,30 @@ class TeamMember(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['user'], name="uk_user"),
+        ]
+
+
+class Level(models.Model):
+    name = models.CharField(max_length=80, unique=True)
+    answer = models.CharField(max_length=200)
+    created_at = models.DateTimeField(default=now, blank=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.answer}"
+
+    def is_correct(self, answer_attempt):
+        return self.answer == encoded(answer_attempt)
+
+
+class Submission(models.Model):
+    team = models.ForeignKey(Team, on_delete=models.CASCADE)
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=now, blank=True)
+
+    def __str__(self):
+        return f"{self.team} - {self.level} - {self.created_at}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['team', 'level'], name="uk_team_level"),
         ]
