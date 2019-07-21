@@ -133,6 +133,19 @@ class TeamModelTests(TestCase):
         self.assertIsNone(team.next_level())
 
 
+class LevelModelTests(TestCase):
+    def new_level(self, name, answer):
+        Level.objects.create(name=name, answer=encoded(answer))
+
+    def test_cannot_create_level_with_same_name(self):
+        self.new_level("foo", "bar")
+        self.assertRaises(IntegrityError, self.new_level, "foo", "baz")
+
+    def test_cannot_create_level_with_same_answer(self):
+        self.new_level("foo", "bar")
+        self.assertRaises(IntegrityError, self.new_level, "baz", "bar")
+
+
 class TeamViewTests(TestCase):
     def test_anon_user_cannot_see_team_page(self):
         url = reverse('leaderboard:team')

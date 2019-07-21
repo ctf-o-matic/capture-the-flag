@@ -95,6 +95,12 @@ class Level(models.Model):
     def __str__(self):
         return f"{self.name} - {self.answer}"
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['name'], name="uk_name"),
+            models.UniqueConstraint(fields=['answer'], name="uk_answer"),
+        ]
+
     def is_correct(self, answer_attempt):
         return self.answer == encoded(answer_attempt)
 
