@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded
+from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings
 
 
 def random_alphabetic(length=10):
@@ -279,3 +279,41 @@ class CreateSubmissionViewTests(TestCase):
 
         self.assertEqual(0, self.team.next_level_index())
         self.assertEqual(0, count_submissions())
+
+
+class RankingTests(TestCase):
+    def setUp(self):
+        self.user1 = new_user()
+        self.team1 = new_team()
+        self.team1.add_member(self.user1)
+
+        self.user2 = new_user()
+        self.team2 = new_team()
+        self.team2.add_member(self.user2)
+
+        self.answers = [random_alphabetic() for _ in range(6)]
+        for answer in self.answers:
+            new_level(answer)
+
+    def test_ranking_is_empty_when_no_submissions(self):
+        self.assertEqual(0, len(rankings()))
+
+    def test_ranking_is_empty_when_no_levels(self):
+        Level.objects.all().delete()
+        self.assertEqual(0, len(rankings()))
+
+    def test_team_on_higher_level_comes_first(self):
+        self.team1.submit_attempt(self.answers[0])
+        self.assertEqual(1, len(rankings()))
+        self.assertEqual(self.team1.name, rankings()[0]['team_name'])
+
+        self.team2.submit_attempt(self.answers[0])
+        self.assertEqual(2, len(rankings()))
+
+        self.team2.submit_attempt(self.answers[1])
+        self.assertEqual([self.team2.name, self.team1.name], [d['team_name'] for d in rankings()])
+
+    def test_team_submitted_first_on_same_level_comes_first(self):
+        self.team1.submit_attempt(self.answers[0])
+        self.team2.submit_attempt(self.answers[0])
+        self.assertEqual([self.team1.name, self.team2.name], [d['team_name'] for d in rankings()])

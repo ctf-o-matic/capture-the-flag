@@ -2,6 +2,7 @@ import hashlib
 
 from django.db import models, transaction
 from django.contrib.auth.models import User
+from django.db.models import Count, Max
 from django.utils.timezone import now
 
 MAX_MEMBERS_PER_TEAM = 4
@@ -16,6 +17,29 @@ def find_team(user):
         return TeamMember.objects.get(user=user).team
     except TeamMember.DoesNotExist:
         return None
+
+
+def rankings():
+    rankings = []
+
+    level_names = [level.name for level in Level.objects.all()]
+
+    annotate_kwargs = {
+        "next_level_index": Count('submission'),
+        "last_submission_date": Max('submission__created_at'),
+    }
+    order_by = ('-next_level_index', 'last_submission_date')
+
+    query = Team.objects.annotate(**annotate_kwargs).order_by(*order_by).filter(next_level_index__gt=0)
+
+    for ranking in query:
+        rankings.append({
+            "team_name": ranking.name,
+            "level_name": level_names[ranking.next_level_index - 1],
+            "submission_date": ranking.last_submission_date,
+        })
+
+    return rankings
 
 
 class Team(models.Model):
@@ -117,4 +141,4 @@ class Submission(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['team', 'level'], name="uk_team_level"),
         ]
-        ordering = ['-level', '-created_at']
+        ordering = ['-level', 'created_at']

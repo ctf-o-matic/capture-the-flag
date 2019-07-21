@@ -4,11 +4,7 @@ from django.urls import reverse
 from django.views import View
 
 from leaderboard.forms import CreateTeamForm, CreateSubmissionForm
-from leaderboard.models import Team, Submission, find_team
-
-
-def leaderboard(request):
-    return render(request, 'leaderboard/leaderboard.html')
+from leaderboard.models import Team, Submission, find_team, rankings
 
 
 class TeamView(LoginRequiredMixin, View):
@@ -102,3 +98,11 @@ class CreateSubmissionView(LoginRequiredMixin, View):
                 form.add_error(None, e)
 
         return render(request, SubmissionsView.template_name, context)
+
+
+class Leaderboard(View):
+    template_name = 'leaderboard/leaderboard.html'
+
+    def get(self, request):
+        context = {"rankings": rankings()}
+        return render(request, self.template_name, context)

@@ -2,21 +2,28 @@
 
 {% block pagetitle %}Capture The Flag{% endblock %}
 
-{% block keywords %}{% endblock %}
-
-{% block description %}{% endblock %}
-
 {% block content %}
 
 <div class="jumbotron bg-transparent mb-0 radius-0">
   <div class="container">
       <div class="row">
         <div class="col-xl-12">
-          <h1 class="display-2">Leaderboard</h1>
-
-          <p class="text-grey">
-            ...
-          </p>
+            <h1>Leaderboard</h1>
+            {% if rankings %}
+                <div class="list-group col-xl-6">
+                {% for ranking in rankings %}
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <div>{{ranking.team_name}}</div>
+                      <code>{{ranking.level_name}}</code>
+                      <small>{{ranking.submission_date}}</small>
+                    </div>
+                  </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <p>No submissions yet, stay tuned!</p>
+            {% endif %}
         </div>
       </div>
   </div>
