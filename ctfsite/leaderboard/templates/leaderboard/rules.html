@@ -12,20 +12,33 @@
   <div class="container">
       <div class="row">
         <div class="col-xl-12">
-          <h1 class="display-2">Rules</h1>
+          <h1>Rules</h1>
 
           <ul>
-            <li>Form teams of 2-4 people.</li>
-            <li>The winner is the team to reach the highest level the fastest.</li>
-            <li>The winner is expected to be able to explain the solution of all levels.</li>
+            <li>Form teams of 2-4 people.
+              <ul>
+                <li>Team members cannot change after the team has passed <code>level0</code>.</li>
+                <li>The winner is the team to reach the highest level the fastest.</li>
+                <li>The winner must be able to explain the solution of all levels, or else forfeit victory.</li>
+              </ul>
+            </li>
             <li>Each level implies a lesson to learn in software security. Try to identify what it is!</li>
             <li>Hints will be released daily.</li>
-            <li>There are no trick questions. The key to the next level is always about the vulnerable code,
-              not something else, and not the environment, or this leaderboard.</li>
+            <li>There are no trick questions. The key to the next level is always about the vulnerable code of that level.
+              It is not a hidden objective to root the system, or the leaderboard, or to sniff network packets of other users.</li>
             <!--<li></li>-->
           </ul>
 
-          <h3>Warnings</h3>
+          <h2>Warnings</h2>
+
+          <p>Users are not isolated in the competition environment.</p>
+
+          <ul>
+            <li>CPU, memory, disk I/O intensive operations may get terminated.</li>
+            <li>Any file you create may get read / modified / deleted by other users.</li>
+            <li>The content of <code>/tmp</code> is wiped out every hour.</li>
+            <!--<li></li>-->
+          </ul>
 
           <p>A team may be disqualified in case of abuses.</p>
 
