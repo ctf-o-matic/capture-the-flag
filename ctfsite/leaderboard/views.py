@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views import View
 
 from leaderboard.forms import CreateTeamForm, CreateSubmissionForm
-from leaderboard.models import Team, Level, find_team
+from leaderboard.models import Team, Submission, find_team
 
 
 def leaderboard(request):
@@ -47,6 +47,13 @@ def common_context_for_submission(team):
     level = team.next_level()
     if level is not None:
         context["level_name"] = level.name
+
+    context["submissions"] = submissions = []
+    for s in Submission.objects.filter(team=team):
+        submissions.append({
+            "level_name": s.level.name,
+            "date": s.created_at,
+        })
 
     return context
 

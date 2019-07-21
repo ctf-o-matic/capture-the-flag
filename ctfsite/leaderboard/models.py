@@ -111,3 +111,4 @@ class Submission(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['team', 'level'], name="uk_team_level"),
         ]
+        ordering = ['-level', '-created_at']

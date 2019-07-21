@@ -196,7 +196,7 @@ class SubmissionsViewTests(TestCase):
         team = new_team()
         team.add_member(self.user)
         response = self.client.get(reverse('leaderboard:submissions'))
-        self.assertContains(response, "Congratulations, you got the flag, well done!")
+        self.assertContains(response, "Congratulations, you have captured the flag, well done!")
         self.assertNotContains(response, "Next level:")
         self.assertNotContains(response, reverse('leaderboard:create-submission'))
 
@@ -205,7 +205,7 @@ class SubmissionsViewTests(TestCase):
         team.add_member(self.user)
         new_level()
         response = self.client.get(reverse('leaderboard:submissions'))
-        self.assertNotContains(response, "Congratulations, you got the flag, well done!")
+        self.assertNotContains(response, "Congratulations, you have captured the flag, well done!")
         self.assertContains(response, "Next level:")
         self.assertContains(response, reverse('leaderboard:create-submission'))
 

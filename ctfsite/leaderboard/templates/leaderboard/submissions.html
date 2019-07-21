@@ -12,17 +12,15 @@
   <div class="container">
       <div class="row">
         <div class="col-xl-12">
-          <h1>Submissions</h1>
-
             {% if not level_name %}
-                <h2>Congratulations, you got the flag, well done!</h2>
+                <h1>Congratulations, you have captured the flag, well done!</h1>
             {% else %}
               {% if just_passed_level %}
                 <div class="alert alert-success" role="alert">
                   Correct submission, congrats on passing the level!
                 </div>
               {% endif %}
-              <p>Next level: <code>{{level_name}}</code></p>
+              <h1>Next level: <code>{{level_name}}</code></h1>
 
               <form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation" novalidate>
                   {% csrf_token %}
@@ -57,6 +55,20 @@
                   }, false);
                 })();
                 </script>
+            {% endif %}
+
+            {% if submissions %}
+                <h2 class="mb-3 mt-3">Submissions</h2>
+                <div class="list-group col-xl-6">
+                {% for submission in submissions %}
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <code>{{submission.level_name}}</code>
+                      <small>{{submission.date}}</small>
+                    </div>
+                  </div>
+                {% endfor %}
+                </div>
             {% endif %}
 
         </div>
