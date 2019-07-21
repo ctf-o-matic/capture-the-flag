@@ -22,5 +22,5 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('oauth/', include('social_django.urls', namespace='social')),
     path('', TemplateView.as_view(template_name='leaderboard/index.html'), name='index'),
-    path('leaderboard/', include('leaderboard.urls')),
+    path('leaderboard/', include('leaderboard.urls', namespace='leaderboard')),
 ]

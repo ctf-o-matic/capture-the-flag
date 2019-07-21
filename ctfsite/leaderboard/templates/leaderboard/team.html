@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Capture The Flag{% endblock %}
+
+{% block keywords %}{% endblock %}
+
+{% block description %}{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron bg-transparent mb-0 radius-0">
+  <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <h1>Team: {% if team %}{{team.name}}{% else %}None{% endif %}</h1>
+
+            {% if team %}
+            <p>Members:</p>
+            <ul>
+                {% for tm in team.teammember_set.all %}
+                <li>{{ tm.user.get_full_name }}</li>
+                {% endfor %}
+            </ul>
+
+            {% else %}
+          <p class="text-grey">
+            You are not in a team, yet. Only teams can submit solutions.
+          </p>
+          <p class="text-grey">
+              You can either join an existing team, or create a new one.
+          </p>
+
+          <form method="post" action="{% url 'leaderboard:create-team' %}" class="needs-validation" novalidate>
+              {% csrf_token %}
+              {% include 'leaderboard/form-errors.html' %}
+            <div class="form-row align-items-center">
+              <div class="col-sm-4">
+                <input name="team_name" type="text" class="form-control" placeholder="Team name to create, ex: Foo Fighters" required>
+                <div class="invalid-feedback">Please enter a name for the team.</div>
+              </div>
+              <div class="col-auto">
+                <button class="btn btn-primary" type="submit">Create team</button>
+              </div>
+            </div>
+          </form>
+
+            <script>
+            (function() {
+              'use strict';
+              window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                  form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                      event.preventDefault();
+                      event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                  }, false);
+                });
+              }, false);
+            })();
+            </script>
+            {% endif %}
+
+        </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -4,6 +4,7 @@ import string
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.test import TestCase
+from django.urls import reverse
 
 from .models import Team, TeamMember, Level, MAX_MEMBERS_PER_TEAM, encoded
 
@@ -15,7 +16,10 @@ def random_alphabetic(length=10):
 def new_user(username=None):
     if username is None:
         username = random_alphabetic()
-    return User.objects.create(username=username)
+    user = User.objects.create(username=username)
+    user.set_password(username)
+    user.save()
+    return user
 
 
 def new_team():
@@ -114,3 +118,44 @@ class TeamModelTests(TestCase):
 
         self.assertFalse(team.can_submit())
         self.assertTrue(team.has_flag())
+
+
+class TeamViewTests(TestCase):
+    def test_anon_user_cannot_see_team_page(self):
+        response = self.client.get(reverse('leaderboard:team'))
+        expected_url = '/accounts/login/?next=/leaderboard/team'
+        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+
+    def test_logged_in_user_sees_create_team_form_when_not_yet_member(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertContains(response, "Team: None")
+        self.assertContains(response, reverse('leaderboard:create-team'))
+
+class CreateTeamViewTests(TestCase):
+    def test_logged_in_user_cannot_create_team_with_empty_name(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": ""})
+        self.assertContains(response, "team_name: This field is required")
+
+    def test_logged_in_user_can_create_team(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
+        self.assertRedirects(response, reverse('leaderboard:team'), status_code=302, fetch_redirect_response=False)
+        self.assertEqual('foo', Team.objects.first().name)
+
+    def test_anon_user_cannot_create_team(self):
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
+        expected_url = '/accounts/login/?next=/leaderboard/team/create'
+        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+
+    def test_logged_in_user_cannot_create_team_if_already_member_of_a_team(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        team = new_team()
+        team.add_member(user)
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
+        self.assertContains(response, "UNIQUE constraint failed: leaderboard_teammember.user_id")
