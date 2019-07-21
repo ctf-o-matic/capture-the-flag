@@ -159,6 +159,40 @@ class TeamViewTests(TestCase):
         self.assertContains(response, "Team: None")
         self.assertContains(response, reverse('leaderboard:create-team'))
 
+    def test_logged_in_user_doesnt_see_create_team_form_when_already_member(self):
+        user = new_user()
+        team = new_team()
+        team.add_member(user)
+        self.client.login(username=user.username, password=user.username)
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertContains(response, f"Team: {team.name}")
+        self.assertNotContains(response, reverse('leaderboard:create-team'))
+
+    def test_logged_in_user_sees_leave_team_button_before_team_has_submissions(self):
+        user = new_user()
+        team = new_team()
+        team.add_member(user)
+        self.client.login(username=user.username, password=user.username)
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertContains(response, reverse('leaderboard:leave-team'))
+
+    def test_logged_in_user_doesnt_see_leave_team_button_when_not_yet_member(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertNotContains(response, reverse('leaderboard:leave-team'))
+
+    def test_logged_in_user_doesnt_see_leave_team_button_after_team_submissions(self):
+        user = new_user()
+        team = new_team()
+        team.add_member(user)
+        answer = random_alphabetic()
+        new_level(answer)
+        team.submit_attempt(answer)
+        self.client.login(username=user.username, password=user.username)
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertNotContains(response, reverse('leaderboard:leave-team'))
+
 
 class CreateTeamViewTests(TestCase):
     def setUp(self):
@@ -187,6 +221,66 @@ class CreateTeamViewTests(TestCase):
         team.add_member(self.user)
         response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
         self.assertContains(response, "UNIQUE constraint failed: leaderboard_teammember.user_id")
+
+
+class LeaveTeamViewTests(TestCase):
+    def setUp(self):
+        self.user = user = new_user()
+        self.client.login(username=user.username, password=user.username)
+
+        self.team = team = new_team()
+        team.add_member(user)
+
+    def test_user_can_leave_team_before_team_has_submissions_and_team_is_deleted_if_no_more_users(self):
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+
+        response = self.client.get(reverse('leaderboard:leave-team'))
+        self.assertRedirects(response, reverse('leaderboard:team'), status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(0, count_teams())
+        self.assertEqual(0, count_team_members())
+
+    def test_user_can_leave_team_before_team_has_submissions_and_team_is_kept_if_has_more_users(self):
+        user2 = new_user()
+        self.team.add_member(user2)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(2, count_team_members())
+
+        response = self.client.get(reverse('leaderboard:leave-team'))
+        self.assertRedirects(response, reverse('leaderboard:team'), status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+
+    def test_user_cannot_leave_team_after_team_has_submissions(self):
+        answer = random_alphabetic()
+        new_level(answer)
+        self.team.submit_attempt(answer)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+        self.assertEqual(1, count_submissions())
+
+        response = self.client.get(reverse('leaderboard:leave-team'))
+        self.assertRedirects(response, reverse('leaderboard:team'), status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+        self.assertEqual(1, count_submissions())
+
+    def test_anon_user_cannot_leave_team(self):
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+
+        self.client.logout()
+        url = reverse('leaderboard:leave-team')
+        response = self.client.get(url)
+        self.assertRedirects(response, login_redirect_url(url), status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
 
 
 class SubmissionsViewTests(TestCase):

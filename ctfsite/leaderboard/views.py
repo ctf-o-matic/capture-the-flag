@@ -16,6 +16,7 @@ class TeamView(LoginRequiredMixin, View):
         team = find_team(request.user)
         if team:
             context['team'] = team
+            context['user_can_leave'] = not team.has_submissions()
 
         return render(request, self.template_name, context)
 
@@ -35,6 +36,15 @@ class CreateTeamView(LoginRequiredMixin, View):
                 form.add_error(None, e)
 
         return render(request, TeamView.template_name, {"form": form})
+
+
+class LeaveTeamView(LoginRequiredMixin, View):
+    def get(self, request):
+        team = find_team(request.user)
+        if team is not None and not team.has_submissions():
+            team.remove_member(request.user)
+
+        return redirect('leaderboard:team')
 
 
 def common_context_for_submission(team):

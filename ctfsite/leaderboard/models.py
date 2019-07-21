@@ -96,6 +96,9 @@ class Team(models.Model):
         Submission.objects.create(team=self, level=level)
         return True
 
+    def has_submissions(self):
+        return self.next_level_index() > 0
+
 
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)

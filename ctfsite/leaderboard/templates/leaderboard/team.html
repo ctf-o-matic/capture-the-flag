@@ -21,6 +21,13 @@
                     <li>{{ tm.user.get_full_name }}</li>
                     {% endfor %}
                 </ul>
+
+                {% if user_can_leave %}
+                    <div class="alert alert-danger d-flex justify-content-between align-items-center">
+                        While the team has not submitted a solution, you may leave to join another team, if needed.
+                        <a href="{% url 'leaderboard:leave-team' %}" class="btn btn-danger">Leave team</a>
+                    </div>
+                {% endif %}
             {% else %}
           <p class="text-grey">
             You are not in a team, yet. Only teams can submit solutions.
