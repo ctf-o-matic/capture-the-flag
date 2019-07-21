@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Team, TeamMember, Level, MAX_MEMBERS_PER_TEAM, encoded
+from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded
 
 
 def random_alphabetic(length=10):
@@ -32,6 +32,22 @@ def new_level(answer=None):
     return Level.objects.create(name=random_alphabetic(), answer=encoded(answer))
 
 
+def count_teams():
+    return Team.objects.count()
+
+
+def count_team_members():
+    return TeamMember.objects.count()
+
+
+def count_submissions():
+    return Submission.objects.count()
+
+
+def login_redirect_url(url):
+    return '/accounts/login/?next=' + url
+
+
 class TeamModelTests(TestCase):
     def test_can_create_teams(self):
         for _ in range(3):
@@ -39,8 +55,8 @@ class TeamModelTests(TestCase):
             for _ in range(MAX_MEMBERS_PER_TEAM):
                 team.add_member(new_user())
 
-        self.assertEqual(3, Team.objects.count())
-        self.assertEqual(3 * MAX_MEMBERS_PER_TEAM, TeamMember.objects.count())
+        self.assertEqual(3, count_teams())
+        self.assertEqual(3 * MAX_MEMBERS_PER_TEAM, count_team_members())
 
     def test_cannot_create_more_members_than_max(self):
         team = new_team()
@@ -66,20 +82,17 @@ class TeamModelTests(TestCase):
         user = new_user()
         team = new_team()
         team.add_member(user)
-        self.assertEqual(1, TeamMember.objects.count())
+        self.assertEqual(1, count_team_members())
         team.remove_member(user)
-        self.assertEqual(0, TeamMember.objects.count())
+        self.assertEqual(0, count_team_members())
 
     def test_cannot_submit_when_team_is_empty(self):
         team = new_team()
         self.assertFalse(team.can_submit())
 
-    def test_has_flag_when_no_levels(self):
-        team = new_team()
-        self.assertTrue(team.has_flag())
-
     def test_submit_fails_for_incorrect_answer(self):
         team = new_team()
+        team.add_member(new_user())
         new_level()
         self.assertFalse(team.submit_attempt('incorrect'))
 
@@ -90,14 +103,14 @@ class TeamModelTests(TestCase):
         user = new_user()
         team = new_team()
         team.add_member(user)
-        self.assertEqual(0, team.completed_levels())
+        self.assertEqual(0, team.next_level_index())
         self.assertTrue(team.can_submit())
-        self.assertFalse(team.has_flag())
+        self.assertIsNotNone(team.next_level())
 
         self.assertTrue(team.submit_attempt(answer))
-        self.assertEqual(1, team.completed_levels())
+        self.assertEqual(1, team.next_level_index())
         self.assertFalse(team.can_submit())
-        self.assertTrue(team.has_flag())
+        self.assertIsNone(team.next_level())
 
     def test_submit_accepts_correct_answer_sequence(self):
         answers = [random_alphabetic() for _ in range(6)]
@@ -109,22 +122,22 @@ class TeamModelTests(TestCase):
         team.add_member(user)
 
         for i, answer in enumerate(answers):
-            self.assertEqual(i, team.completed_levels())
+            self.assertEqual(i, team.next_level_index())
             self.assertTrue(team.can_submit())
-            self.assertFalse(team.has_flag())
+            self.assertIsNotNone(team.next_level())
 
             self.assertTrue(team.submit_attempt(answer))
-            self.assertEqual(i + 1, team.completed_levels())
+            self.assertEqual(i + 1, team.next_level_index())
 
         self.assertFalse(team.can_submit())
-        self.assertTrue(team.has_flag())
+        self.assertIsNone(team.next_level())
 
 
 class TeamViewTests(TestCase):
     def test_anon_user_cannot_see_team_page(self):
-        response = self.client.get(reverse('leaderboard:team'))
-        expected_url = '/accounts/login/?next=/leaderboard/team'
-        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+        url = reverse('leaderboard:team')
+        response = self.client.get(url)
+        self.assertRedirects(response, login_redirect_url(url), status_code=302, fetch_redirect_response=False)
 
     def test_logged_in_user_sees_create_team_form_when_not_yet_member(self):
         user = new_user()
@@ -133,29 +146,123 @@ class TeamViewTests(TestCase):
         self.assertContains(response, "Team: None")
         self.assertContains(response, reverse('leaderboard:create-team'))
 
+
 class CreateTeamViewTests(TestCase):
-    def test_logged_in_user_cannot_create_team_with_empty_name(self):
-        user = new_user()
+    def setUp(self):
+        self.user = user = new_user()
         self.client.login(username=user.username, password=user.username)
+
+    def test_logged_in_user_cannot_create_team_with_empty_name(self):
         response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": ""})
         self.assertContains(response, "team_name: This field is required")
 
     def test_logged_in_user_can_create_team(self):
-        user = new_user()
-        self.client.login(username=user.username, password=user.username)
         response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
         self.assertRedirects(response, reverse('leaderboard:team'), status_code=302, fetch_redirect_response=False)
         self.assertEqual('foo', Team.objects.first().name)
 
     def test_anon_user_cannot_create_team(self):
-        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
-        expected_url = '/accounts/login/?next=/leaderboard/team/create'
-        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+        self.client.logout()
+        url = reverse('leaderboard:create-team')
+        response = self.client.post(url, data={"team_name": "foo"})
+        self.assertRedirects(response, login_redirect_url(url), status_code=302, fetch_redirect_response=False)
+        self.assertEqual(0, count_teams())
+        self.assertEqual(0, count_team_members())
 
     def test_logged_in_user_cannot_create_team_if_already_member_of_a_team(self):
-        user = new_user()
-        self.client.login(username=user.username, password=user.username)
         team = new_team()
-        team.add_member(user)
+        team.add_member(self.user)
         response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
         self.assertContains(response, "UNIQUE constraint failed: leaderboard_teammember.user_id")
+
+
+class SubmissionsViewTests(TestCase):
+    def setUp(self):
+        self.user = user = new_user()
+        self.client.login(username=user.username, password=user.username)
+
+    def test_anon_user_cannot_see_submissions_page(self):
+        self.client.logout()
+        url = reverse('leaderboard:submissions')
+        response = self.client.get(url)
+        self.assertRedirects(response, login_redirect_url(url), status_code=302, fetch_redirect_response=False)
+
+    def test_logged_in_user_cannot_see_create_submission_form_when_not_yet_member(self):
+        response = self.client.get(reverse('leaderboard:submissions'))
+        expected_url = reverse('leaderboard:team')
+        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+
+    def test_logged_in_user_cannot_see_create_submission_form_when_no_more_levels(self):
+        team = new_team()
+        team.add_member(self.user)
+        response = self.client.get(reverse('leaderboard:submissions'))
+        self.assertContains(response, "Congratulations, you got the flag, well done!")
+        self.assertNotContains(response, "Next level:")
+        self.assertNotContains(response, reverse('leaderboard:create-submission'))
+
+    def test_logged_in_user_sees_create_submission_form_when_there_are_more_levels(self):
+        team = new_team()
+        team.add_member(self.user)
+        new_level()
+        response = self.client.get(reverse('leaderboard:submissions'))
+        self.assertNotContains(response, "Congratulations, you got the flag, well done!")
+        self.assertContains(response, "Next level:")
+        self.assertContains(response, reverse('leaderboard:create-submission'))
+
+
+class CreateSubmissionViewTests(TestCase):
+    def setUp(self):
+        self.user = user = new_user()
+        self.client.login(username=user.username, password=user.username)
+
+        self.team = team = new_team()
+        team.add_member(self.user)
+
+        self.answer = answer = random_alphabetic()
+        new_level(answer)
+
+    def test_logged_in_user_cannot_create_submission_with_empty_answer(self):
+        response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": ""})
+        self.assertContains(response, "answer_attempt: This field is required")
+        self.assertEqual(0, self.team.next_level_index())
+        self.assertEqual(0, count_submissions())
+
+    def test_logged_in_user_cannot_create_submission_with_incorrect_answer(self):
+        response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": self.answer + "x"})
+        self.assertContains(response, "Incorrect answer")
+        self.assertEqual(0, self.team.next_level_index())
+        self.assertEqual(0, count_submissions())
+
+    def test_logged_in_user_cannot_create_submission_when_already_has_the_flag(self):
+        self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": self.answer})
+        self.assertEqual(1, self.team.next_level_index())
+        self.assertEqual(1, count_submissions())
+
+        response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": 'foo'})
+        expected_url = reverse('leaderboard:submissions')
+        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(1, self.team.next_level_index())
+        self.assertEqual(1, count_submissions())
+
+    def test_logged_in_user_can_create_submission_with_correct_answer(self):
+        self.assertEqual(0, self.team.next_level_index())
+        self.assertEqual(0, count_submissions())
+
+        response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": self.answer})
+        expected_url = reverse('leaderboard:submissions') + '?passed=1'
+        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(1, self.team.next_level_index())
+        self.assertEqual(1, count_submissions())
+
+    def test_anon_user_cannot_create_submission(self):
+        self.client.logout()
+
+        url = reverse('leaderboard:create-submission')
+        response = self.client.post(url, data={"answer_attempt": self.answer})
+        expected_url = login_redirect_url(url)
+        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(0, self.team.next_level_index())
+        self.assertEqual(0, count_submissions())

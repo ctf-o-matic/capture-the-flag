@@ -17,6 +17,7 @@
             <!--<li class="nav-item"><a href="/leaderboard/" class="nav-link text-light">Leaderboard</a></li>-->
             {% if user.is_authenticated %}
             <li class="nav-item"><a href="/leaderboard/team" class="nav-link text-light">Team</a></li>
+            <li class="nav-item"><a href="/leaderboard/submissions" class="nav-link text-light">Submissions</a></li>
             {% endif %}
           </ul>
           {% if user.is_authenticated %}

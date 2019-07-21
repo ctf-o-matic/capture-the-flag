@@ -1,9 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 
-from leaderboard.forms import CreateTeamForm
-from leaderboard.models import Team, TeamMember
+from leaderboard.forms import CreateTeamForm, CreateSubmissionForm
+from leaderboard.models import Team, Level, find_team
 
 
 def leaderboard(request):
@@ -15,9 +16,10 @@ class TeamView(LoginRequiredMixin, View):
 
     def get(self, request):
         context = {}
-        team_member = TeamMember.objects.filter(user=request.user)
-        if team_member:
-            context['team'] = team_member[0].team
+
+        team = find_team(request.user)
+        if team:
+            context['team'] = team
 
         return render(request, self.template_name, context)
 
@@ -36,4 +38,60 @@ class CreateTeamView(LoginRequiredMixin, View):
             except Exception as e:
                 form.add_error(None, e)
 
-        return render(request, 'leaderboard/team.html', {"form": form})
+        return render(request, TeamView.template_name, {"form": form})
+
+
+def common_context_for_submission(team):
+    context = {}
+
+    level = team.next_level()
+    if level is not None:
+        context["level_name"] = level.name
+
+    return context
+
+
+class SubmissionsView(LoginRequiredMixin, View):
+    template_name = 'leaderboard/submissions.html'
+
+    def get(self, request):
+        team = find_team(request.user)
+        if not team:
+            return redirect('leaderboard:team')
+
+        context = common_context_for_submission(team)
+
+        if request.GET.get('passed'):
+            context["just_passed_level"] = True
+
+        return render(request, self.template_name, context)
+
+
+class CreateSubmissionView(LoginRequiredMixin, View):
+    form_class = CreateSubmissionForm
+
+    def post(self, request):
+        team = find_team(request.user)
+        if team is None:
+            return redirect('leaderboard:team')
+
+        context = common_context_for_submission(team)
+
+        if 'level_name' not in context:
+            return redirect('leaderboard:submissions')
+
+        form = self.form_class(request.POST)
+        context['form'] = form
+
+        if form.is_valid():
+            answer_attempt = form.cleaned_data['answer_attempt']
+
+            try:
+                if team.submit_attempt(answer_attempt):
+                    return redirect(reverse('leaderboard:submissions') + '?passed=1')
+                else:
+                    form.add_error(None, "Incorrect answer, that's not the password!")
+            except Exception as e:
+                form.add_error(None, e)
+
+        return render(request, SubmissionsView.template_name, context)

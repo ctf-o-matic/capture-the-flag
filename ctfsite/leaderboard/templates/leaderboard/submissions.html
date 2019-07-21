@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block pagetitle %}Capture The Flag{% endblock %}
+
+{% block keywords %}{% endblock %}
+
+{% block description %}{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron bg-transparent mb-0 radius-0">
+  <div class="container">
+      <div class="row">
+        <div class="col-xl-12">
+          <h1>Submissions</h1>
+
+            {% if not level_name %}
+                <h2>Congratulations, you got the flag, well done!</h2>
+            {% else %}
+              {% if just_passed_level %}
+                <div class="alert alert-success" role="alert">
+                  Correct submission, congrats on passing the level!
+                </div>
+              {% endif %}
+              <p>Next level: <code>{{level_name}}</code></p>
+
+              <form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation" novalidate>
+                  {% csrf_token %}
+                  {% include 'leaderboard/form-errors.html' %}
+                <div class="form-row align-items-center">
+                  <div class="col-sm-4">
+                    <input name="answer_attempt" type="text" class="form-control" placeholder="The password" required>
+                    <div class="invalid-feedback">Please enter the password.</div>
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                  </div>
+                </div>
+              </form>
+
+                <script>
+                (function() {
+                  'use strict';
+                  window.addEventListener('load', function() {
+                    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                      form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                      }, false);
+                    });
+                  }, false);
+                })();
+                </script>
+            {% endif %}
+
+        </div>
+      </div>
+  </div>
+</div>
+
+{% endblock %}

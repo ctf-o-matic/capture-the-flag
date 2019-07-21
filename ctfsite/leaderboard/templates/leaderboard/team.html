@@ -15,13 +15,12 @@
           <h1>Team: {% if team %}{{team.name}}{% else %}None{% endif %}</h1>
 
             {% if team %}
-            <p>Members:</p>
-            <ul>
-                {% for tm in team.teammember_set.all %}
-                <li>{{ tm.user.get_full_name }}</li>
-                {% endfor %}
-            </ul>
-
+                <p>Members:</p>
+                <ul>
+                    {% for tm in team.teammember_set.all %}
+                    <li>{{ tm.user.get_full_name }}</li>
+                    {% endfor %}
+                </ul>
             {% else %}
           <p class="text-grey">
             You are not in a team, yet. Only teams can submit solutions.

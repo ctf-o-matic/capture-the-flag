@@ -11,6 +11,13 @@ def encoded(answer_attempt):
     return hashlib.sha1(answer_attempt.encode()).hexdigest()
 
 
+def find_team(user):
+    try:
+        return TeamMember.objects.get(user=user).team
+    except TeamMember.DoesNotExist:
+        return None
+
+
 class Team(models.Model):
     name = models.CharField(max_length=80)
     created_at = models.DateTimeField(default=now, blank=True)
@@ -38,17 +45,27 @@ class Team(models.Model):
         if self.is_empty():
             self.delete()
 
-    def can_submit(self):
-        return not self.is_empty() and not self.has_flag()
+    def next_level(self):
+        next_level_index = self.next_level_index()
+        if next_level_index >= Level.objects.count():
+            return None
 
-    def has_flag(self):
-        return self.completed_levels() == Level.objects.count()
+        return Level.objects.all()[next_level_index]
 
-    def completed_levels(self):
+    def next_level_index(self):
         return Submission.objects.filter(team=self).count()
 
+    def can_submit(self):
+        return not self.is_empty() and self.next_level() is not None
+
     def submit_attempt(self, answer_attempt):
-        level = Level.objects.all()[self.completed_levels()]
+        if not self.can_submit():
+            raise ValueError("Illegal state: team cannot submit solutions")
+
+        level = self.next_level()
+        if not level:
+            raise ValueError("Illegal state: there is no next level")
+
         if not level.is_correct(answer_attempt):
             return False
 
