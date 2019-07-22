@@ -128,7 +128,7 @@ class TeamMember(models.Model):
 
 class Level(models.Model):
     name = models.CharField(max_length=80, unique=True)
-    answer = models.CharField(max_length=200)
+    answer = models.CharField(max_length=200, help_text="The answer encrypted with sha1, ex: printf answer | sha1sum")
     created_at = models.DateTimeField(default=now, blank=True)
 
     def __str__(self):
