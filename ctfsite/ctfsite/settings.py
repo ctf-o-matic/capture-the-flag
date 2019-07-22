@@ -124,13 +124,13 @@ STATIC_URL = '/static/'
 # project specific Django settings
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOpenId',
     'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.google.GoogleOAuth',
     'django.contrib.auth.backends.ModelBackend',
 )
 
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+SOCIAL_AUTH_BACKEND_ERROR_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
