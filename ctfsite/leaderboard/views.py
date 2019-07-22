@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views import View
 
 from leaderboard.forms import CreateTeamForm, CreateSubmissionForm
-from leaderboard.models import Team, Submission, find_team, rankings
+from leaderboard.models import Team, Submission, find_team, rankings, available_teams
 
 
 class TeamView(LoginRequiredMixin, View):
@@ -17,6 +17,9 @@ class TeamView(LoginRequiredMixin, View):
         if team:
             context['team'] = team
             context['user_can_leave'] = not team.has_submissions()
+
+        else:
+            context['available_teams'] = available_teams()
 
         return render(request, self.template_name, context)
 
@@ -43,6 +46,40 @@ class LeaveTeamView(LoginRequiredMixin, View):
         team = find_team(request.user)
         if team is not None and not team.has_submissions():
             team.remove_member(request.user)
+
+        return redirect('leaderboard:team')
+
+
+class JoinTeamView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        team = find_team(request.user)
+        if team is not None:
+            return redirect('leaderboard:team')
+
+        try:
+            team = Team.objects.get(pk=pk)
+        except Team.DoesNotExist:
+            context = {
+                "available_teams": available_teams(),
+                "join_error": "team-missing",
+            }
+            return render(request, TeamView.template_name, context)
+
+        if not team.is_accepting_members():
+            context = {
+                "available_teams": available_teams(),
+                "join_error": "team-full",
+            }
+            return render(request, TeamView.template_name, context)
+
+        if team.has_submissions():
+            context = {
+                "available_teams": available_teams(),
+                "join_error": "team-has-submissions",
+            }
+            return render(request, TeamView.template_name, context)
+
+        team.add_member(request.user)
 
         return redirect('leaderboard:team')
 

@@ -33,7 +33,11 @@
             You are not in a team, yet. Only teams can submit solutions.
           </p>
           <p class="text-grey">
-              You can either join an existing team, or create a new one.
+              {% if available_teams %}
+              You can either join an existing team with available spots, or create a new one.
+              {% else %}
+              It looks like there are no available teams. You can go ahead and create one.
+              {% endif %}
           </p>
 
           <form method="post" action="{% url 'leaderboard:create-team' %}" class="needs-validation" novalidate>
@@ -69,6 +73,45 @@
               }, false);
             })();
             </script>
+
+                {% if available_teams %}
+                    <h2 class="mb-3 mt-3">Available teams</h2>
+                    {% if join_error %}
+                        <div class="alert alert-warning">
+                            {% if join_error == "team-missing" %}
+                                Sorry, it seems the team you selected has disappeared...
+                            {% elif join_error == "team-full" %}
+                                Sorry, it seems the team you selected is no longer available (no more slots)...
+                            {% elif join_error == "team-has-submissions" %}
+                                Sorry, it seems the team you selected is no longer available (has already submissions)...
+                            {% else %}
+                                Unknown error: {{ join_error }}
+                            {% endif %}
+                            Please choose another team!
+                        </div>
+                    {% endif %}
+
+                    <ul>
+                    {% for team in available_teams %}
+                        <li>{{ team }}
+                            <ul>
+                                {% for tm in team.teammember_set.all %}
+                                    <li>{{ tm.user }}</li>
+                                {% endfor %}
+                            </ul>
+                            <a href="{% url 'leaderboard:join-team' team.pk %}" class="btn btn-secondary">Join this team</a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% elif join_error %}
+                    <h2 class="mb-3 mt-3">Available teams</h2>
+                    <div class="alert alert-warning">
+                        Sorry, it seems the team you selected is no longer available.
+                        In fact there are no more available teams.
+                        At the moment you have no choice but to create your own!
+                    </div>
+                {% endif %}
+
             {% endif %}
 
         </div>

@@ -42,6 +42,18 @@ def rankings():
     return rankings
 
 
+def available_teams():
+    annotate_kwargs = {
+        "next_level_index": Count('submission'),
+        "member_count": Count('teammember'),
+    }
+    filter_kwargs = {
+        "next_level_index": 0,
+        "member_count__lt": MAX_MEMBERS_PER_TEAM,
+    }
+    return Team.objects.annotate(**annotate_kwargs).filter(**filter_kwargs)
+
+
 class Team(models.Model):
     name = models.CharField(max_length=80)
     created_at = models.DateTimeField(default=now, blank=True)

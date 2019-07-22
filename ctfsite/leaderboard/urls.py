@@ -9,8 +9,9 @@ urlpatterns = [
     path('rules', TemplateView.as_view(template_name='leaderboard/rules.html'), name='rules'),
     path('', views.Leaderboard.as_view(), name='leaderboard'),
     path('team', views.TeamView.as_view(), name='team'),
-    path('team/create', views.CreateTeamView.as_view(), name='create-team'),
     path('team/leave', views.LeaveTeamView.as_view(), name='leave-team'),
+    path('teams', views.CreateTeamView.as_view(), name='create-team'),
+    path('teams/<int:pk>/join', views.JoinTeamView.as_view(), name='join-team'),
     path('submissions', views.SubmissionsView.as_view(), name='submissions'),
     path('submissions/create', views.CreateSubmissionView.as_view(), name='create-submission'),
 ]

@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings
+from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings, available_teams
 
 
 def random_alphabetic(length=10):
@@ -283,6 +283,71 @@ class LeaveTeamViewTests(TestCase):
         self.assertEqual(1, count_team_members())
 
 
+class JoinTeamViewTests(TestCase):
+    def setUp(self):
+        self.user = user = new_user()
+        self.client.login(username=user.username, password=user.username)
+
+        self.team = team = new_team()
+
+        other_user = new_user()
+        team.add_member(other_user)
+
+    def test_user_can_join_team_before_team_has_submissions_and_still_has_available_slots(self):
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+
+        response = self.client.get(reverse('leaderboard:join-team', args=[str(self.team.pk)]))
+        self.assertRedirects(response, reverse('leaderboard:team'), status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(2, count_team_members())
+
+    def test_user_cannot_join_team_after_team_has_submissions(self):
+        answer = random_alphabetic()
+        new_level(answer)
+        self.team.submit_attempt(answer)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+        self.assertEqual(1, count_submissions())
+
+        response = self.client.get(reverse('leaderboard:join-team', args=[str(self.team.pk)]))
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, "Sorry, it seems the team you selected is no longer available")
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+        self.assertEqual(1, count_submissions())
+
+    def test_user_cannot_join_team_when_it_has_no_more_slots(self):
+        for _ in range(MAX_MEMBERS_PER_TEAM - 1):
+            user = new_user()
+            self.team.add_member(user)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(4, count_team_members())
+
+        response = self.client.get(reverse('leaderboard:join-team', args=[str(self.team.pk)]))
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, "Sorry, it seems the team you selected is no longer available")
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(4, count_team_members())
+
+    def test_anon_user_cannot_join_team(self):
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+
+        self.client.logout()
+        url = reverse('leaderboard:join-team', args=[str(self.team.pk)])
+        response = self.client.get(url)
+        self.assertRedirects(response, login_redirect_url(url), status_code=302, fetch_redirect_response=False)
+
+        self.assertEqual(1, count_teams())
+        self.assertEqual(1, count_team_members())
+
+
 class SubmissionsViewTests(TestCase):
     def setUp(self):
         self.user = user = new_user()
@@ -411,3 +476,27 @@ class RankingTests(TestCase):
         self.team1.submit_attempt(self.answers[0])
         self.team2.submit_attempt(self.answers[0])
         self.assertEqual([self.team1.name, self.team2.name], [d['team_name'] for d in rankings()])
+
+
+class AvailableTeamsTests(TestCase):
+    def test_include_teams_without_submissions_and_less_than_max_members(self):
+        team = new_team()
+        self.assertEqual([team.name], [t.name for t in available_teams()])
+
+    def test_exclude_teams_with_submissions(self):
+        team = new_team()
+        user = new_user()
+        team.add_member(user)
+
+        answer = random_alphabetic()
+        new_level(answer)
+        team.submit_attempt(answer)
+        self.assertEqual(0, len(available_teams()))
+
+    def test_exclude_teams_with_too_many_members(self):
+        team = new_team()
+        for _ in range(MAX_MEMBERS_PER_TEAM):
+            user = new_user()
+            team.add_member(user)
+
+        self.assertEqual(0, len(available_teams()))
