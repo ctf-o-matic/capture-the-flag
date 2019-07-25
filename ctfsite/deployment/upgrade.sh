@@ -6,7 +6,7 @@ cd "$(dirname "$0")"/..
 
 branchname=$1
 
-unset GIT_DIR
+git reset --hard
 git pull releases "$branchname"
 
 ./scripts/install-or-upgrade-requirements.sh
