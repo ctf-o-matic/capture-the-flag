@@ -33,7 +33,7 @@ Setup almost done, a few manual steps remain.
 
 In $script_dir_abspath, add the following remote:
 
-    git add remote releases $repo_path
+    git remote add releases $repo_path
 
 Then checkout the deployment branch:
 
@@ -41,11 +41,11 @@ Then checkout the deployment branch:
 
 On your work PC, add the following remote:
 
-    git add remote releases "server:$remote_repo_path"
+    git remote add releases "server:$remote_repo_path"
 
 Then add the following Git alias in your ~/.gitconfig:
 
-    deploy-$branch = push releases master:$branch
+    deploy-$branch = push releases HEAD:$branch
 
 This will enable "git deploy-$branch" to trigger a push to the deployment repo,
 which in turn will trigger calling $script_dir_abspath/upgrade.sh
