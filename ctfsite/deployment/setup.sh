@@ -23,7 +23,7 @@ fi
 script_dir_abspath=$(cd "$(dirname "$0")"; pwd)
 
 ln -snf "$script_dir_abspath/post-receive" "$repo_path/hooks/"
-ln -snf "$script_dir_abspath/upgrade.sh" "$repo_path/upgrade-$branch.sh"
+ln -snf "$script_dir_abspath/upgrade.sh" "$repo_path/upgrade.sh"
 
 remote_repo_path=$(cd "$repo_path"; pwd)
 remote_repo_path=${remote_repo_path#$HOME/}
