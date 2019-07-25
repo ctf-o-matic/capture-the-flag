@@ -12,4 +12,4 @@ git pull releases "$branchname"
 ./scripts/install-or-upgrade-requirements.sh
 ./manage.sh collectstatic --noinput
 
-touch ../tmp/restart.txt
+touch "$(dirname "$PWD")"/tmp/restart.txt
