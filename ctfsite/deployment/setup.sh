@@ -8,13 +8,15 @@ if [[ $# != 2 ]]; then
     exit 1
 fi
 
-if [[ "$1" != *.git ]]; then
-    echo "error: first parameter was expected to end with '.git', got: $1"
-    exit 1
-fi
-
 repo_path=$1
 branch=$2
+
+repo_path=${repo_path%/}
+
+if [[ "$repo_path" != *.git ]]; then
+    echo "error: first parameter was expected to end with '.git', got: $repo_path"
+    exit 1
+fi
 
 if ! [[ -d "$repo_path" ]]; then
     git init --bare "$repo_path"
