@@ -92,18 +92,28 @@
                         </div>
                     {% endif %}
 
-                    <ul>
+                    <table class="table table-hover table-dark">
+                      <thead>
+                        <tr>
+                          <th scope="col">Team</th>
+                          <th scope="col">Members</th>
+                          <th scope="col">Join?</th>
+                        </tr>
+                      </thead>
+                      <tbody>
                     {% for team in available_teams %}
-                        <li>{{ team }}
-                            <ul>
-                                {% for tm in team.teammember_set.all %}
-                                    <li>{{ tm.user }}</li>
-                                {% endfor %}
-                            </ul>
-                            <a href="{% url 'leaderboard:join-team' team.pk %}" class="btn btn-secondary">Join this team</a>
-                        </li>
+                        <tr>
+                          <td>{{team}}</td>
+                          <td>
+                            {% for tm in team.teammember_set.all %}
+                                <div>{{ tm.user }}</div>
+                            {% endfor %}
+                          </td>
+                          <td><a href="{% url 'leaderboard:join-team' team.pk %}" class="btn btn-secondary">Join this team</a></td>
+                        </tr>
                     {% endfor %}
-                    </ul>
+                      </tbody>
+                    </table>
                 {% elif join_error %}
                     <h2 class="mb-3 mt-3">Available teams</h2>
                     <div class="alert alert-warning">
