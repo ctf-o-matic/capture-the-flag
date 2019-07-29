@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.views import View
 
 from leaderboard.forms import CreateTeamForm, CreateSubmissionForm
-from leaderboard.models import Team, Submission, find_team, rankings, available_teams
+from leaderboard.models import Team, Submission, find_team, rankings, available_teams, create_team_with_user
 
 
 class TeamView(LoginRequiredMixin, View):
@@ -29,11 +29,15 @@ class CreateTeamView(LoginRequiredMixin, View):
 
     def post(self, request):
         form = self.form_class(request.POST)
-        if form.is_valid():
+
+        team = find_team(request.user)
+        if team is not None:
+            form.add_error(None, f"You are already member of a team: {team.name}")
+
+        elif form.is_valid():
             name = form.cleaned_data['team_name']
             try:
-                team = Team.objects.create(name=name)
-                team.add_member(request.user)
+                create_team_with_user(name, request.user)
                 return redirect('leaderboard:team')
             except Exception as e:
                 form.add_error(None, e)

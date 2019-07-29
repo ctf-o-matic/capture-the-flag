@@ -15,6 +15,7 @@
           <h1>Team: {% if team %}{{team.name}}{% else %}None{% endif %}</h1>
 
             {% if team %}
+              {% include 'leaderboard/form-errors.html' %}
                 <p>Members:</p>
                 <ul>
                     {% for tm in team.teammember_set.all %}

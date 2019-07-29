@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings, available_teams
+from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings, available_teams, create_team_with_user
 
 
 def random_alphabetic(length=10):
@@ -22,8 +22,10 @@ def new_user(username=None):
     return user
 
 
-def new_team():
-    return Team.objects.create(name=random_alphabetic())
+def new_team(user, name=None):
+    if name is None:
+        name = random_alphabetic()
+    return create_team_with_user(name, user)
 
 
 def new_level(answer=None):
@@ -51,48 +53,45 @@ def login_redirect_url(url):
 class TeamModelTests(TestCase):
     def test_can_create_teams(self):
         for _ in range(3):
-            team = new_team()
-            for _ in range(MAX_MEMBERS_PER_TEAM):
+            team = new_team(new_user())
+            for _ in range(MAX_MEMBERS_PER_TEAM - 1):
                 team.add_member(new_user())
 
         self.assertEqual(3, count_teams())
         self.assertEqual(3 * MAX_MEMBERS_PER_TEAM, count_team_members())
 
     def test_cannot_create_more_members_than_max(self):
-        team = new_team()
-        for _ in range(MAX_MEMBERS_PER_TEAM):
+        team = new_team(new_user())
+        for _ in range(MAX_MEMBERS_PER_TEAM - 1):
             team.add_member(new_user())
 
         self.assertRaisesMessage(ValueError, f"Team '{team.name}' is not accepting members", team.add_member, new_user())
 
     def test_cannot_add_same_member_twice(self):
-        team = new_team()
         user = new_user()
-        team.add_member(user)
+        team = new_team(user)
         self.assertRaises(IntegrityError, team.add_member, user)
 
     def test_same_user_cannot_join_multiple_teams(self):
         user = new_user()
-        team1 = new_team()
-        team1.add_member(user)
-        team2 = new_team()
+        new_team(user)
+        team2 = new_team(new_user())
         self.assertRaises(IntegrityError, team2.add_member, user)
 
     def test_remove_last_member_deletes_team(self):
         user = new_user()
-        team = new_team()
-        team.add_member(user)
+        team = new_team(user)
         self.assertEqual(1, count_team_members())
         team.remove_member(user)
         self.assertEqual(0, count_team_members())
 
     def test_cannot_submit_when_team_is_empty(self):
-        team = new_team()
+        team = new_team(new_user())
+        TeamMember.objects.all().delete()
         self.assertFalse(team.can_submit())
 
     def test_submit_fails_for_incorrect_answer(self):
-        team = new_team()
-        team.add_member(new_user())
+        team = new_team(new_user())
         new_level()
         self.assertFalse(team.submit_attempt('incorrect'))
 
@@ -101,8 +100,7 @@ class TeamModelTests(TestCase):
         new_level(answer)
 
         user = new_user()
-        team = new_team()
-        team.add_member(user)
+        team = new_team(user)
         self.assertEqual(0, team.next_level_index())
         self.assertTrue(team.can_submit())
         self.assertIsNotNone(team.next_level())
@@ -117,9 +115,7 @@ class TeamModelTests(TestCase):
         for answer in answers:
             new_level(answer)
 
-        user = new_user()
-        team = new_team()
-        team.add_member(user)
+        team = new_team(new_user())
 
         for i, answer in enumerate(answers):
             self.assertEqual(i, team.next_level_index())
@@ -131,6 +127,13 @@ class TeamModelTests(TestCase):
 
         self.assertFalse(team.can_submit())
         self.assertIsNone(team.next_level())
+
+    def test_team_names_must_be_unique(self):
+        def create():
+            Team.objects.create(name='foo')
+
+        create()
+        self.assertRaises(IntegrityError, create)
 
 
 class LevelModelTests(TestCase):
@@ -161,8 +164,7 @@ class TeamViewTests(TestCase):
 
     def test_logged_in_user_doesnt_see_create_team_form_when_already_member(self):
         user = new_user()
-        team = new_team()
-        team.add_member(user)
+        team = new_team(user)
         self.client.login(username=user.username, password=user.username)
         response = self.client.get(reverse('leaderboard:team'))
         self.assertContains(response, f"Team: {team.name}")
@@ -170,8 +172,7 @@ class TeamViewTests(TestCase):
 
     def test_logged_in_user_sees_leave_team_button_before_team_has_submissions(self):
         user = new_user()
-        team = new_team()
-        team.add_member(user)
+        new_team(user)
         self.client.login(username=user.username, password=user.username)
         response = self.client.get(reverse('leaderboard:team'))
         self.assertContains(response, reverse('leaderboard:leave-team'))
@@ -184,8 +185,7 @@ class TeamViewTests(TestCase):
 
     def test_logged_in_user_doesnt_see_leave_team_button_after_team_submissions(self):
         user = new_user()
-        team = new_team()
-        team.add_member(user)
+        team = new_team(user)
         answer = random_alphabetic()
         new_level(answer)
         team.submit_attempt(answer)
@@ -217,10 +217,22 @@ class CreateTeamViewTests(TestCase):
         self.assertEqual(0, count_team_members())
 
     def test_logged_in_user_cannot_create_team_if_already_member_of_a_team(self):
-        team = new_team()
+        team = new_team(new_user())
         team.add_member(self.user)
-        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo"})
-        self.assertContains(response, "UNIQUE constraint failed: leaderboard_teammember.user_id")
+        self.assertEqual(1, count_teams())
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": "foo" + team.name})
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, f"You are already member of a team: {team.name}")
+        self.assertEqual(1, count_teams())
+
+    def test_logged_in_user_cannot_create_team_with_already_existing_name(self):
+        name = "foo"
+        new_team(new_user(), name)
+        self.assertEqual(1, count_teams())
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": name})
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, "UNIQUE constraint failed: leaderboard_team.name")
+        self.assertEqual(1, count_teams())
 
 
 class LeaveTeamViewTests(TestCase):
@@ -228,8 +240,7 @@ class LeaveTeamViewTests(TestCase):
         self.user = user = new_user()
         self.client.login(username=user.username, password=user.username)
 
-        self.team = team = new_team()
-        team.add_member(user)
+        self.team = new_team(user)
 
     def test_user_can_leave_team_before_team_has_submissions_and_team_is_deleted_if_no_more_users(self):
         self.assertEqual(1, count_teams())
@@ -288,10 +299,7 @@ class JoinTeamViewTests(TestCase):
         self.user = user = new_user()
         self.client.login(username=user.username, password=user.username)
 
-        self.team = team = new_team()
-
-        other_user = new_user()
-        team.add_member(other_user)
+        self.team = new_team(new_user())
 
     def test_user_can_join_team_before_team_has_submissions_and_still_has_available_slots(self):
         self.assertEqual(1, count_teams())
@@ -365,16 +373,14 @@ class SubmissionsViewTests(TestCase):
         self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
 
     def test_logged_in_user_cannot_see_create_submission_form_when_no_more_levels(self):
-        team = new_team()
-        team.add_member(self.user)
+        team = new_team(self.user)
         response = self.client.get(reverse('leaderboard:submissions'))
         self.assertContains(response, "Congratulations, you have captured the flag, well done!")
         self.assertNotContains(response, "Next level:")
         self.assertNotContains(response, reverse('leaderboard:create-submission'))
 
     def test_logged_in_user_sees_create_submission_form_when_there_are_more_levels(self):
-        team = new_team()
-        team.add_member(self.user)
+        new_team(self.user)
         new_level()
         response = self.client.get(reverse('leaderboard:submissions'))
         self.assertNotContains(response, "Congratulations, you have captured the flag, well done!")
@@ -387,8 +393,7 @@ class CreateSubmissionViewTests(TestCase):
         self.user = user = new_user()
         self.client.login(username=user.username, password=user.username)
 
-        self.team = team = new_team()
-        team.add_member(self.user)
+        self.team = new_team(self.user)
 
         self.answer = answer = random_alphabetic()
         new_level(answer)
@@ -443,12 +448,10 @@ class CreateSubmissionViewTests(TestCase):
 class RankingTests(TestCase):
     def setUp(self):
         self.user1 = new_user()
-        self.team1 = new_team()
-        self.team1.add_member(self.user1)
+        self.team1 = new_team(self.user1)
 
         self.user2 = new_user()
-        self.team2 = new_team()
-        self.team2.add_member(self.user2)
+        self.team2 = new_team(self.user2)
 
         self.answers = [random_alphabetic() for _ in range(6)]
         for answer in self.answers:
@@ -480,23 +483,19 @@ class RankingTests(TestCase):
 
 class AvailableTeamsTests(TestCase):
     def test_include_teams_without_submissions_and_less_than_max_members(self):
-        team = new_team()
+        team = new_team(new_user())
         self.assertEqual([team.name], [t.name for t in available_teams()])
 
     def test_exclude_teams_with_submissions(self):
-        team = new_team()
-        user = new_user()
-        team.add_member(user)
-
+        team = new_team(new_user())
         answer = random_alphabetic()
         new_level(answer)
         team.submit_attempt(answer)
         self.assertEqual(0, len(available_teams()))
 
     def test_exclude_teams_with_too_many_members(self):
-        team = new_team()
-        for _ in range(MAX_MEMBERS_PER_TEAM):
-            user = new_user()
-            team.add_member(user)
+        team = new_team(new_user())
+        for _ in range(MAX_MEMBERS_PER_TEAM - 1):
+            team.add_member(new_user())
 
         self.assertEqual(0, len(available_teams()))

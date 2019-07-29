@@ -54,8 +54,19 @@ def available_teams():
     return Team.objects.annotate(**annotate_kwargs).filter(**filter_kwargs)
 
 
+@transaction.atomic
+def create_team_with_user(name, user):
+    tm = TeamMember.objects.filter(user=user)
+    if len(tm) > 0:
+        raise ValueError(f"User {user} is already member of a team")
+
+    team = Team.objects.create(name=name)
+    TeamMember.objects.create(team=team, user=user)
+    return team
+
+
 class Team(models.Model):
-    name = models.CharField(max_length=80)
+    name = models.CharField(max_length=80, unique=True)
     created_at = models.DateTimeField(default=now, blank=True)
 
     def __str__(self):
@@ -76,7 +87,7 @@ class Team(models.Model):
 
     @transaction.atomic
     def remove_member(self, user):
-        TeamMember.objects.filter(team=self, user=user).delete()
+        TeamMember.objects.get(team=self, user=user).delete()
 
         if self.is_empty():
             self.delete()
