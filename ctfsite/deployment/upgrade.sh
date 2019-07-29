@@ -8,8 +8,8 @@ branchname=$1
 
 # defined during the execution of a hook, need to unset this
 unset GIT_DIR
-git reset --hard
-git pull releases "$branchname"
+git fetch releases "$branchname"
+git reset --hard releases/"$branchname"
 
 ./scripts/install-or-upgrade-requirements.sh
 ./manage.sh migrate
