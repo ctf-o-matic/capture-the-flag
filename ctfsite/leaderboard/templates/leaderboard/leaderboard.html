@@ -10,17 +10,26 @@
         <div class="col-xl-12">
             <h1>Leaderboard</h1>
             {% if rankings %}
-                <div class="list-group col-xl-6">
+                <table class="table table-hover table-dark">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Team</th>
+                      <th scope="col">Level</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                 {% for ranking in rankings %}
-                  <div class="list-group-item">
-                    <div class="d-flex justify-content-between">
-                      <div>{{ranking.team_name}}</div>
-                      <code>{{ranking.level_name}}</code>
-                      <small>{{ranking.submission_date}}</small>
-                    </div>
-                  </div>
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td>{{ranking.team_name}}</td>
+                      <td><code>{{ranking.level_name}}</code></td>
+                      <td>{{ranking.submission_date}}</td>
+                    </tr>
                 {% endfor %}
-                </div>
+                  </tbody>
+                </table>
             {% else %}
                 <p>No submissions yet, stay tuned!</p>
             {% endif %}
