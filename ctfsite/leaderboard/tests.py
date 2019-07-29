@@ -234,6 +234,25 @@ class CreateTeamViewTests(TestCase):
         self.assertContains(response, "UNIQUE constraint failed: leaderboard_team.name")
         self.assertEqual(1, count_teams())
 
+    def test_logged_in_user_cannot_create_team_with_too_long_name(self):
+        name = "foo" * 80
+        self.assertEqual(0, count_teams())
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": name})
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, "team_name: Ensure this value has at most 80 characters")
+        self.assertEqual(0, count_teams())
+
+    def test_available_teams_are_still_visible_when_create_team_fails_with_errors(self):
+        team = new_team(new_user())
+        name = "foo" * 80
+        self.assertEqual(1, count_teams())
+        response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": name})
+        self.assertEqual(200, response.status_code)
+        self.assertContains(response, "team_name: Ensure this value has at most 80 characters")
+        self.assertContains(response, "Available teams")
+        self.assertContains(response, team.name)
+        self.assertEqual(1, count_teams())
+
 
 class LeaveTeamViewTests(TestCase):
     def setUp(self):

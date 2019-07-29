@@ -42,7 +42,11 @@ class CreateTeamView(LoginRequiredMixin, View):
             except Exception as e:
                 form.add_error(None, e)
 
-        return render(request, TeamView.template_name, {"form": form})
+        context = {
+            "form": form,
+            "available_teams": available_teams(),
+        }
+        return render(request, TeamView.template_name, context)
 
 
 class LeaveTeamView(LoginRequiredMixin, View):
