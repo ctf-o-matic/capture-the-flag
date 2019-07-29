@@ -73,6 +73,7 @@ tmp/
 # Django
 db.sqlite3
 *_settings.py
+/static
 
 # crontab-installer
 /crontab.txt
