@@ -1,4 +1,4 @@
-0 * * * * ./backup.sh hourly
-15 0 * * * ./backup.sh daily
-20 1 7,14,21,28 * * ./backup.sh weekly
-35 1 1 * * ./backup.sh monthly
+0 * * * * "$PWD"/backup.sh hourly db.sqlite3
+15 0 * * * "$PWD"/backup.sh daily db.sqlite3
+20 1 7,14,21,28 * * "$PWD"/backup.sh weekly db.sqlite3
+35 1 1 * * "$PWD"/backup.sh monthly db.sqlite3
