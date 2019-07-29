@@ -22,11 +22,11 @@
           </p>
 
           <p class="text-grey">
-            We built Capture the Flag, a security wargame inspired by SmashTheStack's IO,
+            We built <em>Capture The Flag</em>, a security wargame inspired by SmashTheStack's IO,
             to help our teams practice identifying and exploiting common security problems.
-            After completing this CTF,
-            you should have a greatly improved understanding of how attackers will try to break your code
-            (and hopefully you will have fun in the process!).
+            After completing this <em>CTF</em>,
+            you should have a greatly improved understanding of how attackers will try to break your code.
+            We also hope you will have fun in the process!
           </p>
 
           <p class="text-grey">
@@ -39,6 +39,18 @@
             — you will probably find it useful.
             Once you have the password, you can <code>ssh</code> in as <code>level1</code>,
             where new instructions await you.
+          </p>
+
+          <p class="text-grey">
+            {% if team %}
+              To advance on the <a href="{% url 'leaderboard:leaderboard' %}">Leaderboard</a>,
+              don't forget to <a href="{% url 'leaderboard:submissions' %}">submit your solutions</a>.
+            {% else %}
+              To enter the <a href="{% url 'leaderboard:leaderboard' %}">Leaderboard</a>,
+              you must be in a team, and submit your solutions on this site.
+              You are not in a team yet.
+              You can <a href="{% url 'leaderboard:team' %}">create a team or join one here</a>.
+            {% endif %}
           </p>
 
           <p>Happy hacking!<br/>
