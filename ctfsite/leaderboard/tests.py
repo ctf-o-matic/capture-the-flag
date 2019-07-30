@@ -128,6 +128,28 @@ class TeamModelTests(TestCase):
         self.assertFalse(team.can_submit())
         self.assertIsNone(team.next_level())
 
+    def test_submit_accepts_answers_only_in_correct_sequence(self):
+        answers = [random_alphabetic() for _ in range(6)]
+        self.assertEqual(len(answers), len(set(answers)))
+
+        for answer in answers:
+            new_level(answer)
+
+        team = new_team(new_user())
+
+        self.assertTrue(team.can_submit())
+        self.assertEqual(0, team.next_level_index())
+
+        for i, answer in enumerate(answers):
+            for j, wrong in enumerate(answers):
+                if i != j:
+                    self.assertFalse(team.submit_attempt(wrong))
+
+            self.assertTrue(team.submit_attempt(answer))
+
+        self.assertFalse(team.can_submit())
+        self.assertIsNone(team.next_level())
+
     def test_team_names_must_be_unique(self):
         def create():
             Team.objects.create(name='foo')
