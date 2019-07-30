@@ -69,9 +69,9 @@ backup() {
 }
 
 case $period in
-    hourly) backup "$(date +%H)" "$@" ;;
-    daily) backup "$(date +%a)" "$@" ;;
-    weekly) backup "$(date +%d)" "$@" ;;
-    monthly) backup "$(date +%b)" "$@" ;;
+    hourly) backup h"$(date +%H)" "$@" ;;
+    daily) backup d"$(date +%a)" "$@" ;;
+    weekly) backup w"$(date +%d)" "$@" ;;
+    monthly) backup m"$(date +%b)" "$@" ;;
     *) usage
 esac
