@@ -12,6 +12,7 @@ for ((i = 1; i <= 8; i++)); do
 done
 
 docker run -it \
+    --cap-add=SYS_PTRACE \
     --hostname "$name" \
     "${port_args[@]}" \
     "$name" "$@"
