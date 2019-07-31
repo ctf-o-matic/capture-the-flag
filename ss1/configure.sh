@@ -20,6 +20,22 @@ levels=(${levels[@]%/})
 # strip beginning, leaving only the directory name
 levels=(${levels[@]##*/})
 
+alphabet=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789
+alphabet_length=${#alphabet}
+
+pwgen() {
+    local length=$1
+    local i index pw=
+
+    for ((i = 0; i < length; i++)); do
+        index=$((RANDOM % alphabet_length))
+        letter=${alphabet:index:1}
+        pw+=$letter
+    done
+
+    echo "$pw"
+}
+
 create_password() {
     pwgen 16 1
 }

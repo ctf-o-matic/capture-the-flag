@@ -8,7 +8,6 @@ Requirements
 
 Software:
 
-* `pwgen` -- for generating random passwords
 * `docker` -- obviously
 
 Building the image
