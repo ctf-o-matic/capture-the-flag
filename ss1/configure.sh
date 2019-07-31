@@ -91,6 +91,7 @@ cp -vr levels/common "$generated"/levels/
 
 msg "setup root user and authorized ssh keys ..."
 mkdir -p "$generated"/root/.ssh
-ssh-add -L > "$generated"/root/.ssh/authorized_keys
+ssh-add -L > "$generated"/root/.ssh/authorized_keys ||
+    error "no keys in ssh-agent; you might want to add some and re-run"
 create_password > "$generated"/root/.password
 chmod -R go-rwx "$generated"/root
