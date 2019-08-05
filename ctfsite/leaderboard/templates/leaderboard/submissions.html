@@ -34,6 +34,12 @@
                     Once you have the password, you can <code>ssh</code> in as <code>level1</code>,
                     where new instructions await you.
                   </p>
+
+                  <p class="alert alert-warning">
+                    Reminder: once you submit a solution, the team members become permanent:
+                      members can no longer leave, and new members can no longer join.
+                      (As explained on the <a href="{% url 'leaderboard:rules' %}">Rules</a> page.)
+                  </p>
               {% elif team.can_submit %}
                 <h1>Submit a solution</h1>
                   <p class="text-grey">

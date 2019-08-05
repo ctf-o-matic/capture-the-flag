@@ -15,6 +15,13 @@
             {% if team %}
               {% include 'leaderboard/form-errors.html' %}
 
+              {% if team.can_submit and team.next_level_index == 0 %}
+                  <p class="alert alert-info">
+                    See the instructions for the first level and submit your solution on the
+                    <a href="{% url 'leaderboard:submissions' %}">Submissions</a> page.
+                  </p>
+              {% endif %}
+
               <h1>Team: {{team.name}}</h1>
 
               <p>Members:</p>
