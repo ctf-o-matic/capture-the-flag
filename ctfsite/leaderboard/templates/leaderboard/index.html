@@ -29,29 +29,30 @@
             We also hope you will have fun in the process!
           </p>
 
-          <p class="text-grey">
-            You can begin the CTF challenge by running <code>ssh -p 8022 level0@34.66.129.228</code> from your shell.
-          </p>
-
-          <p class="text-grey">
-            Your goal is to read the contents of <code>/home/level1/.password</code>.
-            In <code>/levels/level1</code>, you'll find a binary owned by <code>level1</code> (as well as its source code)
-            — you will probably find it useful.
-            Once you have the password, you can <code>ssh</code> in as <code>level1</code>,
-            where new instructions await you.
-          </p>
-
-          <p class="text-grey">
+          {% if user.is_authenticated %}
             {% if team %}
-              To advance on the <a href="{% url 'leaderboard:leaderboard' %}">Leaderboard</a>,
-              don't forget to <a href="{% url 'leaderboard:submissions' %}">submit your solutions</a>.
+                {% if team.can_submit %}
+                  <p class="alert alert-info">
+                    Don't forget to submit the solution to the next level on the
+                    <a href="{% url 'leaderboard:submissions' %}">Submissions</a> page.
+                  </p>
+                {% else %}
+                  <p class="alert alert-success">
+                    Congratulations, your team {{ team.name }} has captured the flag, well done!
+                  </p>
+                {% endif %}
             {% else %}
-              To enter the <a href="{% url 'leaderboard:leaderboard' %}">Leaderboard</a>,
-              you must be in a team, and submit your solutions on this site.
-              You are not in a team yet.
-              You can <a href="{% url 'leaderboard:team' %}">create a team or join one here</a>.
+              <p class="alert alert-info">
+                You are not in a team, yet.
+                To participate in the competition, <a href="{% url 'leaderboard:team' %}">join a team or create a new team</a>.
+              </p>
             {% endif %}
-          </p>
+
+          {% else %}
+            <p class="text-grey">
+              To participate, please <a href="/oauth/login/google-oauth2/">Login</a>!
+            </p>
+          {% endif %}
 
           <p>Happy hacking!<br/>
           The Capture The Flag Team</p>

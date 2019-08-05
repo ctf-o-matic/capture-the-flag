@@ -12,68 +12,35 @@
   <div class="container">
       <div class="row">
         <div class="col-xl-12">
-          <h1>Team: {% if team %}{{team.name}}{% else %}None{% endif %}</h1>
-
             {% if team %}
               {% include 'leaderboard/form-errors.html' %}
-                <p>Members:</p>
-                <ul>
-                    {% for tm in team.teammember_set.all %}
-                    <li>{{ tm.user.get_full_name }}</li>
-                    {% endfor %}
-                </ul>
+
+              <h1>Team: {{team.name}}</h1>
+
+              <p>Members:</p>
+              <ul>
+                {% for tm in team.teammember_set.all %}
+                <li>{{ tm.user.get_full_name }}</li>
+                {% endfor %}
+              </ul>
 
                 {% if user_can_leave %}
                     <div class="alert alert-warning d-flex justify-content-between align-items-center">
-                        While the team has not submitted a solution, you may leave to join another team, if needed.
+                        While the team has not submitted a solution, you may still leave this team to join another team, if needed.
                         <a href="{% url 'leaderboard:leave-team' %}" class="btn btn-warning">Leave team</a>
                     </div>
                 {% endif %}
             {% else %}
-          <p class="text-grey">
-            You are not in a team, yet. Only teams can submit solutions.
-          </p>
-          <p class="text-grey">
-              {% if available_teams %}
-              You can either join an existing team with available spots, or create a new one.
-              {% else %}
-              It looks like there are no available teams. You can go ahead and create one.
-              {% endif %}
-          </p>
-
-          <form method="post" action="{% url 'leaderboard:create-team' %}" class="needs-validation" novalidate>
-              {% csrf_token %}
-              {% include 'leaderboard/form-errors.html' %}
-            <div class="form-row align-items-center">
-              <div class="col-sm-4">
-                <input name="team_name" type="text" class="form-control" placeholder="Team name to create, ex: Foo Fighters" required>
-                <div class="invalid-feedback">Please enter a name for the team.</div>
+              <div class="alert alert-info">
+                <div>You are not in a team, yet. Only teams can submit solutions.</div>
+                <div>
+                    {% if available_teams %}
+                        You can either join one of the available teams, or create a new team.
+                    {% else %}
+                        There are no available teams, yet. You can go ahead and create one.
+                    {% endif %}
+                </div>
               </div>
-              <div class="col-auto">
-                <button class="btn btn-primary" type="submit">Create team</button>
-              </div>
-            </div>
-          </form>
-
-            <script>
-            (function() {
-              'use strict';
-              window.addEventListener('load', function() {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                  form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                      event.preventDefault();
-                      event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                  }, false);
-                });
-              }, false);
-            })();
-            </script>
 
                 {% if available_teams %}
                     <h2 class="mb-3 mt-3">Available teams</h2>
@@ -122,6 +89,25 @@
                         At the moment you have no choice but to create your own!
                     </div>
                 {% endif %}
+
+              <h2>Create a new team</h2>
+
+              {% include 'leaderboard/form-errors.html' %}
+
+              <form method="post" action="{% url 'leaderboard:create-team' %}" class="needs-validation" novalidate>
+                  {% csrf_token %}
+                <div class="form-row align-items-center">
+                  <div class="col-sm-4">
+                    <input name="team_name" type="text" class="form-control" placeholder="Team name to create, ex: Foo Fighters" required>
+                    <div class="invalid-feedback">Please enter a name for the team.</div>
+                  </div>
+                  <div class="col-auto">
+                    <button class="btn btn-primary" type="submit">Create team</button>
+                  </div>
+                </div>
+              </form>
+
+              {% include 'leaderboard/form-frontend-validations.html' %}
 
             {% endif %}
 

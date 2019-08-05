@@ -181,7 +181,6 @@ class TeamViewTests(TestCase):
         user = new_user()
         self.client.login(username=user.username, password=user.username)
         response = self.client.get(reverse('leaderboard:team'))
-        self.assertContains(response, "Team: None")
         self.assertContains(response, reverse('leaderboard:create-team'))
 
     def test_logged_in_user_doesnt_see_create_team_form_when_already_member(self):
@@ -425,7 +424,6 @@ class SubmissionsViewTests(TestCase):
         new_level()
         response = self.client.get(reverse('leaderboard:submissions'))
         self.assertNotContains(response, "Congratulations, you have captured the flag, well done!")
-        self.assertContains(response, "Next level:")
         self.assertContains(response, reverse('leaderboard:create-submission'))
 
 

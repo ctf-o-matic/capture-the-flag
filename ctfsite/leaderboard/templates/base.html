@@ -16,21 +16,23 @@
             <li class="nav-item"><a href="/leaderboard/rules" class="nav-link text-light">Rules</a></li>
             <li class="nav-item"><a href="/leaderboard/" class="nav-link text-light">Leaderboard</a></li>
             {% if user.is_authenticated %}
-            <li class="nav-item"><a href="/leaderboard/team" class="nav-link text-light">Team</a></li>
               {% if team %}
-              <li class="nav-item"><a href="/leaderboard/submissions" class="nav-link text-light">Submissions</a></li>
+                <li class="nav-item"><a href="/leaderboard/team" class="nav-link text-light">Your team</a></li>
+                <li class="nav-item"><a href="/leaderboard/submissions" class="nav-link text-light">Submissions</a></li>
+              {% else %}
+                <li class="nav-item"><a href="/leaderboard/team" class="nav-link text-light">Join a team</a></li>
               {% endif %}
             {% endif %}
           </ul>
 
           {% if user.is_staff %}
-          <a href="/admin" class="btn btn-outline-warning mr-3">Admin</a>
+            <a href="/admin" class="btn btn-outline-warning mr-3">Admin</a>
           {% endif %}
 
           {% if user.is_authenticated %}
-          <a href="{% url 'logout' %}" class="btn btn-outline-info">Logout</a>
+            <a href="{% url 'logout' %}" class="btn btn-outline-info">Logout</a>
           {% else %}
-          <a href="/oauth/login/google-oauth2/" class="btn btn-outline-success">Login</a>
+            <a href="/oauth/login/google-oauth2/" class="btn btn-outline-success">Login</a>
           {% endif %}
         </div>
       </nav>
