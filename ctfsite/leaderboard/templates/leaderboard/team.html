@@ -12,112 +12,46 @@
   <div class="container">
       <div class="row">
         <div class="col-xl-12">
-            {% if team %}
-              {% include 'leaderboard/form-errors.html' %}
-
-              {% if team.can_submit and team.next_level_index == 0 %}
-                  <p class="alert alert-info">
-                    See the instructions for the first level and submit your solution on the
-                    <a href="{% url 'leaderboard:submissions' %}">Submissions</a> page.
-                  </p>
-              {% endif %}
-
-              <h1>Team: {{team.name}}</h1>
-
-              <p>Members:</p>
-              <ul>
-                {% for tm in team.teammember_set.all %}
-                <li>{{ tm.user.get_full_name }}</li>
-                {% endfor %}
-              </ul>
-
-                {% if user_can_leave %}
-                    <div class="alert alert-warning d-flex justify-content-between align-items-center">
-                        While the team has not submitted a solution, you may still leave this team to join another team, if needed.
-                        <a href="{% url 'leaderboard:leave-team' %}" class="btn btn-warning">Leave team</a>
-                    </div>
-                {% endif %}
+          {% if not team %}
+            {% include 'leaderboard/team-join.html' %}
+          {% else %}
+            {% if team.is_done %}
+                {% include 'leaderboard/team-done.html' %}
+            {% elif team.is_level0 %}
+                {% include 'leaderboard/team-level0.html' %}
             {% else %}
-              <div class="alert alert-info">
-                <div>You are not in a team, yet. Only teams can submit solutions.</div>
-                <div>
-                    {% if available_teams %}
-                        You can either join one of the available teams, or create a new team.
-                    {% else %}
-                        There are no available teams, yet. You can go ahead and create one.
-                    {% endif %}
-                </div>
-              </div>
-
-                {% if available_teams %}
-                    <h2 class="mb-3 mt-3">Available teams</h2>
-                    {% if join_error %}
-                        <div class="alert alert-warning">
-                            {% if join_error == "team-missing" %}
-                                Sorry, it seems the team you selected has disappeared...
-                            {% elif join_error == "team-full" %}
-                                Sorry, it seems the team you selected is no longer available (no more slots)...
-                            {% elif join_error == "team-has-submissions" %}
-                                Sorry, it seems the team you selected is no longer available (has already submissions)...
-                            {% else %}
-                                Unknown error: {{ join_error }}
-                            {% endif %}
-                            Please choose another team!
-                        </div>
-                    {% endif %}
-
-                    <table class="table table-hover table-dark">
-                      <thead>
-                        <tr>
-                          <th scope="col">Team</th>
-                          <th scope="col">Members</th>
-                          <th scope="col">Join?</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                    {% for team in available_teams %}
-                        <tr>
-                          <td>{{team}}</td>
-                          <td>
-                            {% for tm in team.teammember_set.all %}
-                                <div>{{ tm.user }}</div>
-                            {% endfor %}
-                          </td>
-                          <td><a href="{% url 'leaderboard:join-team' team.pk %}" class="btn btn-secondary">Join this team</a></td>
-                        </tr>
-                    {% endfor %}
-                      </tbody>
-                    </table>
-                {% elif join_error %}
-                    <h2 class="mb-3 mt-3">Available teams</h2>
-                    <div class="alert alert-warning">
-                        Sorry, it seems the team you selected is no longer available.
-                        In fact there are no more available teams.
-                        At the moment you have no choice but to create your own!
-                    </div>
-                {% endif %}
-
-              <h2>Create a new team</h2>
-
-              {% include 'leaderboard/form-errors.html' %}
-
-              <form method="post" action="{% url 'leaderboard:create-team' %}" class="needs-validation" novalidate>
-                  {% csrf_token %}
-                <div class="form-row align-items-center">
-                  <div class="col-sm-4">
-                    <input name="team_name" type="text" class="form-control" placeholder="Team name to create, ex: Foo Fighters" required>
-                    <div class="invalid-feedback">Please enter a name for the team.</div>
-                  </div>
-                  <div class="col-auto">
-                    <button class="btn btn-primary" type="submit">Create team</button>
-                  </div>
-                </div>
-              </form>
-
-              {% include 'leaderboard/form-frontend-validations.html' %}
-
+                {% include 'leaderboard/team-next.html' %}
             {% endif %}
 
+            {% if submissions %}
+                <h2 class="mb-3 mt-3">Submissions</h2>
+                <div class="list-group col-xl-6">
+                {% for submission in submissions %}
+                  <div class="list-group-item">
+                    <div class="d-flex justify-content-between">
+                      <code>{{submission.level_name}}</code>
+                      <small>{{submission.date}}</small>
+                    </div>
+                  </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+
+            <h2 class="mb-3 mt-3">Team: {{team.name}}</h2>
+
+            <ul>
+                {% for tm in team.teammember_set.all %}
+                    <li>{{ tm.user.get_full_name }}</li>
+                {% endfor %}
+            </ul>
+
+            {% if user_can_leave %}
+                <div class="alert alert-warning d-flex justify-content-between align-items-center">
+                    While the team has not submitted a solution, you may still leave this team to join another team, if needed.
+                    <a href="{% url 'leaderboard:leave-team' %}" class="btn btn-warning">Leave team</a>
+                </div>
+            {% endif %}
+          {% endif %}
         </div>
       </div>
   </div>

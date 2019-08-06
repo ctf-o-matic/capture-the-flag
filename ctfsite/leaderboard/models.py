@@ -92,6 +92,13 @@ class Team(models.Model):
         if self.is_empty():
             self.delete()
 
+    def current_level(self):
+        next_level_index = self.next_level_index()
+        if next_level_index == 0:
+            return None
+
+        return Level.objects.all()[next_level_index - 1].name
+
     def next_level(self):
         next_level_index = self.next_level_index()
         if next_level_index >= Level.objects.count():
@@ -121,6 +128,12 @@ class Team(models.Model):
 
     def has_submissions(self):
         return self.next_level_index() > 0
+
+    def is_done(self):
+        return self.next_level() is None
+
+    def is_level0(self):
+        return self.next_level_index() == 0
 
 
 class TeamMember(models.Model):

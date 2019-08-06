@@ -1,0 +1,33 @@
+<h1>Start</h1>
+
+<p class="text-grey">
+    You can begin the CTF challenge by running <code>ssh -p 8022 level0@34.66.129.228</code> from your shell.
+</p>
+
+<p class="text-grey">
+    Your goal is to read the contents of <code>/home/level1/.password</code>.
+    In <code>/levels/level1</code>, you'll find a binary owned by <code>level1</code> (as well as its source code)
+    — you will probably find it useful.
+    Once you have the password, you can <code>ssh</code> in as <code>level1</code>,
+    where new instructions await you.
+</p>
+
+<p class="alert alert-warning">
+    Reminder: once you submit a solution, the team members cannot change anymore:
+    members can no longer leave, and new members can no longer join.
+    (As explained in the <a href="{% url 'leaderboard:rules' %}">Rules</a>.)
+</p>
+
+<form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation" novalidate>
+    {% csrf_token %}
+    {% include 'leaderboard/form-errors.html' %}
+    <div class="form-row align-items-center">
+        <div class="col-sm-4">
+            <input name="answer_attempt" type="text" class="form-control" placeholder="The password" required>
+            <div class="invalid-feedback">Please enter the password.</div>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </div>
+</form>

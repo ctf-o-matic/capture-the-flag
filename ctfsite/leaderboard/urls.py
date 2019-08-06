@@ -12,6 +12,5 @@ urlpatterns = [
     path('team/leave', views.LeaveTeamView.as_view(), name='leave-team'),
     path('teams', views.CreateTeamView.as_view(), name='create-team'),
     path('teams/<int:pk>/join', views.JoinTeamView.as_view(), name='join-team'),
-    path('submissions', views.SubmissionsView.as_view(), name='submissions'),
     path('submissions/create', views.CreateSubmissionView.as_view(), name='create-submission'),
 ]

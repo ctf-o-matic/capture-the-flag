@@ -214,11 +214,30 @@ class TeamViewTests(TestCase):
         response = self.client.get(reverse('leaderboard:team'))
         self.assertNotContains(response, reverse('leaderboard:leave-team'))
 
+    def test_logged_in_user_cannot_see_create_submission_form_when_no_more_levels(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        new_team(user)
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertContains(response, "Congratulations, you have captured the flag!")
+        self.assertNotContains(response, "Next level:")
+        self.assertNotContains(response, reverse('leaderboard:create-submission'))
+
+    def test_logged_in_user_sees_create_submission_form_when_there_are_more_levels(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        new_team(user)
+        new_level()
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertNotContains(response, "Congratulations, you have captured the flag!")
+        self.assertContains(response, reverse('leaderboard:create-submission'))
+
 
 class CreateTeamViewTests(TestCase):
     def setUp(self):
         self.user = user = new_user()
         self.client.login(username=user.username, password=user.username)
+        new_level()
 
     def test_logged_in_user_cannot_create_team_with_empty_name(self):
         response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": ""})
@@ -396,37 +415,6 @@ class JoinTeamViewTests(TestCase):
         self.assertEqual(1, count_team_members())
 
 
-class SubmissionsViewTests(TestCase):
-    def setUp(self):
-        self.user = user = new_user()
-        self.client.login(username=user.username, password=user.username)
-
-    def test_anon_user_cannot_see_submissions_page(self):
-        self.client.logout()
-        url = reverse('leaderboard:submissions')
-        response = self.client.get(url)
-        self.assertRedirects(response, login_redirect_url(url), status_code=302, fetch_redirect_response=False)
-
-    def test_logged_in_user_cannot_see_create_submission_form_when_not_yet_member(self):
-        response = self.client.get(reverse('leaderboard:submissions'))
-        expected_url = reverse('leaderboard:team')
-        self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
-
-    def test_logged_in_user_cannot_see_create_submission_form_when_no_more_levels(self):
-        team = new_team(self.user)
-        response = self.client.get(reverse('leaderboard:submissions'))
-        self.assertContains(response, "Congratulations, you have captured the flag, well done!")
-        self.assertNotContains(response, "Next level:")
-        self.assertNotContains(response, reverse('leaderboard:create-submission'))
-
-    def test_logged_in_user_sees_create_submission_form_when_there_are_more_levels(self):
-        new_team(self.user)
-        new_level()
-        response = self.client.get(reverse('leaderboard:submissions'))
-        self.assertNotContains(response, "Congratulations, you have captured the flag, well done!")
-        self.assertContains(response, reverse('leaderboard:create-submission'))
-
-
 class CreateSubmissionViewTests(TestCase):
     def setUp(self):
         self.user = user = new_user()
@@ -455,7 +443,7 @@ class CreateSubmissionViewTests(TestCase):
         self.assertEqual(1, count_submissions())
 
         response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": 'foo'})
-        expected_url = reverse('leaderboard:submissions')
+        expected_url = reverse('leaderboard:team')
         self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
 
         self.assertEqual(1, self.team.next_level_index())
@@ -466,7 +454,7 @@ class CreateSubmissionViewTests(TestCase):
         self.assertEqual(0, count_submissions())
 
         response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": self.answer})
-        expected_url = reverse('leaderboard:submissions') + '?passed=1'
+        expected_url = reverse('leaderboard:team') + '?passed=1'
         self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
 
         self.assertEqual(1, self.team.next_level_index())
