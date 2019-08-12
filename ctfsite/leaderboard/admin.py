@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.utils.timezone import now
 
-from leaderboard.models import Team, TeamMember, Level, Submission
+from leaderboard.models import Team, TeamMember, Level, Submission, Hint
 
 
 class TeamMemberInline(admin.TabularInline):
@@ -17,14 +18,35 @@ class TeamAdmin(admin.ModelAdmin):
     inlines = (TeamMemberInline, SubmissionInline)
 
 
+class HintInline(admin.TabularInline):
+    model = Hint
+    extra = 1
+
+
 class LevelAdmin(admin.ModelAdmin):
-    pass
+    inlines = (HintInline,)
 
 
 class SubmissionAdmin(admin.ModelAdmin):
     pass
 
 
+class HintAdmin(admin.ModelAdmin):
+    list_display = ('level', 'text', 'visible')
+    list_filter = ('level', 'visible')
+
+    actions = ['show_hints', 'hide_hints']
+
+    def show_hints(self, request, queryset):
+        queryset.update(visible=True, updated_at=now())
+    show_hints.short_description = "Make selected hints visible"
+
+    def hide_hints(self, request, queryset):
+        queryset.update(visible=False, updated_at=now())
+    hide_hints.short_description = "Make selected hints hidden"
+
+
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Level, LevelAdmin)
 admin.site.register(Submission, SubmissionAdmin)
+admin.site.register(Hint, HintAdmin)

@@ -1,0 +1,14 @@
+{% if team.visible_hints %}
+<p>
+  <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#hints" aria-expanded="false" aria-controls="collapseExample">
+      <i class="fas fa-lightbulb"></i> Need some hints?
+  </button>
+</p>
+<div class="collapse" id="hints">
+  <div class="card card-body">
+    {% for hint in team.visible_hints %}
+        <p>{{ hint.text }}</p>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

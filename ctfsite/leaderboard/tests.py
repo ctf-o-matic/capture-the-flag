@@ -6,7 +6,8 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings, available_teams, create_team_with_user
+from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings, available_teams, \
+    create_team_with_user, Hint
 
 
 def random_alphabetic(length=10):
@@ -32,6 +33,10 @@ def new_level(answer=None):
     if answer is None:
         answer = random_alphabetic()
     return Level.objects.create(name=random_alphabetic(), answer=encoded(answer))
+
+
+def new_hint(**kwargs):
+    return Hint.objects.create(**kwargs)
 
 
 def count_teams():
@@ -157,6 +162,31 @@ class TeamModelTests(TestCase):
         create()
         self.assertRaises(IntegrityError, create)
 
+    def test_visible_hints_at_current_level(self):
+        user = new_user()
+        team = new_team(user)
+
+        answers = [random_alphabetic() for _ in range(3)]
+        levels = [new_level(answer) for answer in answers]
+
+        visible_hints = [new_hint(level=level, visible=True) for level in levels]
+        [new_hint(level=level, visible=False) for level in levels]
+
+        self.assertEqual(levels[0], team.next_level())
+        self.assertListEqual([visible_hints[0]], list(team.visible_hints()))
+
+        self.assertTrue(team.submit_attempt(answers[0]))
+        self.assertEqual(levels[1], team.next_level())
+        self.assertListEqual([visible_hints[1]], list(team.visible_hints()))
+
+        self.assertTrue(team.submit_attempt(answers[1]))
+        self.assertEqual(levels[2], team.next_level())
+        self.assertListEqual([visible_hints[2]], list(team.visible_hints()))
+
+        self.assertTrue(team.submit_attempt(answers[2]))
+        self.assertIsNone(team.next_level())
+        self.assertEqual(0, len(team.visible_hints()))
+
 
 class LevelModelTests(TestCase):
     def new_level(self, name, answer):
@@ -231,6 +261,39 @@ class TeamViewTests(TestCase):
         response = self.client.get(reverse('leaderboard:team'))
         self.assertNotContains(response, "Congratulations, you have captured the flag!")
         self.assertContains(response, reverse('leaderboard:create-submission'))
+
+    def test_logged_in_user_sees_visible_hints_at_current_level(self):
+        user = new_user()
+        self.client.login(username=user.username, password=user.username)
+        team = new_team(user)
+
+        answers = [random_alphabetic() for _ in range(3)]
+        levels = [new_level(answer) for answer in answers]
+        for i, level in enumerate(levels):
+            new_hint(level=level, text=f"hint-level{i}-visible", visible=True)
+            new_hint(level=level, text=f"hint-level{i}-hidden", visible=False)
+
+        self.assertEqual(levels[0], team.next_level())
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertContains(response, "hint-level0-visible")
+        self.assertNotContains(response, "hint-level0-hidden")
+
+        self.assertTrue(team.submit_attempt(answers[0]))
+        self.assertEqual(levels[1], team.next_level())
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertContains(response, "hint-level1-visible")
+        self.assertNotContains(response, "hint-level1-hidden")
+
+        self.assertTrue(team.submit_attempt(answers[1]))
+        self.assertEqual(levels[2], team.next_level())
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertContains(response, "hint-level2-visible")
+        self.assertNotContains(response, "hint-level2-hidden")
+
+        self.assertTrue(team.submit_attempt(answers[2]))
+        self.assertIsNone(team.next_level())
+        response = self.client.get(reverse('leaderboard:team'))
+        self.assertNotContains(response, "hint-")
 
 
 class CreateTeamViewTests(TestCase):

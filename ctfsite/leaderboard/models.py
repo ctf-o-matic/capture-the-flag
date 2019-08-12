@@ -135,6 +135,12 @@ class Team(models.Model):
     def is_level0(self):
         return self.next_level_index() == 0
 
+    def visible_hints(self):
+        if not self.can_submit():
+            return []
+
+        return Hint.objects.filter(level=self.next_level(), visible=True)
+
 
 class TeamMember(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
@@ -156,7 +162,7 @@ class Level(models.Model):
     created_at = models.DateTimeField(default=now, blank=True)
 
     def __str__(self):
-        return f"{self.name} - {self.answer}"
+        return self.name
 
     class Meta:
         constraints = [
@@ -180,4 +186,18 @@ class Submission(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['team', 'level'], name="uk_team_level"),
         ]
+        ordering = ['-level', 'created_at']
+
+
+class Hint(models.Model):
+    level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    text = models.CharField(max_length=200, help_text="A hint. A good hint gives a small nudge, without spoiling the challenge!")
+    visible = models.BooleanField(default=False)
+    created_at = models.DateTimeField(default=now, blank=True)
+    updated_at = models.DateTimeField(default=now, blank=True)
+
+    def __str__(self):
+        return f"{self.level} - {self.text}"
+
+    class Meta:
         ordering = ['-level', 'created_at']

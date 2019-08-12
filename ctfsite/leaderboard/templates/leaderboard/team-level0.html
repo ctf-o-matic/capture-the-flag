@@ -18,7 +18,7 @@
     (As explained in the <a href="{% url 'leaderboard:rules' %}">Rules</a>.)
 </p>
 
-<form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation" novalidate>
+<form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation mb-3 mt-3" novalidate>
     {% csrf_token %}
     {% include 'leaderboard/form-errors.html' %}
     <div class="form-row align-items-center">
@@ -31,3 +31,7 @@
         </div>
     </div>
 </form>
+
+{% include 'leaderboard/hints.html' %}
+
+{% include 'leaderboard/form-frontend-validations.html' %}
