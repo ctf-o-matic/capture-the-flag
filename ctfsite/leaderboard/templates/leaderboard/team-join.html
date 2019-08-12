@@ -26,22 +26,15 @@
         </div>
     {% endif %}
 
-    <table class="table table-hover table-dark">
-        <thead>
-        <tr>
-            <th scope="col">Team</th>
-            <th scope="col">Members</th>
-            <th scope="col">Join?</th>
-        </tr>
-        </thead>
+    <table class="table ">
         <tbody>
         {% for team in available_teams %}
             <tr>
-                <td>{{team}}</td>
-                <td>
+                <td class="align-middle">{{team}} (<span class="text-muted">
                     {% for tm in team.teammember_set.all %}
-                        <div>{{ tm.user }}</div>
-                    {% endfor %}
+                        {{ tm.user }}{% if not forloop.last %},{% endif %}
+                    {% endfor %}</span>
+                    )
                 </td>
                 <td><a href="{% url 'leaderboard:join-team' team.pk %}" class="btn btn-secondary">Join this team</a></td>
             </tr>
