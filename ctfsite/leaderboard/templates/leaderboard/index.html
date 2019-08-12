@@ -33,8 +33,7 @@
             {% if team %}
                 {% if team.can_submit %}
                   <p class="alert alert-info">
-                    Don't forget to submit the solution to the next level on the
-                    <a href="{% url 'leaderboard:submissions' %}">Submissions</a> page.
+                    You're in team {{ team }}. Time to get started, the <a href="{% url 'leaderboard:team' %}">first level</a> is waiting for you!
                   </p>
                 {% else %}
                   <p class="alert alert-success">
