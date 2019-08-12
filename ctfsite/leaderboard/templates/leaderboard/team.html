@@ -46,9 +46,9 @@
             </ul>
 
             {% if user_can_leave %}
-                <div class="alert alert-warning d-flex justify-content-between align-items-center">
+                <div class="alert alert-danger d-flex justify-content-between align-items-center">
                     While the team has not submitted a solution, you may still leave this team to join another team, if needed.
-                    <a href="{% url 'leaderboard:leave-team' %}" class="btn btn-warning">Leave team</a>
+                    <a href="{% url 'leaderboard:leave-team' %}" class="btn btn-danger">Leave team</a>
                 </div>
             {% endif %}
           {% endif %}
