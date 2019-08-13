@@ -13,9 +13,10 @@
 </p>
 
 <p class="alert alert-warning">
-    Reminder: once you submit a solution, the team members cannot change anymore:
-    members can no longer leave, and new members can no longer join.
-    (As explained in the <a href="{% url 'leaderboard:rules' %}">Rules</a>.)
+    Is your team complete? After you submit the solution to the first level,
+    team members cannot change anymore (nobody joins, nobody leaves).
+    Make sure to finalize your team members before submitting the first solution.
+    (More details in <a href="{% url 'leaderboard:rules' %}">Rules</a>.)
 </p>
 
 <form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation mb-3 mt-3" novalidate>
