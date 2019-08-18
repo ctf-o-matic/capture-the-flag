@@ -1,2 +1,2 @@
-This one is a web-based vulnerability, so go ahead and
-point your browser to http://localhost:__NEXT_LEVEL_PORT__/
+The main feature of this level is a simple tool to print the current time.
+Whatever could go wrong with such a simple task!

@@ -11,7 +11,7 @@ The password for the next level is in: /home/level2/.password
 
 You may find the files in /levels/level2 useful.
 
-This one is a web-based vulnerability, so go ahead and
-point your browser to http://localhost:8002/
+The main feature of this level is a simple tool to print the current time.
+Whatever could go wrong with such a simple task!
 
 Best of luck!

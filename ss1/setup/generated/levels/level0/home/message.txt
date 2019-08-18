@@ -7,13 +7,23 @@ _______________________________
 
 Welcome to the Capture The Flag security challenge!
 
-In /home/level1/.password is the password of the level1 user.
-Your mission, should you choose to accept it, is to read that
-file and login as level1 to advance to the next level.
-You may find the files in /levels/level1 useful.
+The users of this system are named level1, level2, level3, and so on.
+Each user owns some program running in the system. Developed with love.
+These programs appear to be well-protected, and in any case, harmless.
 
-Your goal is to advance from level to level by discovering and exploiting the
-vulnerability at each level until you reach the final level with the flag!
+Unfortunately, appearances can be deceiving. Each of the programs have
+a fatal flaw, which in the wrong hands could lead to unauthorized access
+to the user account of their owners, which in turn can lead to further
+escalation of privileges.
+
+Your goal is to advance from level to level, by discovering and exploiting
+vulnerabilities. On the last level, the flag (and glory!) is awaiting you!
+
+For this contest you'll need good stamina, so quick health check first!
+Don't worry, it's super-safe, using our super-secure database of
+medical analysis records. Point your browser to:
+
+    http://localhost:8001/
 
 Happy hacking!
 The Capture The Flag Team

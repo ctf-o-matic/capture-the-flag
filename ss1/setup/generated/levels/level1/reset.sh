@@ -6,10 +6,14 @@ cd "$(dirname "$0")"
 
 level=$(basename "$PWD")
 
-cd special
-make
+password=$(cat "/home/$level/.password")
 
-progpath=/levels/$level/prog
-cp prog "$progpath"
-chown -v "$level:$level" "$progpath"
-chmod -v 4555 "$progpath"
+src_path=special/db.sqlite3
+dst_path=/var/run/levels/$level/wwwdata/db.sqlite3
+cp -v "$src_path" "$dst_path"
+chown -v "$level:$level" "$dst_path"
+chown -v 0600 "$dst_path"
+
+cat << EOF | sqlite3 "$dst_path"
+update safemedicalanalysis_medicalresult set description = replace(description, '__PASSWORD__', '$password');
+EOF

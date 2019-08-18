@@ -6,7 +6,4 @@ rundir=$1; shift
 port=$1; shift
 
 cd "$rundir"
-PYTHONPATH=./runtime ./code/prog.py "$port" ./wwwdata server &
-PYTHONPATH=./runtime ./code/prog.py "$port" ./wwwdata worker &
-
-wait
+PYTHONPATH=./runtime ./code/prog.py "$port" ./wwwdata

@@ -53,19 +53,26 @@ create_welcome_message() {
     local next_level_port=$(levelport "$current")
     ((next_level_port++))
 
+    render_template() {
+        sed -e "/__HINT__/r $hintfile" -e "/__HINT__/d" | \
+        sed \
+            -e "s/__CURRENT_LEVEL_NUM__/$current_level_num/g" \
+            -e "s/__NEXT_LEVEL_PORT__/$next_level_port/g" \
+            -e "s/__NEXT_LEVEL__/$next/g"
+    }
+
     if [[ "$current_level_num" == "0" ]]; then
-        cat messages/banner.txt messages/first.txt > "$output"
+        local hintfile=levels/$next/hint.tpl
+        cat messages/banner.txt messages/first.tpl | \
+            render_template \
+            > "$output"
         cp -v messages/*-help.txt "$dst/home/"
     elif ! [[ "$next" ]]; then
         cat messages/banner.txt messages/last.txt > "$output"
     else
         local hintfile=levels/$next/hint.tpl
         cat messages/banner.txt messages/middle.tpl | \
-        sed -e "/__HINT__/r $hintfile" -e "/__HINT__/d" | \
-        sed \
-            -e "s/__CURRENT_LEVEL_NUM__/$current_level_num/g" \
-            -e "s/__NEXT_LEVEL_PORT__/$next_level_port/g" \
-            -e "s/__NEXT_LEVEL__/$next/g" \
+            render_template \
             > "$output"
     fi
 }
