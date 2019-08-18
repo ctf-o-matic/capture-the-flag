@@ -14,16 +14,6 @@ You may find the files in /levels/level4 useful.
 This one is a web-based vulnerability, so go ahead and
 point your browser to http://localhost:8004/
 
-As it turns out, it's a public uppercasing service. You can POST data to it,
-and it will uppercase it for you:
-
-  curl localhost:8004 -d 'hello friend'
-  {
-      "processing_time": 5.0067901611328125e-06,
-      "queue_time": 0.41274619102478027,
-      "result": "HELLO FRIEND"
-  }
-
-Could it be that this seemingly innocuous service will be level4's downfall?
+It turns out it's a cat database service, how cute!
 
 Best of luck!

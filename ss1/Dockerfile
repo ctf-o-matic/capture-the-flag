@@ -13,6 +13,7 @@ RUN apk update && apk add \
     make \
     gcc \
     libc-dev \
+    php7 \
     sqlite \
     sudo
 
