@@ -7,3 +7,11 @@ _ssh() {
         -oLogLevel=QUIET \
         "$@"
 }
+
+_scp() {
+    scp -P 8022 \
+        -oStrictHostKeyChecking=no \
+        -oUserKnownHostsFile=/dev/null \
+        -oLogLevel=QUIET \
+        "$@"
+}
