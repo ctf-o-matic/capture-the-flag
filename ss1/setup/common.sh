@@ -1,25 +1,25 @@
 #!/usr/bin/env bash
 
 usage() {
-    echo "Usage: $@"
+    echo "Usage: $*"
     exit 1
 }
 
 msg() {
-    echo "* $@"
+    echo "* $*"
 }
 
 cmd() {
-    echo "[cmd] $@"
+    echo "[cmd] $*"
     "$@"
 }
 
 error() {
-    echo "[error] $@" >&2
+    echo "[error] $*" >&2
 }
 
 fatal() {
-    echo "[fatal] $@" >&2
+    echo "[fatal] $*" >&2
     exit 1
 }
 
