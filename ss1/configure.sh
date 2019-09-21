@@ -13,6 +13,14 @@ cd "$(dirname "$0")"
 loadConfig
 
 generated=setup/generated
+
+find_password_files() {
+    find "$generated" -name .password
+}
+
+passwords_tgz=.passwords.tgz
+
+find_password_files | tar -zcvpf "$passwords_tgz" -T-
 rm -fr "$generated"
 
 # directories matching "level?"
@@ -99,6 +107,7 @@ create_level() {
     done
 
     create_password > "$dst/home/.password"
+    chmod 600 "$dst/home/.password"
     create_welcome_message "$current" "$next" "$src" "$dst"
 }
 
@@ -119,3 +128,8 @@ mkdir -p "$generated"/root/.ssh
 ./authorized-keys.sh > "$generated"/root/.ssh/authorized_keys
 create_password > "$generated"/root/.password
 chmod -R go-rwx "$generated"/root
+
+msg "restore password files, for those that have backup ..."
+find_password_files | while read path; do
+    tar -zxvpf "$passwords_tgz" "$path" && chmod 600 "$path" || :
+done

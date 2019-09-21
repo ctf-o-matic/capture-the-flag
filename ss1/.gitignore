@@ -6,4 +6,5 @@
 
 # generated content
 .password
+.passwords.tgz
 .ssh
