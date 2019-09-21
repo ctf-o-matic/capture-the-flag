@@ -84,3 +84,9 @@ waitForPort() {
         sleep 1
     done
 }
+
+loadConfig() {
+    local configfile=.config.sh
+    [[ -f "$configfile" ]] || fatal "config file $configfile missing (see $configfile.sample)"
+    . "$configfile"
+}

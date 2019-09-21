@@ -1,0 +1,3 @@
+# list of github usernames whose keys will be authorized as root,
+# fetched from https://github.com/$username.keys
+authorized_github_users=()

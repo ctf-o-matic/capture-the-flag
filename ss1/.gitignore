@@ -1,4 +1,9 @@
+# Python
+*.pyc
+
+# docker image building
+.config.sh
+
+# generated content
 .password
 .ssh
-
-*.pyc
