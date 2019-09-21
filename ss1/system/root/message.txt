@@ -1,0 +1,12 @@
+Welcome, root!
+
+To reset the files and processes of a level, for example level1, run:
+
+    /setup/reset.sh level1
+
+To reset the files and processes of all levels, run:
+
+    /setup/reset-all.sh
+
+Cheers!
+
