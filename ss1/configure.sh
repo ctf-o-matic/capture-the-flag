@@ -46,8 +46,10 @@ pwgen() {
     echo "$pw"
 }
 
-create_password() {
-    pwgen 16 1
+create_dot_password_file() {
+    local path=$1
+    pwgen 16 1 > "$path"
+    chmod 600 "$path"
 }
 
 create_welcome_message() {
@@ -106,8 +108,7 @@ create_level() {
         [[ -f "$src/$filename" ]] && cp -v "$src/$filename" "$dst/"
     done
 
-    create_password > "$dst/home/.password"
-    chmod 600 "$dst/home/.password"
+    create_dot_password_file "$dst/home/.password"
     create_welcome_message "$current" "$next" "$src" "$dst"
 }
 
@@ -126,7 +127,7 @@ cp -vr levels/common "$generated"/levels/
 msg "setup root user and authorized ssh keys ..."
 mkdir -p "$generated"/root/.ssh
 ./authorized-keys.sh > "$generated"/root/.ssh/authorized_keys
-create_password > "$generated"/root/.password
+create_dot_password_file "$generated"/root/.password
 chmod -R go-rwx "$generated"/root
 
 msg "restore password files, for those that have backup ..."
