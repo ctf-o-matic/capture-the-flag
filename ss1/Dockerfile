@@ -17,6 +17,8 @@ RUN apk update && apk add \
     sqlite \
     sudo
 
+RUN rm -f /etc/motd
+
 EXPOSE 22
 EXPOSE 8001
 EXPOSE 8002
