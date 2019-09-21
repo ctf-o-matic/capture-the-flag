@@ -43,4 +43,6 @@ reset() {
     fi
 }
 
+[[ $# != 0 ]] || fatal "usage: $0 LEVELNAME"
+
 reset "$@"
