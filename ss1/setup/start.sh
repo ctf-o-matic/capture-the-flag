@@ -7,6 +7,8 @@ set -euo pipefail
 ./start-ssh-server.sh
 waitForPort 22
 
+crond -L /var/log/cron.log
+
 services=(/var/run/levels/level?)
 if [[ -d "${services[0]}" ]]; then
     for service in "${services[@]}"; do
