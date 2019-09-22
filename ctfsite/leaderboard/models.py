@@ -201,3 +201,12 @@ class Hint(models.Model):
 
     class Meta:
         ordering = ['-level', 'created_at']
+
+
+class Server(models.Model):
+    ip_address = models.GenericIPAddressField()
+    created_at = models.DateTimeField(default=now, blank=True)
+    updated_at = models.DateTimeField(default=now, blank=True)
+
+    def __str__(self):
+        return self.ip_address
