@@ -54,6 +54,22 @@ def available_teams():
     return Team.objects.annotate(**annotate_kwargs).filter(**filter_kwargs)
 
 
+def least_used_server():
+    return Server.objects.annotate(user_count=Count('userserver')).order_by('user_count').first()
+
+
+def get_or_set_user_server_host(user):
+    user_server = UserServer.objects.filter(user=user).first()
+    if not user_server:
+        least_used = least_used_server()
+        if not least_used:
+            return
+
+        user_server = UserServer.objects.create(user=user, server=least_used)
+
+    return user_server.server.ip_address
+
+
 @transaction.atomic
 def create_team_with_user(name, user):
     tm = TeamMember.objects.filter(user=user)
@@ -210,3 +226,17 @@ class Server(models.Model):
 
     def __str__(self):
         return self.ip_address
+
+
+class UserServer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    server = models.ForeignKey(Server, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(default=now, blank=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.server}"
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user'], name="uk_user"),
+        ]

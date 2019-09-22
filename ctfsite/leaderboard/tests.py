@@ -6,12 +6,17 @@ from django.db import IntegrityError
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Team, TeamMember, Level, Submission, MAX_MEMBERS_PER_TEAM, encoded, rankings, available_teams, \
-    create_team_with_user, Hint
+from .models import MAX_MEMBERS_PER_TEAM
+from .models import Team, TeamMember, Level, Submission, Hint, Server, UserServer
+from .models import encoded, rankings, available_teams, create_team_with_user, least_used_server, get_or_set_user_server_host
 
 
 def random_alphabetic(length=10):
     return ''.join(random.choices(string.ascii_lowercase, k=length))
+
+
+def random_ip_address():
+    return '.'.join([str(random.randint(1, 200)) for _ in range(4)])
 
 
 def new_user(username=None):
@@ -37,6 +42,10 @@ def new_level(answer=None):
 
 def new_hint(**kwargs):
     return Hint.objects.create(**kwargs)
+
+
+def new_server():
+    return Server.objects.create(ip_address=random_ip_address())
 
 
 def count_teams():
@@ -258,6 +267,7 @@ class TeamViewTests(TestCase):
         self.client.login(username=user.username, password=user.username)
         new_team(user)
         new_level()
+        new_server()
         response = self.client.get(reverse('leaderboard:team'))
         self.assertNotContains(response, "Congratulations, you have captured the flag!")
         self.assertContains(response, reverse('leaderboard:create-submission'))
@@ -301,6 +311,7 @@ class CreateTeamViewTests(TestCase):
         self.user = user = new_user()
         self.client.login(username=user.username, password=user.username)
         new_level()
+        new_server()
 
     def test_logged_in_user_cannot_create_team_with_empty_name(self):
         response = self.client.post(reverse('leaderboard:create-team'), data={"team_name": ""})
@@ -363,6 +374,7 @@ class LeaveTeamViewTests(TestCase):
         self.client.login(username=user.username, password=user.username)
 
         self.team = new_team(user)
+        new_server()
 
     def test_user_can_leave_team_before_team_has_submissions_and_team_is_deleted_if_no_more_users(self):
         self.assertEqual(1, count_teams())
@@ -487,6 +499,7 @@ class CreateSubmissionViewTests(TestCase):
 
         self.answer = answer = random_alphabetic()
         new_level(answer)
+        new_server()
 
     def test_logged_in_user_cannot_create_submission_with_empty_answer(self):
         response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": ""})
@@ -589,3 +602,74 @@ class AvailableTeamsTests(TestCase):
             team.add_member(new_user())
 
         self.assertEqual(0, len(available_teams()))
+
+
+class LeastUsedServerTests(TestCase):
+    @staticmethod
+    def gen_uses(server, count):
+        for _ in range(count):
+            user = new_user()
+            UserServer.objects.create(user=user, server=server)
+
+    def test_least_used_server(self):
+        server_used_once = new_server()
+        server_used_twice = new_server()
+        server_used_3_times = new_server()
+
+        self.gen_uses(server_used_twice, 2)
+        self.gen_uses(server_used_once, 1)
+        self.gen_uses(server_used_3_times, 3)
+
+        self.assertEqual(server_used_once, least_used_server())
+
+        server_used_once.delete()
+        self.assertEqual(server_used_twice, least_used_server())
+
+        server_used_twice.delete()
+        self.assertEqual(server_used_3_times, least_used_server())
+
+        server_used_3_times.delete()
+        self.assertIsNone(least_used_server())
+
+        # sanity checks
+        self.assertEqual(1 + 2 + 3, User.objects.count())
+        self.assertEqual(0, Server.objects.count())
+        self.assertEqual(0, UserServer.objects.count())
+
+
+class GetOrSetUserServerHostTests(TestCase):
+    def test_returns_none_when_no_servers(self):
+        self.assertIsNone(get_or_set_user_server_host(new_user()))
+
+    def test_set_to_least_used_server(self):
+        user1 = new_user()
+        user2 = new_user()
+        self.assertIsNone(get_or_set_user_server_host(user1))
+        self.assertIsNone(get_or_set_user_server_host(user2))
+
+        server = new_server()
+        self.assertEqual(server.ip_address, get_or_set_user_server_host(user1))
+        self.assertEqual(server.ip_address, get_or_set_user_server_host(user2))
+
+        server.delete()
+        self.assertIsNone(get_or_set_user_server_host(user1))
+        self.assertIsNone(get_or_set_user_server_host(user2))
+
+    def test_load_balance_to_least_used_server(self):
+        server_count = 3
+        for _ in range(server_count):
+            new_server()
+
+        user_count = user_server_count = server_count * server_count
+        for _ in range(user_count):
+            get_or_set_user_server_host(new_user())
+
+        while user_server_count:
+            self.assertEqual(user_server_count, UserServer.objects.count())
+            user_server_count -= server_count
+            Server.objects.first().delete()
+
+        # sanity checks
+        self.assertEqual(user_count, User.objects.count())
+        self.assertEqual(0, Server.objects.count())
+        self.assertEqual(0, UserServer.objects.count())

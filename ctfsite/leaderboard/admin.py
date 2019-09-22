@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.timezone import now
 
-from leaderboard.models import Team, TeamMember, Level, Submission, Hint
+from leaderboard.models import Team, TeamMember, Level, Submission, Hint, Server, UserServer
 
 
 class TeamMemberInline(admin.TabularInline):
@@ -46,7 +46,14 @@ class HintAdmin(admin.ModelAdmin):
     hide_hints.short_description = "Make selected hints hidden"
 
 
+class UserServerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'server')
+    list_filter = ('server', )
+
+
 admin.site.register(Team, TeamAdmin)
 admin.site.register(Level, LevelAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Hint, HintAdmin)
+admin.site.register(Server)
+admin.site.register(UserServer, UserServerAdmin)

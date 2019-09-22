@@ -10,24 +10,30 @@
     You are currently on <code>{{ team.current_level }}</code>.
 </p>
 
-<p class="text-grey">
-    Continue to the next level by running in a shell <code>ssh -p 8022 level{{ team.next_level_index }}@34.66.129.228</code>,
-    and follow the instructions.
-</p>
+{% if user_server_host %}
+    <p class="text-grey">
+        Continue to the next level by running in a shell <code>ssh -p 8022 level{{ team.next_level_index }}@{{ user_server_host }}</code>,
+        and follow the instructions.
+    </p>
 
-<form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation" novalidate>
-    {% csrf_token %}
-    {% include 'leaderboard/form-errors.html' %}
-    <div class="form-row align-items-center">
-        <div class="col-sm-4">
-            <input name="answer_attempt" type="text" class="form-control" placeholder="The password" required>
-            <div class="invalid-feedback">Please enter the password.</div>
+    <form method="post" action="{% url 'leaderboard:create-submission' %}" class="needs-validation" novalidate>
+        {% csrf_token %}
+        {% include 'leaderboard/form-errors.html' %}
+        <div class="form-row align-items-center">
+            <div class="col-sm-4">
+                <input name="answer_attempt" type="text" class="form-control" placeholder="The password" required>
+                <div class="invalid-feedback">Please enter the password.</div>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </div>
         </div>
-        <div class="col-auto">
-            <button class="btn btn-primary" type="submit">Submit</button>
-        </div>
+    </form>
+{% else %}
+    <div class="alert alert-danger d-flex justify-content-between align-items-center">
+        Something's wrong. There seem to be no available servers to connect to. Please contact the organizers.
     </div>
-</form>
+{% endif %}
 
 {% include 'leaderboard/hints.html' %}
 

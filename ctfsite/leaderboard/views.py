@@ -4,7 +4,8 @@ from django.urls import reverse
 from django.views import View
 
 from leaderboard.forms import CreateTeamForm, CreateSubmissionForm
-from leaderboard.models import Team, Submission, find_team, rankings, available_teams, create_team_with_user
+from leaderboard.models import Team, Submission
+from leaderboard.models import find_team, rankings, available_teams, create_team_with_user, get_or_set_user_server_host
 
 
 def submissions(team):
@@ -15,9 +16,10 @@ def submissions(team):
         }
 
 
-def common_context_for_team(team):
+def common_context_for_team(user, team):
     return {
         'team': team,
+        'user_server_host': get_or_set_user_server_host(user),
         'user_can_leave': not team.has_submissions(),
         'submissions': list(submissions(team)),
     }
@@ -33,7 +35,7 @@ class TeamView(LoginRequiredMixin, View):
             context = {'available_teams': available_teams()}
             return render(request, self.template_name, context)
 
-        context = common_context_for_team(team)
+        context = common_context_for_team(request.user, team)
 
         if request.GET.get('passed'):
             context["just_passed_level"] = True
@@ -62,6 +64,7 @@ class CreateTeamView(LoginRequiredMixin, View):
         context = {
             "form": form,
             "available_teams": available_teams(),
+            "user_server_host": get_or_set_user_server_host(request.user),
         }
         return render(request, TeamView.template_name, context)
 
@@ -87,6 +90,7 @@ class JoinTeamView(LoginRequiredMixin, View):
             context = {
                 "available_teams": available_teams(),
                 "join_error": "team-missing",
+                "user_server_host": get_or_set_user_server_host(request.user),
             }
             return render(request, TeamView.template_name, context)
 
@@ -94,6 +98,7 @@ class JoinTeamView(LoginRequiredMixin, View):
             context = {
                 "available_teams": available_teams(),
                 "join_error": "team-full",
+                "user_server_host": get_or_set_user_server_host(request.user),
             }
             return render(request, TeamView.template_name, context)
 
@@ -101,6 +106,7 @@ class JoinTeamView(LoginRequiredMixin, View):
             context = {
                 "available_teams": available_teams(),
                 "join_error": "team-has-submissions",
+                "user_server_host": get_or_set_user_server_host(request.user),
             }
             return render(request, TeamView.template_name, context)
 
@@ -117,7 +123,7 @@ class CreateSubmissionView(LoginRequiredMixin, View):
         if team is None or team.is_done():
             return redirect('leaderboard:team')
 
-        context = common_context_for_team(team)
+        context = common_context_for_team(request.user, team)
 
         form = self.form_class(request.POST)
         context['form'] = form
