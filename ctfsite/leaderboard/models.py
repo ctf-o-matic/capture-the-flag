@@ -174,15 +174,17 @@ class TeamMember(models.Model):
 
 class Level(models.Model):
     name = models.CharField(max_length=80, unique=True)
+    solution_key = models.SlugField(max_length=80, unique=True, null=True)
     answer = models.CharField(max_length=200, help_text="The answer encrypted with sha1, ex: printf answer | sha1sum")
     created_at = models.DateTimeField(default=now, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.solution_key})"
 
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['name'], name="uk_name"),
+            models.UniqueConstraint(fields=['solution_key'], name="uk_solution_key"),
             models.UniqueConstraint(fields=['answer'], name="uk_answer"),
         ]
 
