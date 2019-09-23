@@ -37,7 +37,8 @@ def new_team(user, name=None):
 def new_level(answer=None):
     if answer is None:
         answer = random_alphabetic()
-    return Level.objects.create(name=random_alphabetic(), answer=encoded(answer))
+    name = random_alphabetic()
+    return Level.objects.create(name=name, solution_key=name, answer=encoded(answer))
 
 
 def new_hint(**kwargs):
@@ -199,7 +200,7 @@ class TeamModelTests(TestCase):
 
 class LevelModelTests(TestCase):
     def new_level(self, name, answer):
-        Level.objects.create(name=name, answer=encoded(answer))
+        Level.objects.create(name=name, solution_key=name, answer=encoded(answer))
 
     def test_cannot_create_level_with_same_name(self):
         self.new_level("foo", "bar")
