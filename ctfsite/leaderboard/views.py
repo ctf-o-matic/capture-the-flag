@@ -5,7 +5,7 @@ from django.views import View
 
 from leaderboard.forms import CreateTeamForm, CreateSubmissionForm
 from leaderboard.models import Team, Submission
-from leaderboard.models import find_team, rankings, available_teams, create_team_with_user, get_or_set_user_server_host
+from leaderboard.models import find_team, rankings, unranked, available_teams, create_team_with_user, get_or_set_user_server_host
 
 
 def submissions(team):
@@ -146,5 +146,8 @@ class Leaderboard(View):
     template_name = 'leaderboard/leaderboard.html'
 
     def get(self, request):
-        context = {"rankings": rankings()}
+        context = {
+            "rankings": rankings(),
+            "unranked": unranked(),
+        }
         return render(request, self.template_name, context)

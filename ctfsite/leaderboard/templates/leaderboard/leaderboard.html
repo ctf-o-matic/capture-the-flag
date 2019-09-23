@@ -9,7 +9,7 @@
       <div class="row">
         <div class="col-xl-12">
             <h1>Leaderboard</h1>
-            {% if rankings %}
+            {% if rankings or unranked %}
                 <table class="table table-hover">
                   <thead>
                     <tr>
@@ -26,6 +26,14 @@
                       <td>{{ranking.team_name}}</td>
                       <td><code>{{ranking.level_name}}</code></td>
                       <td>{{ranking.submission_date}}</td>
+                    </tr>
+                {% endfor %}
+                {% for row in unranked %}
+                    <tr>
+                      <th scope="row">-</th>
+                      <td>{{row.team_name}}</td>
+                      <td><code>{{row.level_name}}</code></td>
+                      <td>{{row.submission_date}}</td>
                     </tr>
                 {% endfor %}
                   </tbody>

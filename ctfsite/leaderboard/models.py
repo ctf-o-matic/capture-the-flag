@@ -42,6 +42,25 @@ def rankings():
     return rankings
 
 
+def unranked():
+    unranked = []
+
+    annotate_kwargs = {
+        "next_level_index": Count('submission'),
+    }
+
+    query = Team.objects.annotate(**annotate_kwargs).order_by('-created_at').filter(next_level_index=0)
+
+    for row in query:
+        unranked.append({
+            "team_name": row.name,
+            "level_name": "level0",
+            "submission_date": row.created_at,
+        })
+
+    return unranked
+
+
 def available_teams():
     annotate_kwargs = {
         "next_level_index": Count('submission'),
