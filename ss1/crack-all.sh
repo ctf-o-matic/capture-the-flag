@@ -13,7 +13,7 @@ else
 fi
 
 for leveldir in levels/level[1-9]/; do
-    msg "running script for dir $leveldir ..."
     level=$(basename "$leveldir")
-    cmd ./crack.sh "$level" "$host"
+    printf "%s..." "$level"
+    cmd ./crack.sh "$level" "$host" &>/dev/null && echo OK || echo FAILED
 done
