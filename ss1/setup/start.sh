@@ -7,6 +7,8 @@ set -euo pipefail
 ./start-ssh-server.sh
 waitForPort 22
 
+umask 0077
+
 crond -L /var/log/cron.log
 
 services=(/var/run/levels/level?)

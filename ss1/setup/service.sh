@@ -62,7 +62,7 @@ start() {
 
     msg "starting process for $level ..."
 
-    (sudo -u "$level" "$start_script" "$rundir" "$port" &>> "$logfile")&
+    ((umask 0022; sudo -u "$level" "$start_script" "$rundir" "$port") &>> "$logfile")&
 
     waitForPort "$port"
     status
