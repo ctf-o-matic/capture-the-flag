@@ -132,7 +132,7 @@ class CreateSubmissionView(LoginRequiredMixin, View):
             answer_attempt = form.cleaned_data['answer_attempt']
 
             try:
-                if team.submit_attempt(answer_attempt):
+                if team.submit_attempt(request.user, answer_attempt):
                     return redirect(reverse('leaderboard:team') + '?passed=1')
                 else:
                     form.add_error(None, "Incorrect answer, that's not the password!")

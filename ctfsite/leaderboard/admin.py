@@ -28,7 +28,7 @@ class LevelAdmin(admin.ModelAdmin):
 
 
 class SubmissionAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('team', 'level', 'user', 'created_at')
 
 
 class HintAdmin(admin.ModelAdmin):

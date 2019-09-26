@@ -147,7 +147,7 @@ class Team(models.Model):
     def can_submit(self):
         return not self.is_empty() and self.next_level() is not None
 
-    def submit_attempt(self, answer_attempt):
+    def submit_attempt(self, user, answer_attempt):
         if not self.can_submit():
             raise ValueError("Illegal state: team cannot submit solutions")
 
@@ -158,7 +158,7 @@ class Team(models.Model):
         if not level.is_correct(answer_attempt):
             return False
 
-        Submission.objects.create(team=self, level=level)
+        Submission.objects.create(team=self, level=level, user=user)
         return True
 
     def has_submissions(self):
@@ -214,10 +214,11 @@ class Level(models.Model):
 class Submission(models.Model):
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(default=now, blank=True)
 
     def __str__(self):
-        return f"{self.team} - {self.level} - {self.created_at}"
+        return f"{self.team} - {self.level} - {self.user} - {self.created_at}"
 
     class Meta:
         constraints = [

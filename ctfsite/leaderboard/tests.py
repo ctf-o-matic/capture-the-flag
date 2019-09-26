@@ -106,9 +106,10 @@ class TeamModelTests(TestCase):
         self.assertFalse(team.can_submit())
 
     def test_submit_fails_for_incorrect_answer(self):
-        team = new_team(new_user())
+        user = new_user()
+        team = new_team(user)
         new_level()
-        self.assertFalse(team.submit_attempt('incorrect'))
+        self.assertFalse(team.submit_attempt(user, 'incorrect'))
 
     def test_submit_accepts_correct_answer(self):
         answer = random_alphabetic()
@@ -120,7 +121,7 @@ class TeamModelTests(TestCase):
         self.assertTrue(team.can_submit())
         self.assertIsNotNone(team.next_level())
 
-        self.assertTrue(team.submit_attempt(answer))
+        self.assertTrue(team.submit_attempt(user, answer))
         self.assertEqual(1, team.next_level_index())
         self.assertFalse(team.can_submit())
         self.assertIsNone(team.next_level())
@@ -130,14 +131,15 @@ class TeamModelTests(TestCase):
         for answer in answers:
             new_level(answer)
 
-        team = new_team(new_user())
+        user = new_user()
+        team = new_team(user)
 
         for i, answer in enumerate(answers):
             self.assertEqual(i, team.next_level_index())
             self.assertTrue(team.can_submit())
             self.assertIsNotNone(team.next_level())
 
-            self.assertTrue(team.submit_attempt(answer))
+            self.assertTrue(team.submit_attempt(user, answer))
             self.assertEqual(i + 1, team.next_level_index())
 
         self.assertFalse(team.can_submit())
@@ -150,7 +152,8 @@ class TeamModelTests(TestCase):
         for answer in answers:
             new_level(answer)
 
-        team = new_team(new_user())
+        user = new_user()
+        team = new_team(user)
 
         self.assertTrue(team.can_submit())
         self.assertEqual(0, team.next_level_index())
@@ -158,9 +161,9 @@ class TeamModelTests(TestCase):
         for i, answer in enumerate(answers):
             for j, wrong in enumerate(answers):
                 if i != j:
-                    self.assertFalse(team.submit_attempt(wrong))
+                    self.assertFalse(team.submit_attempt(user, wrong))
 
-            self.assertTrue(team.submit_attempt(answer))
+            self.assertTrue(team.submit_attempt(user, answer))
 
         self.assertFalse(team.can_submit())
         self.assertIsNone(team.next_level())
@@ -185,15 +188,15 @@ class TeamModelTests(TestCase):
         self.assertEqual(levels[0], team.next_level())
         self.assertListEqual([visible_hints[0]], list(team.visible_hints()))
 
-        self.assertTrue(team.submit_attempt(answers[0]))
+        self.assertTrue(team.submit_attempt(user, answers[0]))
         self.assertEqual(levels[1], team.next_level())
         self.assertListEqual([visible_hints[1]], list(team.visible_hints()))
 
-        self.assertTrue(team.submit_attempt(answers[1]))
+        self.assertTrue(team.submit_attempt(user, answers[1]))
         self.assertEqual(levels[2], team.next_level())
         self.assertListEqual([visible_hints[2]], list(team.visible_hints()))
 
-        self.assertTrue(team.submit_attempt(answers[2]))
+        self.assertTrue(team.submit_attempt(user, answers[2]))
         self.assertIsNone(team.next_level())
         self.assertEqual(0, len(team.visible_hints()))
 
@@ -249,7 +252,7 @@ class TeamViewTests(TestCase):
         team = new_team(user)
         answer = random_alphabetic()
         new_level(answer)
-        team.submit_attempt(answer)
+        team.submit_attempt(user, answer)
         self.client.login(username=user.username, password=user.username)
         response = self.client.get(reverse('leaderboard:team'))
         self.assertNotContains(response, reverse('leaderboard:leave-team'))
@@ -289,19 +292,19 @@ class TeamViewTests(TestCase):
         self.assertContains(response, "hint-level0-visible")
         self.assertNotContains(response, "hint-level0-hidden")
 
-        self.assertTrue(team.submit_attempt(answers[0]))
+        self.assertTrue(team.submit_attempt(user, answers[0]))
         self.assertEqual(levels[1], team.next_level())
         response = self.client.get(reverse('leaderboard:team'))
         self.assertContains(response, "hint-level1-visible")
         self.assertNotContains(response, "hint-level1-hidden")
 
-        self.assertTrue(team.submit_attempt(answers[1]))
+        self.assertTrue(team.submit_attempt(user, answers[1]))
         self.assertEqual(levels[2], team.next_level())
         response = self.client.get(reverse('leaderboard:team'))
         self.assertContains(response, "hint-level2-visible")
         self.assertNotContains(response, "hint-level2-hidden")
 
-        self.assertTrue(team.submit_attempt(answers[2]))
+        self.assertTrue(team.submit_attempt(user, answers[2]))
         self.assertIsNone(team.next_level())
         response = self.client.get(reverse('leaderboard:team'))
         self.assertNotContains(response, "hint-")
@@ -403,7 +406,7 @@ class LeaveTeamViewTests(TestCase):
     def test_user_cannot_leave_team_after_team_has_submissions(self):
         answer = random_alphabetic()
         new_level(answer)
-        self.team.submit_attempt(answer)
+        self.team.submit_attempt(new_user(), answer)
 
         self.assertEqual(1, count_teams())
         self.assertEqual(1, count_team_members())
@@ -449,7 +452,7 @@ class JoinTeamViewTests(TestCase):
     def test_user_cannot_join_team_after_team_has_submissions(self):
         answer = random_alphabetic()
         new_level(answer)
-        self.team.submit_attempt(answer)
+        self.team.submit_attempt(new_user(), answer)
 
         self.assertEqual(1, count_teams())
         self.assertEqual(1, count_team_members())
@@ -569,19 +572,19 @@ class RankingTests(TestCase):
         self.assertEqual(0, len(rankings()))
 
     def test_team_on_higher_level_comes_first(self):
-        self.team1.submit_attempt(self.answers[0])
+        self.team1.submit_attempt(self.user1, self.answers[0])
         self.assertEqual(1, len(rankings()))
         self.assertEqual(self.team1.name, rankings()[0]['team_name'])
 
-        self.team2.submit_attempt(self.answers[0])
+        self.team2.submit_attempt(self.user2, self.answers[0])
         self.assertEqual(2, len(rankings()))
 
-        self.team2.submit_attempt(self.answers[1])
+        self.team2.submit_attempt(self.user2, self.answers[1])
         self.assertEqual([self.team2.name, self.team1.name], [d['team_name'] for d in rankings()])
 
     def test_team_submitted_first_on_same_level_comes_first(self):
-        self.team1.submit_attempt(self.answers[0])
-        self.team2.submit_attempt(self.answers[0])
+        self.team1.submit_attempt(self.user1, self.answers[0])
+        self.team2.submit_attempt(self.user2, self.answers[0])
         self.assertEqual([self.team1.name, self.team2.name], [d['team_name'] for d in rankings()])
 
 
@@ -591,10 +594,11 @@ class AvailableTeamsTests(TestCase):
         self.assertEqual([team.name], [t.name for t in available_teams()])
 
     def test_exclude_teams_with_submissions(self):
-        team = new_team(new_user())
+        user = new_user()
+        team = new_team(user)
         answer = random_alphabetic()
         new_level(answer)
-        team.submit_attempt(answer)
+        team.submit_attempt(user, answer)
         self.assertEqual(0, len(available_teams()))
 
     def test_exclude_teams_with_too_many_members(self):
