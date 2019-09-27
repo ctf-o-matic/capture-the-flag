@@ -18,6 +18,11 @@ class TeamAdmin(admin.ModelAdmin):
     inlines = (TeamMemberInline, SubmissionInline)
 
 
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = ('team', 'user', 'created_at')
+    list_filter = ('team', )
+
+
 class HintInline(admin.TabularInline):
     model = Hint
     extra = 1
@@ -52,6 +57,7 @@ class UserServerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Team, TeamAdmin)
+admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Level, LevelAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Hint, HintAdmin)

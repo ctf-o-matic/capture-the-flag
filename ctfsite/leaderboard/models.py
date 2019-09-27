@@ -189,6 +189,7 @@ class TeamMember(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['user'], name="uk_user"),
         ]
+        ordering = ['team__created_at', 'created_at']
 
 
 class Level(models.Model):
