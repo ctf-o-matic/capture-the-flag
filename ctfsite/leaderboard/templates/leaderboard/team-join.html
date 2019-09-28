@@ -36,7 +36,9 @@
                     {% endfor %}</span>
                     )
                 </td>
-                <td><a href="{% url 'leaderboard:join-team' team.pk %}" class="btn btn-secondary">Join this team</a></td>
+                <td>
+                    <form action="{% url 'leaderboard:join-team' team.pk %}"><button class="btn btn-secondary">Join this team</button></form>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

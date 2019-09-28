@@ -48,7 +48,7 @@
             {% if user_can_leave %}
                 <div class="alert alert-danger d-flex justify-content-between align-items-center">
                     Would you like to leave this team to join another? Before submitting the first solution, you still can, if needed.
-                    <a href="{% url 'leaderboard:leave-team' %}" class="btn btn-danger">Leave team</a>
+                    <form action="{% url 'leaderboard:leave-team' %}"><button class="btn btn-danger">Leave team</button></form>
                 </div>
             {% endif %}
           {% endif %}
