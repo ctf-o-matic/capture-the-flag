@@ -38,7 +38,10 @@ class TeamView(LoginRequiredMixin, View):
         context = common_context_for_team(request.user, team)
 
         if request.GET.get('passed'):
-            context["just_passed_level"] = True
+            try:
+                context["just_passed_level"] = int(request.GET.get('passed'))
+            except:
+                pass
 
         return render(request, self.template_name, context)
 
@@ -133,7 +136,7 @@ class CreateSubmissionView(LoginRequiredMixin, View):
 
             try:
                 if team.submit_attempt(request.user, answer_attempt):
-                    return redirect(reverse('leaderboard:team') + '?passed=1')
+                    return redirect(reverse('leaderboard:team') + f'?passed={team.next_level_index()}')
                 else:
                     form.add_error(None, "Incorrect answer, that's not the password!")
             except Exception as e:
