@@ -13,6 +13,7 @@ def submissions(team):
         yield {
             "level_name": s.level.name,
             "date": s.created_at,
+            "level_number": s.level.pk,
         }
 
 
