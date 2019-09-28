@@ -1,0 +1,23 @@
+{% if celebrate %}
+    {% if celebrate <= team.next_level_index %}
+        <p>
+            {% if celebrate == 1 %}
+            <img src="https://media.giphy.com/media/JltOMwYmi0VrO/giphy.gif">
+            {% elif celebrate == 2 %}
+            <img src="https://media.giphy.com/media/ddHhhUBn25cuQ/giphy.gif">
+            {% elif celebrate == 3 %}
+            <img src="https://media.giphy.com/media/FA74MFGdGKKnC/giphy.gif">
+            {% elif celebrate == 4 %}
+            <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
+            {% elif celebrate == 5 %}
+            <img src="https://media.giphy.com/media/3ohzdIuqJoo8QdKlnW/giphy.gif">
+            {% elif celebrate == 6 %}
+            <img src="https://media.giphy.com/media/itDBteCsTFSVO/giphy.gif">
+            {% endif %}
+        </p>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Hm? What's there to celebrate here?
+        </div>
+    {% endif %}
+{% endif %}

@@ -534,7 +534,7 @@ class CreateSubmissionViewTests(TestCase):
         self.assertEqual(0, count_submissions())
 
         response = self.client.post(reverse('leaderboard:create-submission'), data={"answer_attempt": self.answer})
-        expected_url = reverse('leaderboard:team') + '?passed=1'
+        expected_url = reverse('leaderboard:team') + '?passed=1&celebrate=1'
         self.assertRedirects(response, expected_url, status_code=302, fetch_redirect_response=False)
 
         self.assertEqual(1, self.team.next_level_index())

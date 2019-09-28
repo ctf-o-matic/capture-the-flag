@@ -1,21 +1,10 @@
-{% if just_passed_level and just_passed_level <= team.next_level_index %}
+{% if just_passed_level %}
     <div class="alert alert-success" role="alert">
         Congratulations, that is the correct answer!
     </div>
-    <p>
-        {% if just_passed_level == 1 %}
-        <img src="https://media.giphy.com/media/JltOMwYmi0VrO/giphy.gif">
-        {% elif just_passed_level == 2 %}
-        <img src="https://media.giphy.com/media/ddHhhUBn25cuQ/giphy.gif">
-        {% elif just_passed_level == 3 %}
-        <img src="https://media.giphy.com/media/FA74MFGdGKKnC/giphy.gif">
-        {% elif just_passed_level == 4 %}
-        <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif">
-        {% elif just_passed_level == 5 %}
-        <img src="https://media.giphy.com/media/3ohzdIuqJoo8QdKlnW/giphy.gif">
-        {% endif %}
-    </p>
 {% endif %}
+
+{% include 'leaderboard/celebrate.html' %}
 
 <h1>Next level</h1>
 
