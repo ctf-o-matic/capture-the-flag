@@ -16,19 +16,29 @@
             <li class="nav-item"><a href="/leaderboard/rules" class="nav-link text-light">Rules</a></li>
             <li class="nav-item"><a href="/leaderboard/" class="nav-link text-light">Leaderboard</a></li>
             {% if user.is_authenticated %}
-              <li class="nav-item"><a href="/leaderboard/team" class="nav-link text-light">
-              {% if not team %}
-                Join a team
-              {% else %}
+              {% if active %}
+                <li class="nav-item"><a href="/leaderboard/team" class="nav-link text-light">
+                {% if not team %}
+                  Join a team
+                {% else %}
+                  {% if team.is_done %}
+                    Congrats!
+                  {% elif team.is_level0 %}
+                    Start
+                  {% else %}
+                    Next level
+                  {% endif %}
+                {% endif %}
+                </a></li>
+              {% elif team and not team.is_level0 %}
+                <li class="nav-item"><a href="/leaderboard/team" class="nav-link text-light">
                 {% if team.is_done %}
                   Congrats!
-                {% elif team.is_level0 %}
-                  Start
                 {% else %}
                   Next level
                 {% endif %}
+                </a></li>
               {% endif %}
-              </a></li>
             {% endif %}
           </ul>
 

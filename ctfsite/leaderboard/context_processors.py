@@ -1,8 +1,12 @@
-from leaderboard.models import find_team
+from leaderboard.models import find_team, Server
 
 
 def team(request):
-    if request.user.is_authenticated:
-        return {'team': find_team(request.user)}
+    context = {
+        'active': Server.objects.exists(),
+    }
 
-    return {}
+    if request.user.is_authenticated:
+        context['team'] = find_team(request.user)
+
+    return context

@@ -29,7 +29,14 @@
             We also hope you will have fun in the process!
           </p>
 
-          {% if user.is_authenticated %}
+          {% if not active %}
+            <p class="alert alert-warning">
+              All competition servers are offline at the moment.
+              If you would like to organize a new competition,
+              please contact us at <code>info@capture-the-flag.club</code>,
+              and we can work something out ;-)
+            </p>
+          {% elif user.is_authenticated %}
             {% if team %}
                 {% if team.can_submit %}
                   <p class="alert alert-info">
